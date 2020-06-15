@@ -1,11 +1,11 @@
 <template>
-  <div class="Scene">
+  <div class="SceneData">
     <div class="Wrapper">
       <div>{{sceneData['title']}}</div>
       <div>{{sceneData['description']}}</div>
       <el-divider></el-divider>
       <el-table
-        :data="sceneData['inputFrameList']"
+        :data="sceneData['inputFrameDataList']"
         style="width: 100%">
         <el-table-column
           label="物料数据"
@@ -57,7 +57,7 @@
             <el-popover
               placement="right"
               trigger="hover">
-              <el-table :data="scope.row['outputFrameList']">
+              <el-table :data="scope.row['outputFrameDataList']">
                 <el-table-column
                   label="采集描述"
                   width="180">
@@ -95,7 +95,7 @@
 <script>
 import api from 'api'
 export default {
-  name: 'Scene',
+  name: 'SceneData',
   data () {
     return {
       sceneData: {}
@@ -116,9 +116,9 @@ export default {
     handleDetail (row) {
       let params = {
         sceneDataId: row.sceneDataId,
-        inputFrameId: row.id
+        inputFrameDataId: row.id
       }
-      this.$router.push({name: 'SceneFrame', params: params})
+      this.$router.push({name: 'SceneFrameData', params: params})
     },
     handleDelete (index, row) {
       console.log(index, row)

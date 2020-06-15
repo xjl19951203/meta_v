@@ -2,9 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '../components/Home'
 import Main from '../components/Main'
-import SceneList from '../components/scene/SceneList'
-import Scene from '../components/scene/Scene'
-import SceneFrame from '../components/scene/SceneFrame'
+import SceneDataList from '../components/sceneData/SceneDataList'
+import SceneData from '../components/sceneData/SceneData'
+import SceneFrameData from '../components/sceneData/SceneFrameData'
 
 Vue.use(Router)
 
@@ -20,19 +20,19 @@ export default new Router({
       component: Main,
       children: [
         {
-          path: '/scene',
-          name: 'SceneList',
-          component: SceneList
+          path: '/sceneDataList',
+          name: 'SceneDataList',
+          component: SceneDataList
         },
         {
-          path: '/scene/:sceneDataId',
-          name: 'Scene',
-          component: Scene
+          path: '/sceneData/:sceneDataId',
+          name: 'SceneData',
+          component: SceneData
         },
         {
-          path: '/scene/:sceneDataId/inputFrame/:inputFrameId',
-          name: 'SceneFrame',
-          component: SceneFrame
+          path: '/sceneData/:sceneDataId/inputFrameData/:inputFrameDataId',
+          name: 'SceneFrameData',
+          component: SceneFrameData
         }
       ]
     }

@@ -1,5 +1,5 @@
 <template>
-  <div class="SceneList">
+  <div class="SceneDataList">
     <div class="Wrapper">
       <el-container>
         <el-header>
@@ -78,7 +78,7 @@
 <script>
 import api from 'api'
 export default {
-  name: 'SceneList',
+  name: 'SceneDataList',
   data () {
     return {
       postCategoryList: [],
@@ -141,7 +141,7 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-  .SceneList, .Wrapper, .el-container{
+  .SceneDataList, .Wrapper, .el-container{
     height: 100%;
     max-height: 100%;
     .el-header, .el-footer{
