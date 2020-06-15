@@ -5,6 +5,10 @@ import Main from '../components/Main'
 import SceneDataList from '../components/sceneData/SceneDataList'
 import SceneData from '../components/sceneData/SceneData'
 import SceneFrameData from '../components/sceneData/SceneFrameData'
+import BatchDoc from '../components/batch/BatchDoc'
+import BatchImport from '../components/batch/BatchImport'
+import BatchExport from '../components/batch/BatchExport'
+import Manage from '../components/manage/Manage'
 
 Vue.use(Router)
 
@@ -33,6 +37,26 @@ export default new Router({
           path: '/sceneData/:sceneDataId/inputFrameData/:inputFrameDataId',
           name: 'SceneFrameData',
           component: SceneFrameData
+        },
+        {
+          path: '/batch/doc',
+          name: 'BatchDoc',
+          component: BatchDoc
+        },
+        {
+          path: '/batch/import',
+          name: 'BatchImport',
+          component: BatchImport
+        },
+        {
+          path: '/batch/export',
+          name: 'BatchExport',
+          component: BatchExport
+        },
+        {
+          path: '/manage/:tableName',
+          name: 'Manage',
+          component: Manage
         }
       ]
     }

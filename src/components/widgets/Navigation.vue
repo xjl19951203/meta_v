@@ -1,6 +1,20 @@
 <template>
   <div class="Navigation">
     <el-tree
+     :data="sceneTree"
+     :props="defaultProps"
+     :default-expand-all="false"
+     icon-class="el-icon-folder-opened"
+     @node-click="handleScene">
+    </el-tree>
+    <el-tree
+     :data="baseTree"
+     :props="defaultProps"
+     :default-expand-all="false"
+     icon-class="el-icon-folder-opened"
+     @node-click="handleBase">
+    </el-tree>
+    <el-tree
      :data="navTree"
      :props="defaultProps"
      :default-expand-all="false"
@@ -13,11 +27,15 @@
 export default {
   name: 'Navigation',
   computed: {
-    categories () {
+    sceneTree () {
       let temp = this.$store.state.categories
-      return temp[0]['children']
+      return [{
+        title: '工艺场景',
+        name: 'SceneDataList',
+        children: temp[0]['children']
+      }]
     },
-    systemTable () {
+    baseTree () {
       let temp = this.$store.state.systemTable
       let arr1 = []
       let arr2 = []
@@ -31,30 +49,22 @@ export default {
           arr2.push(item)
         }
       }
-      let table = [
-        {
-          title: '基础表',
-          children: arr1
-        },
-        {
-          title: '辅助表',
-          children: arr2
-        }
-      ]
-      return table
+      return [{
+        title: '基础数据',
+        children: [
+          {
+            title: '基础表',
+            children: arr1
+          },
+          {
+            title: '辅助表',
+            children: arr2
+          }
+        ]
+      }]
     },
     navTree () {
       let temp = [
-        {
-          title: '工艺场景',
-          name: 'SceneList',
-          children: this.categories
-        },
-        {
-          title: '基础数据',
-          name: 'ManageIndex',
-          children: this.systemTable
-        },
         {
           title: '数据批处理',
           name: 'BatchIndex',
@@ -62,7 +72,7 @@ export default {
             {
               title: '导入规范',
               icon: 'file-text-o',
-              name: 'BatchIndex'
+              name: 'BatchDoc'
             },
             {
               title: '批量导入',
@@ -114,8 +124,22 @@ export default {
     }
   },
   methods: {
+    handleScene (data) {
+      if (data['id'] !== undefined) {
+        this.$router.push({name: 'SceneDataList', query: {category: data['id']}})
+      }
+    },
+    handleBase (data) {
+      console.log(data['tableName'])
+      if (data['tableName'] !== undefined) {
+        this.$router.push({name: 'Manage', params: {tableName: data['tableName']}})
+      }
+    },
     handleNodeClick (data) {
-      // this.$router.push({name: data['name'], query: data['query']})
+      console.log(data['id'])
+      if (data['id'] !== undefined) {
+        this.$router.push({name: 'SceneDataList', query: {category: data['id']}})
+      }
     }
   }
 }
@@ -123,9 +147,8 @@ export default {
 <style lang="scss">
   .Navigation{
     padding: 10px;
-    width: calc(100% - 20px);
+    width: fit-content;
     height: calc(100% - 20px);
-    background-color: #4A524F;
     color: #aaa;
     .el-tree{
       color: #aaa;

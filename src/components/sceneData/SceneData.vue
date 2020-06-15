@@ -1,9 +1,10 @@
 <template>
-  <div class="SceneData">
-    <div class="Wrapper">
-      <div>{{sceneData['title']}}</div>
-      <div>{{sceneData['description']}}</div>
+  <el-container class="SceneData">
+    <el-header>
+      <SceneBasic :sceneData="sceneData"></SceneBasic>
       <el-divider></el-divider>
+    </el-header>
+    <el-main>
       <el-table
         :data="sceneData['inputFrameDataList']"
         style="width: 100%">
@@ -16,7 +17,7 @@
             </div>
           </template>
         </el-table-column>
-         <el-table-column
+          <el-table-column
           label="能源数据"
           width="180">
           <template slot-scope="scope">
@@ -25,7 +26,7 @@
             </div>
           </template>
         </el-table-column>
-         <el-table-column
+          <el-table-column
           label="设备数据"
           width="180">
           <template slot-scope="scope">
@@ -34,7 +35,7 @@
             </div>
           </template>
         </el-table-column>
-         <el-table-column
+          <el-table-column
           label="关键参数"
           width="180">
           <template slot-scope="scope">
@@ -89,13 +90,17 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
-  </div>
+    </el-main>
+  </el-container>
 </template>
 <script>
 import api from 'api'
+import SceneBasic from './widgets/SceneBasic'
 export default {
   name: 'SceneData',
+  components: {
+    SceneBasic
+  },
   data () {
     return {
       sceneData: {}

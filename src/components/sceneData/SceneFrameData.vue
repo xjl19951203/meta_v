@@ -1,12 +1,23 @@
 <template>
-  <div class="SceneFrameData">
-    <div class="Wrapper">
-      <el-radio-group v-model="outputIndex" size="small">
-        <el-radio-button :label="index" v-for="(item, index) in frame['outputFrameDataList']" :key="index">
-          {{item['collectionDescription']}}
-        </el-radio-button>
-      </el-radio-group>
+  <el-container class="SceneFrameData">
+    <el-header>
+      <SceneBasic :sceneData="frame['sceneData']"></SceneBasic>
+      <el-card class="hover">
+        <div slot="header" class="clearfix">
+          <el-tag effect="dark">采集描述</el-tag>
+          <el-button style="float: right; padding: 3px 0" type="text">
+            <i class="el-icon-circle-plus-outline"></i> 新增描述
+          </el-button>
+        </div>
+        <el-radio-group v-model="outputIndex" size="small">
+          <el-radio :label="index" v-for="(item, index) in frame['outputFrameDataList']" :key="index">
+            {{item['collectionDescription']}}
+          </el-radio>
+        </el-radio-group>
+      </el-card>
       <el-divider></el-divider>
+    </el-header>
+    <el-main>
       <el-tabs v-model="activeName">
         <el-tab-pane :label="tabPaneList[0].label" name="1">
           <Pane :list="frame['materialDataList']" :label="tabPaneList[0].label" :tableName="tabPaneList[0].tableName"></Pane>
@@ -24,28 +35,33 @@
           <Pane :list="frame['functionUnitDataList']" :label="tabPaneList[4].label" :tableName="tabPaneList[4].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[5].label" name="6">
-          <Pane :list="frame['outputFrameDataList'][outputIndex]['envLoadDataList']" :label="tabPaneList[5].label" :tableName="tabPaneList[5].tableName"></Pane>
+          <Pane :list="frame['outputFrameDataList'][parseInt(outputIndex)]['envLoadDataList']" :label="tabPaneList[5].label" :tableName="tabPaneList[5].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[6].label" name="7">
-          <Pane :list="frame['outputFrameDataList'][outputIndex]['outputPartDataList']" :label="tabPaneList[6].label" :tableName="tabPaneList[6].tableName"></Pane>
+          <Pane :list="frame['outputFrameDataList'][parseInt(outputIndex)]['outputPartDataList']" :label="tabPaneList[6].label" :tableName="tabPaneList[6].tableName"></Pane>
         </el-tab-pane>
       </el-tabs>
-    </div>
-  </div>
+    </el-main>
+  </el-container>
 </template>
 <script>
 import api from 'api'
 import Pane from './widgets/Pane'
+import SceneBasic from './widgets/SceneBasic'
 export default {
   name: 'SceneFrameData',
   components: {
-    Pane
+    Pane,
+    SceneBasic
   },
   data () {
     return {
       activeName: '1',
       outputIndex: 0,
-      frame: {},
+      frame: {
+        sceneData: {},
+        outputFrameDataList: [{}]
+      },
       tabPaneList: [
         {
           label: '物料数据',

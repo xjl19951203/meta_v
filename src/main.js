@@ -11,6 +11,12 @@ import Vuex from 'vuex'
 import store from './store/store'
 import axios from 'axios'
 import api from './fetch/api'
+import Router from 'vue-router'
+
+const originalPush = Router.prototype.push
+Router.prototype.push = function push (location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 Vue.config.productionTip = false
 Vue.use(Vuex)

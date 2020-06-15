@@ -10,9 +10,17 @@ html, body, #app{
 
 .Wrapper{
   max-width: 1000px!important;
+  min-width: 1000px!important;
   margin: auto;
 }
 
 .el-container, .el-header, .el-aside, .el-main{
   padding: 0;
+}
+.el-header, .el-footer{
+  height: fit-content!important;
+}
+
+.el-card{
+  margin: 20px 0;
 }

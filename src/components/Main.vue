@@ -7,9 +7,11 @@
       <el-aside>
         <Navigation></Navigation>
       </el-aside>
-      <el-main>
-        <router-view></router-view>
-      </el-main>
+      <div class="Wrapper">
+        <el-main>
+          <router-view></router-view>
+        </el-main>
+      </div>
     </el-container>
   </el-container>
 </template>
@@ -33,11 +35,17 @@ export default {
       max-height: calc(100% - 60px);
     }
     .el-aside{
-      width: 200px!important;
+      width: fit-content!important;
+      min-width: 200px;
+      height: 100%;
+      max-height: 100%;
+      background-color: #4A524F;
+    }
+    .el-main{
       height: 100%;
       max-height: 100%;
     }
-    .el-main{
+    .Wrapper{
       height: 100%;
       max-height: 100%;
     }

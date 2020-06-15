@@ -1,10 +1,10 @@
 <template>
   <div class="Pane">
-    <el-button type="primary" size="medium" @click="handleEditDrawer(null)">
-      <i class="fa fa-fw fa-plus-circle"></i>
-      添加{{label}}
-    </el-button>
-    <el-divider></el-divider>
+    <p>
+      <el-button type="primary" size="mini" @click="handleEditDrawer(null)">
+        <i class="el-icon-circle-plus-outline"></i> 新增数据
+      </el-button>
+    </p>
     <el-table
       :data="list">
       <el-table-column
