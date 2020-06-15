@@ -62,7 +62,7 @@ export default {
           // api.post(args).then(res => {
           //   console.log(res)
           // })
-          this.$router.push({name: 'SceneList'})
+          this.$router.push({name: 'SceneDataList'})
         } else {
           console.log('error submit!!')
           return false

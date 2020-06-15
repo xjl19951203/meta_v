@@ -121,7 +121,7 @@ export default {
   },
   methods: {
     handleDetailDrawer (index, row) {
-      this.$router.push({name: 'Scene', params: {sceneDataId: row['id']}})
+      this.$router.push({name: 'SceneData', params: {sceneDataId: row['id']}})
     },
     handlePost () {
       this.postSceneForm.categoryId = this.postCategoryList[this.postCategoryList.length - 1]
