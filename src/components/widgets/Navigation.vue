@@ -67,7 +67,6 @@ export default {
       let temp = [
         {
           title: '数据批处理',
-          name: 'BatchIndex',
           children: [
             {
               title: '导入规范',
@@ -92,7 +91,6 @@ export default {
         },
         {
           title: '用户管理',
-          name: 'UserIndex',
           children: [
             {
               title: '用户信息',
@@ -136,9 +134,8 @@ export default {
       }
     },
     handleNodeClick (data) {
-      console.log(data['id'])
-      if (data['id'] !== undefined) {
-        this.$router.push({name: 'SceneDataList', query: {category: data['id']}})
+      if (data['name'] !== undefined) {
+        this.$router.push({name: data['name']})
       }
     }
   }
