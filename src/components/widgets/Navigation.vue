@@ -87,7 +87,7 @@ export default {
         },
         {
           title: '数据查询',
-          name: 'SearchIndex'
+          name: 'Search'
         },
         {
           title: '用户管理',

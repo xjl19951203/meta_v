@@ -2,11 +2,6 @@
   <div class="BatchDoc">
     <h1>
       数据批量处理中心
-      <p>
-        <el-button @click="handleClear">
-          清理缓存
-        </el-button>
-      </p>
     </h1>
   </div>
 </template>

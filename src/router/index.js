@@ -9,6 +9,8 @@ import BatchDoc from '../components/batch/BatchDoc'
 import BatchImport from '../components/batch/BatchImport'
 import BatchExport from '../components/batch/BatchExport'
 import Manage from '../components/manage/Manage'
+import User from '../components/user/User'
+import Search from '../components/search/Search'
 
 Vue.use(Router)
 
@@ -57,6 +59,16 @@ export default new Router({
           path: '/manage/:tableName',
           name: 'Manage',
           component: Manage
+        },
+        {
+          path: '/user',
+          name: 'User',
+          component: User
+        },
+        {
+          path: '/search',
+          name: 'Search',
+          component: Search
         }
       ]
     }

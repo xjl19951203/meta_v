@@ -2,7 +2,7 @@
   <el-row class="Home">
     <el-col class="Left" :span="12">
       <div class="Title">基础制造工艺资源环境负荷数据库</div>
-      <div class="Wrapper">
+      <div class="Wrap">
         <el-row :gutter="50">
           <el-col :span="12" v-for="item in navList" :key="item.index">
             <el-card shadow="hover">
@@ -14,8 +14,24 @@
       </div>
     </el-col>
     <el-col class="Right" :span="12">
-      <Login v-show="type === 'login'"></Login>
-      <Register v-show="type === 'register'"></Register>
+      <div class="Wrap">
+        <p v-if="auth" style="text-align: center">
+          <router-link :to="{name: 'User'}">
+            <el-avatar :size="100">{{auth['userName']}}</el-avatar>
+          </router-link>
+        </p>
+        <el-row :gutter="20" v-if="auth">
+          <el-col :span="4.8" v-for="item in list" :key="item.index">
+            <router-link :to="{name: item['name']}">
+             <el-card shadow="hover" style="text-align: center">
+              {{item['title']}}
+            </el-card>
+            </router-link>
+          </el-col>
+        </el-row>
+        <Login v-else-if="type === 'login'"></Login>
+        <Register v-else-if="type === 'register'"></Register>
+      </div>
     </el-col>
   </el-row>
 </template>
@@ -28,6 +44,11 @@ export default {
   components: {
     Login,
     Register
+  },
+  computed: {
+    auth () {
+      return this.$store.state.auth
+    }
   },
   data () {
     return {
@@ -44,6 +65,28 @@ export default {
         },
         {
           title: '铸造数据库'
+        }
+      ],
+      list: [
+        {
+          name: 'SceneDataList',
+          title: '工艺场景'
+        },
+        {
+          name: 'Manage',
+          title: '基础数据'
+        },
+        {
+          name: 'BatchDoc',
+          title: '批处理'
+        },
+        {
+          name: 'Search',
+          title: '数据查询'
+        },
+        {
+          name: 'User',
+          title: '用户管理'
         }
       ]
     }
@@ -68,6 +111,8 @@ export default {
       this.type = 'login'
     }
     next()
+  },
+  methods: {
   }
 }
 </script>
@@ -76,14 +121,17 @@ export default {
 <style lang="scss">
   .Home{
     height: 100%;
+    a{
+      text-decoration: none;
+    }
     .el-col{
       height: 100%;
     }
+    .Wrap{
+      max-width: 600px!important;
+      margin: auto;
+    }
     .Login{
-      .Wrapper{
-        max-width: 400px!important;
-        margin: auto;
-      }
       .Title{
         font-size: larger;
         font-weight: bolder;

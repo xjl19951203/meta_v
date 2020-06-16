@@ -2,8 +2,6 @@ import store from '../store/store'
 import axios from 'axios'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-// 引入elm组件
-import { Message } from 'element-ui'
 
 axios.interceptors.request.use(config => {
 // 让每个请求携带token--['token']为自定义key
@@ -57,11 +55,6 @@ function post (args) {
     axios.post(root + args.url, args['params'], args['config'])
       .then(response => {
         store.commit('clear')
-        if (response.data !== 0) {
-          Message.success('成功！')
-        } else {
-          Message.error('失败！')
-        }
         resolve(response.data)
       })
       .catch((error) => {
@@ -81,11 +74,6 @@ function put (args) {
     }
     axios.put(root + url, args['params'])
       .then(response => {
-        if (response.data === 1) {
-          Message.success('成功！')
-        } else {
-          Message.error('失败！')
-        }
         store.commit('clear')
         resolve(response.data)
       })

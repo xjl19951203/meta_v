@@ -78,7 +78,7 @@ export default new Vuex.Store({
     },
     login (state, auth) {
       localStorage.setItem('auth', JSON.stringify(auth))
-      state.token = JSON.parse(localStorage.getItem('auth')).token
+      // state.token = JSON.parse(localStorage.getItem('auth')).token
       state.auth = JSON.parse(localStorage.getItem('auth'))
       this.commit('setLoginTime')
     },

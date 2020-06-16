@@ -28,7 +28,7 @@
     </el-header>
     <el-main>
       <el-table
-        :data="sceneList.filter(data => !searchForm.content || data.title.toLowerCase().includes(searchForm.content.toLowerCase()))"
+        :data="sceneDataList.filter(data => !searchForm.content || data.title.toLowerCase().includes(searchForm.content.toLowerCase()))"
         style="width: 100%">
         <el-table-column
           label="工艺分类"
@@ -76,9 +76,12 @@
     </el-main>
     <el-footer>
       <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="1000">
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="categoryRes.currentPage"
+        :page-size="categoryRes.pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="categoryRes.count">
       </el-pagination>
     </el-footer>
   </el-container>
@@ -100,7 +103,15 @@ export default {
         selectCategoryId: null
       },
       searchRules: {},
-      sceneList: [],
+      categoryRes: {
+        count: 1,
+        currentPage: 1,
+        pages: 1,
+        pageSize: 1,
+        data: [],
+        category: {}
+      },
+      sceneDataList: [],
       postSceneDrawer: false,
       postSceneForm: {
         title: '',
@@ -112,24 +123,57 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
+      let categoryId = to.query['category'] ? to.query['category'] : 1
+      let query = {
+        currentPage: to.query['currentPage'] ? to.query['currentPage'] : 1,
+        pageSize: to.query['pageSize'] ? to.query['pageSize'] : 5
+      }
       let args = {
-        url: 'manage/sceneData',
-        params: to.query
+        url: 'category/' + categoryId,
+        params: query
       }
       api.get(args).then(res => {
-        vm.sceneList = res['data']
+        vm.categoryRes = res
+        vm.sceneDataList = res['data']
       })
     })
   },
   beforeRouteUpdate (to, from, next) {
-    let args = {
-      url: 'manage/sceneData',
-      params: to.query
+    let categoryId = to.query['category'] ? to.query['category'] : 1
+    let query = {
+      currentPage: to.query['currentPage'] ? to.query['currentPage'] : 1,
+      pageSize: to.query['pageSize'] ? to.query['pageSize'] : 5
     }
-    api.get(args).then(res => {})
+    let args = {
+      url: 'category/' + categoryId,
+      params: query
+    }
+    api.get(args).then(res => {
+      this.categoryRes = res
+      this.sceneDataList = res['data']
+    })
     next()
   },
   methods: {
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      let routeQuery = this.$route['query']
+      let categoryId = routeQuery['category'] ? routeQuery['category'] : 1
+      let query = {
+        currentPage: val,
+        pageSize: routeQuery['pageSize'] ? routeQuery['pageSize'] : 5
+      }
+      let args = {
+        url: 'category/' + categoryId,
+        params: query
+      }
+      api.get(args).then(res => {
+        this.categoryRes = res
+        this.sceneDataList = res['data']
+      })
+    },
     handleDetailDrawer (index, row) {
       this.$router.push({name: 'SceneData', params: {sceneDataId: row['id']}})
     },

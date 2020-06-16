@@ -1,5 +1,5 @@
 <template>
-  <div class="SearchIndex">
+  <div class="Search">
     <div class="wrapper">
       <el-form ref="searchForm" v-model="searchForm">
         <el-form-item prop="content">
@@ -32,7 +32,7 @@
 import api from 'api'
 import SearchItem from './widgets/SearchItem'
 export default {
-  name: 'SearchIndex',
+  name: 'Search',
   components: {
     SearchItem
   },
@@ -68,7 +68,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .SearchIndex{
+  .Search{
     .el-form{
       padding: 20px 0;
     }
