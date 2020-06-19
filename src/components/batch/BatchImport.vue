@@ -1,12 +1,59 @@
 <template>
   <div class="BatchImport">
-    BatchImport
+    <el-card>
+      上传文件格式：
+      <el-radio-group v-model="fileType">
+        <el-radio label="json">JSON</el-radio>
+        <el-radio label="xls">XLS</el-radio>
+        <el-radio label="csv">CSV</el-radio>
+        <el-radio label="txt">TXT</el-radio>
+      </el-radio-group>
+    </el-card>
+    <el-upload
+      class="upload-demo"
+      drag
+      action="https://jsonplaceholder.typicode.com/posts/"
+      :on-preview="handlePreview"
+      multiple>
+      <i class="el-icon-upload"></i>
+      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+    </el-upload>
+    <el-divider></el-divider>
+    <el-button type="warning">格式校验</el-button>
+    <el-button type="primary">预览</el-button>
+    <el-divider></el-divider>
+    <el-button type="success">开始批处理</el-button>
   </div>
 </template>
 
 <script>
+import api from 'api'
 export default {
-  name: 'BatchImport'
+  name: 'BatchImport',
+  data () {
+    return {
+      fileType: 'json'
+    }
+  },
+  methods: {
+    handleBatch () {
+      let args = {
+        url: 'batch/sceneData'
+      }
+      api.post(args).then(res => {})
+    },
+    handlePreview (file) {
+      console.log(file)
+      const reader = new FileReader()
+      reader.readAsText(file.raw)
+      reader.onload = function () {
+        // 当读取完成之后会回调这个函数，然后此时文件的内容存储到了result中。直接操作即可。
+        console.log('读取结果转为JSON：')
+        let json = JSON.parse(this.result)
+        console.log(json)
+      }
+    }
+  }
 }
 </script>
 

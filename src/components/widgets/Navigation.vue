@@ -31,6 +31,7 @@ export default {
       let temp = this.$store.state.categories
       return [{
         title: '工艺场景',
+        id: null,
         name: 'SceneDataList',
         children: temp[0]['children']
       }]
@@ -123,9 +124,9 @@ export default {
   },
   methods: {
     handleScene (data) {
-      if (data['id'] !== undefined) {
-        this.$router.push({name: 'SceneDataList', query: {category: data['id']}})
-      }
+      // if (data['id'] !== undefined) {
+      this.$router.push({name: 'SceneDataList', query: {category: data['id']}})
+      // }
     },
     handleBase (data) {
       console.log(data['tableName'])
