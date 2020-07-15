@@ -9,6 +9,13 @@
         <el-radio label="txt">TXT</el-radio>
       </el-radio-group>
     </el-card>
+    <el-card>
+      导入数据类型：
+      <el-radio-group v-model="tableType">
+        <el-radio label="baseTable">工艺场景导入</el-radio>
+        <el-radio label="sceneData">基础数据导入</el-radio>
+      </el-radio-group>
+    </el-card>
     <el-upload
       class="upload-demo"
       drag
@@ -19,7 +26,7 @@
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
     </el-upload>
     <el-divider></el-divider>
-    <el-button type="warning">格式校验</el-button>
+<!--    <el-button type="warning">格式校验</el-button>-->
     <el-button type="primary">预览</el-button>
     <el-divider></el-divider>
     <el-button type="success">开始批处理</el-button>
@@ -32,19 +39,36 @@ export default {
   name: 'BatchImport',
   data () {
     return {
-      fileType: 'json'
+      fileType: 'json',
+      tableType: 'baseTable'
     }
   },
   methods: {
     handleBatch () {
-      let args = {
-        url: 'batch/sceneData'
+      let args
+      if (this.fileType === 'json' && this.tableType === 'baseTable') {
+        args = {
+          url: 'batch/excel/json/baseTable/:tableName'
+        }
+      }
+      if (this.this.fileType === 'json' && this.tableType === 'sceneData') {
+        args = {
+          url: 'batch/excel/json/sceneData'
+        }
+      }
+      if (this.fileType === 'excel') {
+        args = {
+          url: 'batch/excel/sceneData'
+        }
       }
       api.post(args).then(res => {})
     },
     handlePreview (file) {
       console.log(file)
       const reader = new FileReader()
+      if (this.fileType === 'xls') {
+
+      }
       reader.readAsText(file.raw)
       reader.onload = function () {
         // 当读取完成之后会回调这个函数，然后此时文件的内容存储到了result中。直接操作即可。
