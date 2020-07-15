@@ -19,6 +19,21 @@
       <el-radio-group v-else if="fileType === 'excel'" v-model="tableType">
         <el-radio label="baseTable">基础数据导入</el-radio>
         <el-radio label="sceneData">工艺场景导入</el-radio>
+        <el-dropdown>
+          <el-button type="primary">
+            请选择下载模板 <i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown" v-if="tableType === 'baseTable'">
+            <el-dropdown-item @click.native="selectTableName">基础物料表</el-dropdown-item>
+            <el-dropdown-item @click.native="selectTableName">基础能源表</el-dropdown-item>
+            <el-dropdown-item @click.native="selectTableName">基础设备表</el-dropdown-item>
+            <el-dropdown-item @click.native="selectTableName">基础环境负荷表</el-dropdown-item>
+          </el-dropdown-menu>
+          <el-dropdown-menu slot="dropdown" v-model="tableName" v-else if="tableType === sceneData">
+            <el-dropdown-item lable="sceneData">工艺场景表</el-dropdown-item>
+          </el-dropdown-menu >
+          <el-button type="primary" @click="downloadTable">下载</el-button>
+        </el-dropdown>
       </el-radio-group>
     </el-card>
     <el-upload
@@ -34,36 +49,73 @@
     <el-button type="warning">格式校验</el-button>
     <el-button type="primary">预览</el-button>
     <el-divider></el-divider>
-    <el-button type="success">开始批处理</el-button>
+    <el-button type="success" @click="handleBatch">开始批处理</el-button>
   </div>
 </template>
 
 <script>
 import api from 'api'
+import store from '../../store/store'
 export default {
   name: 'BatchImport',
   data () {
     return {
       fileType: 'xls',
-      tableType: 'baseTable'
+      tableType: 'baseTable',
+      tableName: null,
+      testArea: '请选择下载导入模板'
     }
   },
   methods: {
+    selectTableName () {
+      this.tableName = 'material'
+    },
+    downloadTable () {
+      let args
+      let tableName = this.tableName
+      if (this.tableName === null) {
+        this.$message('请选择下载模板！！')
+      } else if (this.fileType === 'xls' && this.tableType === 'baseTable') {
+        args = {
+          url: 'batch/excel/baseTableExcel/' + tableName
+        }
+      } else if (this.fileType === 'xls' && this.tableType === 'sceneData') {
+        args = {
+          url: 'batch/excel/sceneDataExcel'
+        }
+      }
+      args.url = store.state.root + args.url
+      window.location.href = args.url
+      // api.get(args).then(res => {
+      //   console.log('hfkjab')
+      //   window.location.href = args.url
+      // })
+    },
     handleBatch () {
       let args
       if (this.fileType === 'json' && this.tableType === 'baseTable') {
         args = {
-          url: 'batch/excel/json/baseTable/:tableName'
+          url: 'batch/json/baseTable/'
         }
       }
-      if (this.this.fileType === 'json' && this.tableType === 'sceneData') {
+      if (this.fileType === 'json' && this.tableType === 'sceneData') {
         args = {
-          url: 'batch/excel/json/sceneData'
+          url: 'batch/json/sceneData'
         }
       }
-      if (this.fileType === 'excel') {
+      if (this.fileType === 'json' && this.tableType === 'sceneDataList') {
+        args = {
+          url: 'batch/json/sceneDataList'
+        }
+      }
+      if (this.fileType === 'excel' && this.tableType === 'sceneData') {
         args = {
           url: 'batch/excel/sceneData'
+        }
+      }
+      if (this.fileType === 'excel' && this.tableType === 'baseTable') {
+        args = {
+          url: 'batch/excel/baseTable'
         }
       }
       api.post(args).then(res => {})
