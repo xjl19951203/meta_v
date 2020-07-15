@@ -3,17 +3,22 @@
     <el-card>
       上传文件格式：
       <el-radio-group v-model="fileType">
-        <el-radio label="json">JSON</el-radio>
         <el-radio label="xls">XLS</el-radio>
-        <el-radio label="csv">CSV</el-radio>
-        <el-radio label="txt">TXT</el-radio>
+        <el-radio label="json">JSON</el-radio>
+<!--        <el-radio label="csv">CSV</el-radio>-->
+<!--        <el-radio label="txt">TXT</el-radio>-->
       </el-radio-group>
     </el-card>
     <el-card>
       导入数据类型：
-      <el-radio-group v-model="tableType">
-        <el-radio label="baseTable">工艺场景导入</el-radio>
-        <el-radio label="sceneData">基础数据导入</el-radio>
+      <el-radio-group v-if="fileType === 'json'" v-model="tableType">
+        <el-radio label="baseTable">基础数据导入</el-radio>
+        <el-radio label="sceneData">单个工艺场景导入</el-radio>
+        <el-radio label="sceneDataList">多个工艺场景导入</el-radio>
+      </el-radio-group>
+      <el-radio-group v-else if="fileType === 'excel'" v-model="tableType">
+        <el-radio label="baseTable">基础数据导入</el-radio>
+        <el-radio label="sceneData">工艺场景导入</el-radio>
       </el-radio-group>
     </el-card>
     <el-upload
@@ -26,7 +31,7 @@
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
     </el-upload>
     <el-divider></el-divider>
-<!--    <el-button type="warning">格式校验</el-button>-->
+    <el-button type="warning">格式校验</el-button>
     <el-button type="primary">预览</el-button>
     <el-divider></el-divider>
     <el-button type="success">开始批处理</el-button>
@@ -39,7 +44,7 @@ export default {
   name: 'BatchImport',
   data () {
     return {
-      fileType: 'json',
+      fileType: 'xls',
       tableType: 'baseTable'
     }
   },
