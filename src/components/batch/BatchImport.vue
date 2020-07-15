@@ -24,13 +24,13 @@
             请选择下载模板 <i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown" v-if="tableType === 'baseTable'">
-            <el-dropdown-item @click.native="selectTableName">基础物料表</el-dropdown-item>
-            <el-dropdown-item @click.native="selectTableName">基础能源表</el-dropdown-item>
-            <el-dropdown-item @click.native="selectTableName">基础设备表</el-dropdown-item>
-            <el-dropdown-item @click.native="selectTableName">基础环境负荷表</el-dropdown-item>
+            <el-dropdown-item @click.native="materialExcel">基础物料表</el-dropdown-item>
+            <el-dropdown-item @click.native="energyExcel">基础能源表</el-dropdown-item>
+            <el-dropdown-item @click.native="deviceExcel">基础设备表</el-dropdown-item>
+            <el-dropdown-item @click.native="envLoadExcel">基础环境负荷表</el-dropdown-item>
           </el-dropdown-menu>
           <el-dropdown-menu slot="dropdown" v-model="tableName" v-else if="tableType === sceneData">
-            <el-dropdown-item lable="sceneData">工艺场景表</el-dropdown-item>
+            <el-dropdown-item @click.native="sceneDataExcel">工艺场景表</el-dropdown-item>
           </el-dropdown-menu >
           <el-button type="primary" @click="downloadTable">下载</el-button>
         </el-dropdown>
@@ -46,8 +46,8 @@
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
     </el-upload>
     <el-divider></el-divider>
-    <el-button type="warning">格式校验</el-button>
-    <el-button type="primary">预览</el-button>
+<!--    <el-button type="warning">格式校验</el-button>-->
+<!--    <el-button type="primary">预览</el-button>-->
     <el-divider></el-divider>
     <el-button type="success" @click="handleBatch">开始批处理</el-button>
   </div>
@@ -67,8 +67,20 @@ export default {
     }
   },
   methods: {
-    selectTableName () {
+    materialExcel () {
       this.tableName = 'material'
+    },
+    energyExcel () {
+      this.tableName = 'energy'
+    },
+    deviceExcel () {
+      this.tableName = 'device'
+    },
+    envLoadExcel () {
+      this.tableName = 'envLoad'
+    },
+    sceneDataExcel () {
+      this.tableName = 'sceneDataExcel'
     },
     downloadTable () {
       let args
@@ -86,6 +98,7 @@ export default {
       }
       args.url = store.state.root + args.url
       window.location.href = args.url
+      this.$message('下载中，请稍候…')
       // api.get(args).then(res => {
       //   console.log('hfkjab')
       //   window.location.href = args.url
@@ -123,9 +136,6 @@ export default {
     handlePreview (file) {
       console.log(file)
       const reader = new FileReader()
-      if (this.fileType === 'xls') {
-
-      }
       reader.readAsText(file.raw)
       reader.onload = function () {
         // 当读取完成之后会回调这个函数，然后此时文件的内容存储到了result中。直接操作即可。
