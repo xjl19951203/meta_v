@@ -9,7 +9,8 @@ axios.interceptors.request.use(config => {
     let token = store.state.token
     Object.assign(config.headers, {
       'authorization': 'Token ' + token,
-      'Content-Security-Policy': 'upgrade-insecure-requests'
+      'Content-Security-Policy': 'upgrade-insecure-requests',
+      'Content-Type': 'multipart/form-data'
     })
   }
   return config
