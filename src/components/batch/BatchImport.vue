@@ -18,12 +18,12 @@
         <el-radio label="inputFrameDataList">批量输入数据帧</el-radio>
         <el-radio label="outputFrameDataList">批量输出数据帧</el-radio>
       </el-radio-group>
-      <el-radio-group v-else if="fileType === 'excel'" v-model="tableType">
+      <el-radio-group v-else-if="fileType === 'xls'" v-model="tableType" @change="changeDefault">
         <el-radio label="baseTable">基础数据导入</el-radio>
         <el-radio label="sceneData">工艺场景导入</el-radio>
         <el-dropdown>
           <el-button type="primary">
-            请选择下载模板 <i class="el-icon-arrow-down el-icon--right"></i>
+            {{variable}} <i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown" v-if="tableType === 'baseTable'">
             <el-dropdown-item @click.native="materialExcel">基础物料表</el-dropdown-item>
@@ -40,14 +40,17 @@
     </el-card>
     <el-upload
       class="upload-demo"
-      :action="getUrl"
+      action="getUrl"
+      name="file"
+      :auto-upload='false'
       :drag="true"
       :multiple='false'
       :limit="1"
-      :auto-upload='false'
       :on-exceed="handleExceed"
+      :on-change="change"
       :on-preview="handlePreview"
-      :before-upload="beforeUpload"
+      :http-request="uploadFile"
+      :before-remove="beforeRemove"
       >
       <i class="el-icon-upload"></i>
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -62,7 +65,7 @@
 </template>
 
 <script>
-// import api from 'api'
+import api from 'api'
 import store from '../../store/store'
 export default {
   name: 'BatchImport',
@@ -70,28 +73,44 @@ export default {
     return {
       fileType: 'xls',
       tableType: 'baseTable',
+      variable: '请选择下载模板',
       tableName: null,
-      testArea: '请选择下载导入模板',
+      cTableName: null,
       postForm: null,
-      file: null,
-      fileUrl: null
+      fileUrl: null,
+      fileList: [],
+      form: {
+        file: ''
+      }
     }
   },
   methods: {
+    changeDefault () {
+      if (this.tableType === 'baseTable') {
+        this.variable = '请选择下载模板'
+      } else if (this.tableType === 'sceneData') {
+        this.variable = '请下载模板'
+      }
+    },
     materialExcel () {
       this.tableName = 'material'
+      this.variable = '基础物料表'
     },
     energyExcel () {
       this.tableName = 'energy'
+      this.variable = '基础能源表'
     },
     deviceExcel () {
       this.tableName = 'device'
+      this.variable = '基础设备表'
     },
     envLoadExcel () {
       this.tableName = 'envLoad'
+      this.variable = '基础环境负荷表'
     },
     sceneDataExcel () {
       this.tableName = 'sceneDataExcel'
+      this.variable = '工艺场景表'
     },
     downloadTable () {
       let args
@@ -111,6 +130,7 @@ export default {
       window.location.href = args.url
       this.$message('下载中，请稍候…')
     },
+    // 根据文件类型和表类型构造url,设置auto-upload为true时直接将请求发送到这个地址
     getUrl () {
       let baseUrl
       if (this.fileType === 'xls') {
@@ -130,23 +150,46 @@ export default {
         return baseUrl + 'outputFrameDataList'
       }
     },
-    // 上传文件个数超过定义的数量
+    // 文件超出个数限制时的钩子,上传文件个数超过定义的数量
     handleExceed (files, fileList) {
       this.$message.warning(`单次限制上传1个文件`)
     },
-    beforeUpload (file) {
-      const extension = file.name.split('.')[1] === 'xls'
-      console.log('uuuuuu')
-      const extension2 = file.name.split('.')[1] === 'xlsx'
-      const isLt1M = file.size / 1024 / 1024 < 1
-      if (!extension && !extension2) {
-        this.$message.error('上传文件只能是 xls、xlsx格式!')
-      }
-      if (!isLt1M) {
-        this.$message.error('上传文件大小不能超过1MB!')
-      }
-      return extension || extension2 || isLt1M
+    // 文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用
+    change (event, file, fileList) {
+      console.log('change', file, file.raw)
+      this.form.file = file.raw
+      // if (file.name('xls')) {
+      //   console.log('hfoiashg')
+      // }
+      // const extension = file.name.split('.')[1] === 'xls'
+      // const extension2 = file.name.split('.')[1] === 'xlsx'
+      // const isLt1M = file.size / 1024 / 1024 < 1
+      // if (!extension && !extension2) {
+      //   this.$message.error('上传文件只能是 xls、xlsx格式!')
+      // }
+      // if (!isLt1M) {
+      //   this.$message.error('上传文件大小不能超过1MB!')
+      // }
+      // return extension || extension2 || isLt1M
     },
+    // 上传文件之前的钩子，参数为上传的文件，若返回 false 或者返回 Promise 且被 reject，则停止上传。
+    // auto-upload为false时不触发
+    // beforeUpload (file) {
+    //   console.log(file.name)
+    //   console.log('before')
+    //   // this.formData.append('file', file.file)
+    //   // const extension = file.name.split('.')[1] === 'xls'
+    //   // const extension2 = file.name.split('.')[1] === 'xlsx'
+    //   // const isLt1M = file.size / 1024 / 1024 < 1
+    //   // if (!extension && !extension2) {
+    //   //   this.$message.error('上传文件只能是 xls、xlsx格式!')
+    //   // }
+    //   // if (!isLt1M) {
+    //   //   this.$message.error('上传文件大小不能超过1MB!')
+    //   // }
+    //   // return extension || extension2 || isLt1M
+    // },
+    // 点击文件列表中已上传的文件时的钩子
     handlePreview (file) {
       if (this.fileType === 'json') {
         console.log(file)
@@ -160,25 +203,43 @@ export default {
           console.log(json)
           that.postForm = json
         }
-      } else if (this.fileType === 'xls') {
-        this.file = file.formData()
       }
     },
     uploadFile (file) {
       this.formData.append('file', file.file)
     },
+    beforeRemove (file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`)
+    },
     submitUpload () {
+      let baseUrl
+      if (this.fileType === 'xls') {
+        baseUrl = 'batch/excel/'
+      } else if (this.fileType === 'json') {
+        baseUrl = 'batch/json/'
+      }
+      if (this.tableType === 'baseTable') {
+        this.fileUrl = baseUrl + 'baseTable'
+      } else if (this.tableType === 'sceneData') {
+        this.fileUrl = baseUrl + 'sceneData'
+      } else if (this.tableType === 'sceneDataList') {
+        this.fileUrl = baseUrl + 'sceneDataList'
+      } else if (this.tableType === 'inputFrameDataList') {
+        this.fileUrl = baseUrl + 'inputFrameDataList'
+      } else if (this.tableType === 'outputFrameDataList') {
+        this.fileUrl = baseUrl + 'outputFrameDataList'
+      }
       let formData = new FormData()
-      formData.append('file', this.file.raw)
+      formData.append('file', this.form.file)
       let args
       args = {
         url: this.fileUrl,
-        params: formData,
         config: {
-          'contentType': 'multipart/form-data;charset=utf-8'
+          headers: {'Content-Type': 'multipart/form-data'}
+          // ; boundary=<calculated when request is sent>
         }
       }
-      api.post(args)
+      api.post(args).then(res => {})
       // if (this.fileType === 'json' && this.tableType === 'baseTable') {
       //   args = {
       //     url: 'batch/json/baseTable/',
