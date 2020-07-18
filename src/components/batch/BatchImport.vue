@@ -21,18 +21,18 @@
       <el-radio-group v-else-if="fileType === 'xls'" v-model="tableType" @change="changeDefault">
         <el-radio label="baseTable">基础数据导入</el-radio>
         <el-radio label="sceneData">工艺场景导入</el-radio>
-        <el-dropdown>
+        <el-dropdown @command="nameExcel">
           <el-button type="primary">
             {{variable}} <i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
-          <el-dropdown-menu slot="dropdown" v-if="tableType === 'baseTable'">
-            <el-dropdown-item @click.native="materialExcel">基础物料表</el-dropdown-item>
-            <el-dropdown-item @click.native="energyExcel">基础能源表</el-dropdown-item>
-            <el-dropdown-item @click.native="deviceExcel">基础设备表</el-dropdown-item>
-            <el-dropdown-item @click.native="envLoadExcel">基础环境负荷表</el-dropdown-item>
+          <el-dropdown-menu slot="dropdown" split-button="true" v-if="tableType === 'baseTable'" >
+            <el-dropdown-item command="a">基础物料表</el-dropdown-item>
+            <el-dropdown-item command="b">基础能源表</el-dropdown-item>
+            <el-dropdown-item command="c">基础设备表</el-dropdown-item>
+            <el-dropdown-item command="d">基础环境负荷表</el-dropdown-item>
           </el-dropdown-menu>
           <el-dropdown-menu slot="dropdown" v-else-if="tableType === 'sceneData'">
-            <el-dropdown-item @click.native="sceneDataExcel">工艺场景表</el-dropdown-item>
+            <el-dropdown-item command="e">工艺场景表</el-dropdown-item>
           </el-dropdown-menu >
           <el-button type="primary" @click="downloadTable">下载</el-button>
         </el-dropdown>
@@ -54,7 +54,7 @@
       >
       <i class="el-icon-upload"></i>
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-      <div class="el-upload__tip" slot="tip">一次只能上传一个文件，单文件不超过5MB</div>
+      <div class="el-upload__tip" slot="tip">一次只能上传一个文件，单文件不超过1MB</div>
     </el-upload>
     <el-divider></el-divider>
 <!--    <el-button type="warning">格式校验</el-button>-->
@@ -92,25 +92,23 @@ export default {
         this.variable = '请下载模板'
       }
     },
-    materialExcel () {
-      this.tableName = 'material'
-      this.variable = '基础物料表'
-    },
-    energyExcel () {
-      this.tableName = 'energy'
-      this.variable = '基础能源表'
-    },
-    deviceExcel () {
-      this.tableName = 'device'
-      this.variable = '基础设备表'
-    },
-    envLoadExcel () {
-      this.tableName = 'envLoad'
-      this.variable = '基础环境负荷表'
-    },
-    sceneDataExcel () {
-      this.tableName = 'sceneDataExcel'
-      this.variable = '工艺场景表'
+    nameExcel (command) {
+      if (command === 'a') {
+        this.tableName = 'material'
+        this.variable = '基础物料表'
+      } else if (command === 'b') {
+        this.tableName = 'energy'
+        this.variable = '基础能源表'
+      } else if (command === 'c') {
+        this.tableName = 'device'
+        this.variable = '基础设备表'
+      } else if (command === 'd') {
+        this.tableName = 'envLoad'
+        this.variable = '基础环境负荷表'
+      } else if (command === 'e') {
+        this.tableName = 'sceneDataExcel'
+        this.variable = '工艺场景表'
+      }
     },
     downloadTable () {
       let args
