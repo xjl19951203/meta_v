@@ -10,7 +10,7 @@ axios.interceptors.request.use(config => {
     Object.assign(config.headers, {
       'authorization': 'Token ' + token,
       'Content-Security-Policy': 'upgrade-insecure-requests',
-      'Content-Type': 'multipart/json;charset=utf-8'
+      'Content-Type': 'multipart/form-data; boundary=<calculated when request is sent>'
     })
   }
   return config

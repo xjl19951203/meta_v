@@ -38,9 +38,14 @@
         </el-dropdown>
       </el-radio-group>
     </el-card>
+<!--    on-exceed文件个数超出限制-->
+<!--    on-change文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用-->
+<!--    on-preview点击已经上传的文件-->
+<!--    http-request覆盖默认的上传行为，可以自定义上传的实现-->
+<!--    before-remove移除已经上传的文件-->
     <el-upload
       class="upload-demo"
-      action="getUrl"
+      :action="getUrl"
       name="file"
       :auto-upload='false'
       :drag="true"
@@ -49,8 +54,10 @@
       :on-exceed="handleExceed"
       :on-change="change"
       :on-preview="handlePreview"
-      :http-request="uploadFile"
       :before-remove="beforeRemove"
+      :on-error="uploadFalse"
+      :on-success="uploadSuccess"
+      ref="uploadFileRef"
       >
       <i class="el-icon-upload"></i>
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -60,12 +67,12 @@
 <!--    <el-button type="warning">格式校验</el-button>-->
 <!--    <el-button type="primary">预览</el-button>-->
 <!--    <el-divider></el-divider>-->
-    <el-button type="success" @click="submitUpload">开始批处理</el-button>
+    <el-button type="success" @click="submit">开始批处理</el-button>
   </div>
 </template>
 
 <script>
-import api from 'api'
+// import api from 'api'
 import store from '../../store/store'
 export default {
   name: 'BatchImport',
@@ -78,9 +85,27 @@ export default {
       cTableName: null,
       postForm: null,
       fileUrl: null,
-      fileList: [],
-      form: {
-        file: ''
+      baseUrl: ''
+    }
+  },
+  computed: {
+    getUrl () {
+      let baseUrl
+      if (this.fileType === 'xls') {
+        baseUrl = store.state.root + 'batch/excel/'
+      } else if (this.fileType === 'json') {
+        baseUrl = store.state.root + 'batch/json/'
+      }
+      if (this.tableType === 'baseTable') {
+        return baseUrl + 'baseTable'
+      } else if (this.tableType === 'sceneData') {
+        return baseUrl + 'sceneData'
+      } else if (this.tableType === 'sceneDataList') {
+        return baseUrl + 'sceneDataList'
+      } else if (this.tableType === 'inputFrameDataList') {
+        return baseUrl + 'inputFrameDataList'
+      } else if (this.tableType === 'outputFrameDataList') {
+        return baseUrl + 'outputFrameDataList'
       }
     }
   },
@@ -88,8 +113,10 @@ export default {
     changeDefault () {
       if (this.tableType === 'baseTable') {
         this.variable = '请选择下载模板'
+        this.baseUrl = store.state.root + 'batch/excel/' + 'baseTable'
       } else if (this.tableType === 'sceneData') {
         this.variable = '请下载模板'
+        this.baseUrl = store.state.root + 'batch/excel/' + 'baseTable'
       }
     },
     nameExcel (command) {
@@ -128,71 +155,37 @@ export default {
       window.location.href = args.url
       this.$message('下载中，请稍候…')
     },
-    // 根据文件类型和表类型构造url,设置auto-upload为true时直接将请求发送到这个地址
-    getUrl () {
-      let baseUrl
-      if (this.fileType === 'xls') {
-        baseUrl = store.state.root + 'batch/excel/'
-      } else if (this.fileType === 'json') {
-        baseUrl = store.state.root + 'batch/json/'
-      }
-      if (this.tableType === 'baseTable') {
-        return baseUrl + 'baseTable'
-      } else if (this.tableType === 'sceneData') {
-        return baseUrl + 'sceneData'
-      } else if (this.tableType === 'sceneDataList') {
-        return baseUrl + 'sceneDataList'
-      } else if (this.tableType === 'inputFrameDataList') {
-        return baseUrl + 'inputFrameDataList'
-      } else if (this.tableType === 'outputFrameDataList') {
-        return baseUrl + 'outputFrameDataList'
-      }
-    },
     // 文件超出个数限制时的钩子,上传文件个数超过定义的数量
     handleExceed (files, fileList) {
       this.$message.warning(`单次限制上传1个文件`)
     },
     // 文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用
     change (event, file, fileList) {
-      console.log('change', file, file.raw)
-      this.form.file = file.raw
-      // if (file.name('xls')) {
-      //   console.log('hfoiashg')
-      // }
-      // const extension = file.name.split('.')[1] === 'xls'
-      // const extension2 = file.name.split('.')[1] === 'xlsx'
-      // const isLt1M = file.size / 1024 / 1024 < 1
-      // if (!extension && !extension2) {
-      //   this.$message.error('上传文件只能是 xls、xlsx格式!')
-      // }
-      // if (!isLt1M) {
-      //   this.$message.error('上传文件大小不能超过1MB!')
-      // }
-      // return extension || extension2 || isLt1M
+      console.log('change', file, file[0].name)
+      // let fileName = file.name
+      const extension = (file[0].name || '').split('.')[1] === 'xls'
+      const extension2 = (file[0].name || '').split('.')[1] === 'xlsx'
+      const isLt1M = file[0].size / 1024 / 1024 <= 1
+      if (!extension && !extension2) {
+        this.$message({
+          message: '上传文件只能是 xls、xlsx格式!',
+          type: 'error'
+        })
+        // alert('上传文件只能是 xls、xlsx格式!')
+      } else if (!isLt1M) {
+        this.$message({
+          message: '上传文件大小不能超过1MB',
+          type: 'error'
+        })
+      }
+      return extension || extension2 || isLt1M
     },
-    // 上传文件之前的钩子，参数为上传的文件，若返回 false 或者返回 Promise 且被 reject，则停止上传。
-    // auto-upload为false时不触发
-    // beforeUpload (file) {
-    //   console.log(file.name)
-    //   console.log('before')
-    //   // this.formData.append('file', file.file)
-    //   // const extension = file.name.split('.')[1] === 'xls'
-    //   // const extension2 = file.name.split('.')[1] === 'xlsx'
-    //   // const isLt1M = file.size / 1024 / 1024 < 1
-    //   // if (!extension && !extension2) {
-    //   //   this.$message.error('上传文件只能是 xls、xlsx格式!')
-    //   // }
-    //   // if (!isLt1M) {
-    //   //   this.$message.error('上传文件大小不能超过1MB!')
-    //   // }
-    //   // return extension || extension2 || isLt1M
-    // },
     // 点击文件列表中已上传的文件时的钩子
     handlePreview (file) {
       if (this.fileType === 'json') {
         console.log(file)
         const reader = new FileReader()
-        reader.readAsText(file.raw)
+        reader.readAsText(file[0].raw)
         reader.onload = function () {
           let that = this
           // 当读取完成之后会回调这个函数，然后此时文件的内容存储到了result中。直接操作即可。
@@ -203,87 +196,52 @@ export default {
         }
       }
     },
-    uploadFile (file) {
-      this.formData.append('file', file.file)
-    },
     beforeRemove (file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`)
     },
-    submitUpload () {
-      let baseUrl
-      if (this.fileType === 'xls') {
-        baseUrl = 'batch/excel/'
-      } else if (this.fileType === 'json') {
-        baseUrl = 'batch/json/'
+    submit () {
+      this.$refs.uploadFileRef.submit()
+    },
+    uploadSuccess (response, file, fileList) {
+      if (response.status) {
+        alert('文件导入成功')
+      } else {
+        alert('文件导入失败')
       }
-      if (this.tableType === 'baseTable') {
-        this.fileUrl = baseUrl + 'baseTable'
-      } else if (this.tableType === 'sceneData') {
-        this.fileUrl = baseUrl + 'sceneData'
-      } else if (this.tableType === 'sceneDataList') {
-        this.fileUrl = baseUrl + 'sceneDataList'
-      } else if (this.tableType === 'inputFrameDataList') {
-        this.fileUrl = baseUrl + 'inputFrameDataList'
-      } else if (this.tableType === 'outputFrameDataList') {
-        this.fileUrl = baseUrl + 'outputFrameDataList'
-      }
-      let formData = new FormData()
-      formData.append('file', this.form.file)
-      let args
-      args = {
-        url: this.fileUrl,
-        config: {
-          headers: {'Content-Type': 'multipart/form-data'}
-          // ; boundary=<calculated when request is sent>
-        }
-      }
-      api.post(args).then(res => {})
-      // if (this.fileType === 'json' && this.tableType === 'baseTable') {
-      //   args = {
-      //     url: 'batch/json/baseTable/',
-      //     params: this.postForm
-      //   }
-      // }
-      // if (this.fileType === 'json' && this.tableType === 'sceneData') {
-      //   args = {
-      //     url: 'batch/json/sceneData',
-      //     params: this.postForm
-      //   }
-      // }
-      // if (this.fileType === 'json' && this.tableType === 'sceneDataList') {
-      //   args = {
-      //     url: 'batch/json/sceneDataList',
-      //     params: this.postForm
-      //   }
-      // }
-      // if (this.fileType === 'xls' && this.tableType === 'sceneData') {
-      //   args = {
-      //     url: 'batch/excel/sceneData',
-      //     params: this.postForm
-      //   }
-      // }
-      // if (this.fileType === 'xls' && this.tableType === 'baseTable') {
-      //   args = {
-      //     url: 'batch/excel/baseTable',
-      //     params: this.file,
-      //     config: {
-      //       // eslint-disable-next-line standard/object-curly-even-spacing
-      //       headers: { 'Content-Type': 'multipart/form-data; boundary=<calculated when request is sent>'}
-      //     }
-      //   }
-      // }
-      // api.post(args).then(res => {
-      //   switch (this.fileInfo) {
-      //     case 'sceneData':
-      //       this.$router.push({name: 'SceneData', params: {sceneDataId: res}})
-      //       break
-      //     case 'sceneDataList':
-      //       this.postForm = res
-      //       // this.resFlag = true
-      //       break
-      //   }
-      // })
+    },
+    uploadFalse (response, file, fileList) {
+      alert('文件上传失败！')
     }
+    // submitUpload () {
+    //   let baseUrl
+    //   if (this.fileType === 'xls') {
+    //     baseUrl = 'batch/excel/'
+    //   } else if (this.fileType === 'json') {
+    //     baseUrl = 'batch/json/'
+    //   }
+    //   if (this.tableType === 'baseTable') {
+    //     this.fileUrl = baseUrl + 'baseTable'
+    //   } else if (this.tableType === 'sceneData') {
+    //     this.fileUrl = baseUrl + 'sceneData'
+    //   } else if (this.tableType === 'sceneDataList') {
+    //     this.fileUrl = baseUrl + 'sceneDataList'
+    //   } else if (this.tableType === 'inputFrameDataList') {
+    //     this.fileUrl = baseUrl + 'inputFrameDataList'
+    //   } else if (this.tableType === 'outputFrameDataList') {
+    //     this.fileUrl = baseUrl + 'outputFrameDataList'
+    //   }
+    //   let formData = new FormData()
+    //   formData.append('file', this.formData.file)
+    //   let args
+    //   args = {
+    //     url: this.fileUrl,
+    //     config: {
+    //       headers: {'Content-Type': 'multipart/form-data; boundary=<calculated when request is sent>'}
+    //     }
+    //   }
+    //   api.post(args, formData).then(res => {})
+    // }
+
   }
 }
 </script>
