@@ -9,12 +9,14 @@
         </el-form-item>
         <el-form-item>
           <el-radio-group v-model="searchForm.searchType">
+            <el-radio label="null">查询所有数据</el-radio>
             <el-radio label="baseData">查询基础数据</el-radio>
             <el-radio label="sceneData">查询工艺场景数据</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item>
           <el-radio-group v-if="searchForm.searchType==='baseData'" v-model="searchForm.dataType">
+            <el-radio label="null">所有基础数据</el-radio>
             <el-radio label="material">基础物料数据</el-radio>
             <el-radio label="energy">基础能源数据</el-radio>
             <el-radio label="device">基础设备数据</el-radio>
@@ -54,9 +56,9 @@ export default {
   data () {
     return {
       searchForm: {
-        searchType: '',
-        dataType: '',
-        content: ''
+        searchType: null,
+        dataType: null,
+        content: null
       },
       searchList: {
         sceneData: [],
@@ -67,24 +69,31 @@ export default {
       }
     }
   },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      api.get({url: 'search', params: {content: to.query['content'] ? to.query['content'] : ''}}).then(res => {
-        vm.searchList = res
-        vm.searchForm.content = to.query['content']
-      })
-    })
-  },
-  beforeRouteUpdate (to, from, next) {
-    api.get({url: 'search', params: {content: to.query['content'] ? to.query['content'] : ''}}).then(res => {
-      this.searchList = res
-      this.searchForm.content = to.query['content']
-    })
-    next()
-  },
+  // beforeRouteEnter (to, from, next) {
+  //   next(vm => {
+  //     api.get({url: 'search', params: {content: to.query['content'] ? to.query['content'] : ''}}).then(res => {
+  //       vm.searchList = res
+  //       vm.searchForm.content = to.query['content']
+  //       vm.searchForm.searchType = to.query['searchType']
+  //       vm.searchForm.dataType = to.query['dataType']
+  //     })
+  //   })
+  // },
+  // beforeRouteUpdate (to, from, next) {
+  //   api.get({url: 'search', params: {searchType: to.query['searchType'] ? to.query['searchType'] : '', dataType: to.query['dataType'] ? to.query['dataType'] : '', content: to.query['content'] ? to.query['content'] : ''}}).then(res => {
+  //     this.searchList = res
+  //     this.searchForm.content = to.query['content']
+  //     this.searchForm.searchType = to.query['searchType']
+  //     this.searchForm.dataType = to.query['dataType']
+  //   })
+  //   next()
+  // },
   methods: {
     handleSubmit () {
-      this.$router.push({name: 'SearchItem', query: {content: this.searchForm.content}})
+      api.get({url: 'search', params: {searchType: this.searchForm.searchType, dataType: this.searchForm.dataType, content: this.searchForm.content}}).then(res => {
+        this.searchList = res
+      })
+      this.$router.push({name: 'SearchItem', query: {searchType: this.searchForm.searchType, dataType: this.searchForm.dataType, content: this.searchForm.content}})
     }
   }
 }
