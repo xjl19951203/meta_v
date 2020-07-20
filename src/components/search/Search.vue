@@ -7,7 +7,22 @@
             <el-button slot="append" icon="el-icon-search" @click="handleSubmit"></el-button>
           </el-input>
         </el-form-item>
+        <el-form-item>
+          <el-radio-group v-model="searchForm.searchType">
+            <el-radio label="baseData">查询基础数据</el-radio>
+            <el-radio label="sceneData">查询工艺场景数据</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item>
+          <el-radio-group v-if="searchForm.searchType==='baseData'" v-model="searchForm.dataType">
+            <el-radio label="material">基础物料数据</el-radio>
+            <el-radio label="energy">基础能源数据</el-radio>
+            <el-radio label="device">基础设备数据</el-radio>
+            <el-radio label="envLoad">基础环境负荷数据</el-radio>
+          </el-radio-group>
+        </el-form-item>
       </el-form>
+
       <el-divider></el-divider>
       <div v-if="searchList.length === 0">
         <el-card class="box-card">
@@ -39,9 +54,17 @@ export default {
   data () {
     return {
       searchForm: {
+        searchType: '',
+        dataType: '',
         content: ''
       },
-      searchList: []
+      searchList: {
+        sceneData: [],
+        material: [],
+        energy: [],
+        device: [],
+        envLoad: []
+      }
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -61,7 +84,7 @@ export default {
   },
   methods: {
     handleSubmit () {
-      this.$router.push({name: 'SearchIndex', query: {content: this.searchForm.content}})
+      this.$router.push({name: 'SearchItem', query: {content: this.searchForm.content}})
     }
   }
 }

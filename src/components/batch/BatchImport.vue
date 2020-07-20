@@ -45,7 +45,7 @@
 <!--    before-remove移除已经上传的文件-->
     <el-upload
       class="upload-demo"
-      :action="getUrl"
+      :action="myUrl()"
       name="file"
       :auto-upload='false'
       :drag="true"
@@ -110,6 +110,15 @@ export default {
     }
   },
   methods: {
+    myUrl () {
+      if (this.tableType === 'baseTable') {
+        return 'http://localhost:8000/api/batch/excel/baseTable'
+        // return store.state.root + 'batch/excel/' + 'baseTable'
+      } else if (this.tableType === 'sceneData') {
+        return 'http://localhost:8000/api/batch/excel/sceneData'
+        // return store.state.root + 'batch/excel/' + 'sceneData'
+      }
+    },
     changeDefault () {
       if (this.tableType === 'baseTable') {
         this.variable = '请选择下载模板'
@@ -171,12 +180,14 @@ export default {
           message: '上传文件只能是 xls、xlsx格式!',
           type: 'error'
         })
+        return false
         // alert('上传文件只能是 xls、xlsx格式!')
       } else if (!isLt1M) {
         this.$message({
           message: '上传文件大小不能超过1MB',
           type: 'error'
         })
+        return false
       }
       return extension || extension2 || isLt1M
     },
@@ -203,14 +214,11 @@ export default {
       this.$refs.uploadFileRef.submit()
     },
     uploadSuccess (response, file, fileList) {
-      if (response.status) {
-        alert('文件导入成功')
-      } else {
-        alert('文件导入失败')
-      }
+      // console.log('文件导入成功', file, response)
+      alert('文件导入成功')
     },
     uploadFalse (response, file, fileList) {
-      alert('文件上传失败！')
+      alert('文件导入失败！')
     }
     // submitUpload () {
     //   let baseUrl
