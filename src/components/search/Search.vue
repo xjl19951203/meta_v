@@ -19,26 +19,9 @@
             <el-checkbox  label="envLoad">环境负荷</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
-<!--        <el-form-item>-->
-<!--          <el-radio-group v-model="searchForm.searchType">-->
-<!--            <el-radio label="null">查询所有数据</el-radio>-->
-<!--            <el-radio label="baseData">查询基础数据</el-radio>-->
-<!--            <el-radio label="sceneData">查询工艺场景数据</el-radio>-->
-<!--          </el-radio-group>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item>-->
-<!--          <el-radio-group v-if="searchForm.searchType==='baseData'" v-model="searchForm.dataType">-->
-<!--            <el-radio label="null">所有基础数据</el-radio>-->
-<!--            <el-radio label="material">基a础物料数据</el-radio>-->
-<!--            <el-radio label="energy">基础能源数据</el-radio>-->
-<!--            <el-radio label="device">基础设备数据</el-radio>-->
-<!--            <el-radio label="envLoad">基础环境负荷数据</el-radio>-->
-<!--          </el-radio-group>-->
-<!--        </el-form-item>-->
       </el-form>
-
       <el-divider></el-divider>
-      <div v-if="searchList.length === 0">
+      <div v-if="searchListLength === 0">
         <el-card class="box-card">
           <p>暂无数据</p>
           <el-divider></el-divider>
@@ -46,17 +29,24 @@
         </el-card>
       </div>
       <div v-else>
-        <p>
-          <i class="fa fa-fw fa-bar-chart"></i>
-<!--          <el-tag>一共搜索到{{this.checkedTables}}</el-tag>-->
-<!--          <el-tag v-for="datas in this.checkedTables" :lable="getRecordNumbers" :key="datas">{{data[0]}}</el-tag>-->
-<!--          查询统计：{{searchList.sceneData.length+searchList.material.length+searchList.energy.length+searchList.device.length+searchList.envLoad.length}}条记录，其中:-->
-<!--          工艺场景{{searchList.sceneData.length}}条记录-->
-<!--          物料{{searchList.material.length}}条记录-->
-<!--          能源{{searchList.energy.length}}条记录-->
-<!--          设备{{searchList.device.length}}条记录-->
-<!--          环境负荷{{searchList.envLoad.length}}条记录-->
-        </p>
+        <el-tag>
+          查询统计：共查询到{{searchListLength}} 条记录，其中：
+        </el-tag>
+        <el-tag size="small" v-if="searchList.sceneData !== undefined">
+          工艺场景:查询到{{(searchList.sceneData||'').length}} 条记录
+        </el-tag>
+        <el-tag v-if="searchList.material !== undefined">
+          物料:查询到{{(searchList.material||'').length}} 条记录
+        </el-tag>
+        <el-tag v-if="searchList.energy !== undefined">
+          能源:查询到{{(searchList.energy||'').length}} 条记录
+        </el-tag>
+        <el-tag v-if="searchList.device !== undefined">
+          设备:查询到{{(searchList.device||'').length}} 条记录
+        </el-tag>
+        <el-tag v-if="searchList.envLoad !== undefined">
+          环境负荷:查询到{{(searchList.envLoad||'').length}} 条记录
+        </el-tag>
         <el-divider></el-divider>
 <!--        <search-item v-for="item in searchList" :key="item.index" :item="item"></search-item>-->
       </div>
@@ -91,7 +81,7 @@ export default {
         device: [],
         envLoad: []
       },
-      recordNumbers: 0
+      searchListLength: 0
     }
   },
   // beforeRouteEnter (to, from, next) {
@@ -124,16 +114,19 @@ export default {
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.tables.length
     },
     searchSubmit () {
+      this.searchListLength = 0
       console.log(this.checkedTables)
       api.get({url: 'search', params: {content: this.searchForm.content, tableType: this.checkedTables.join(',')}}).then(res => {
         this.searchList = res
+        for (var key in this.searchList) {
+          this.searchListLength = this.searchListLength + this.searchList[key].length
+          console.log(key.toString())
+        }
         console.log(this.searchList)
       })
       // this.$router.push({name: 'SearchItem', query: {searchType: this.searchForm.searchType, dataType: this.searchForm.dataType, content: this.searchForm.content}})
     },
-    getRecordNumbers () {
-    //
-    }
+    getRecordNumbers () {}
   }
 }
 </script>
