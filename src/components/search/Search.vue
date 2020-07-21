@@ -84,20 +84,16 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      api.get({url: 'search', params: {content: to.query['content'] ? to.query['content'] : ''}}).then(res => {
+      api.get({url: 'search', params: {content: to.query['content'] ? to.query['content'] : ''}, tableType: to.query[vm.checkedTables.join(',')] ? to.query[vm.checkedTables.join(',')] : ''}).then(res => {
         vm.searchList = res
         vm.searchForm.content = to.query['content']
-        vm.searchForm.searchType = to.query['searchType']
-        vm.searchForm.dataType = to.query['dataType']
       })
     })
   },
   beforeRouteUpdate (to, from, next) {
-    api.get({url: 'search', params: {searchType: to.query['searchType'] ? to.query['searchType'] : '', dataType: to.query['dataType'] ? to.query['dataType'] : '', content: to.query['content'] ? to.query['content'] : ''}}).then(res => {
+    api.get({url: 'search', params: {content: to.query['content'] ? to.query['content'] : ''}, tableType: to.query[this.checkedTables.join(',')] ? to.query[this.checkedTables.join(',')] : ''}).then(res => {
       this.searchList = res
       this.searchForm.content = to.query['content']
-      this.searchForm.searchType = to.query['searchType']
-      this.searchForm.dataType = to.query['dataType']
     })
     next()
   },
@@ -118,7 +114,7 @@ export default {
         this.searchList = res
         for (var key in this.searchList) {
           this.searchListLength = this.searchListLength + this.searchList[key].length
-          console.log(key.toString())
+          console.log(key.index)
         }
         console.log(this.searchList)
       })
