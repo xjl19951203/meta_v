@@ -3,7 +3,7 @@
     <div class="wrapper">
       <el-form ref="searchForm" v-model="searchForm">
         <el-form-item prop="content">
-          <el-input placeholder="搜索" v-model="searchForm.content" class="input-with-select">
+          <el-input placeholder="搜索" @keyup.enter.native="searchSubmit" v-model="searchForm.content" class="input-with-select">
 <!--            <el-button slot="append" icon="el-icon-search" @click="handleSubmit"></el-button>-->
             <el-button slot="append" icon="el-icon-search" @click="searchSubmit"></el-button>
           </el-input>
@@ -22,17 +22,15 @@
       </el-form>
       <el-divider></el-divider>
       <div v-if="searchListLength === 0">
-        <el-card class="box-card">
-          <p>暂无数据</p>
-          <el-divider></el-divider>
-          <p>请输入搜索内容...</p>
-        </el-card>
+        <p>暂无数据</p>
+        <p>请输入搜索内容...</p>
       </div>
       <div v-else>
-        <el-tag>
+        <div>
           查询统计：共查询到{{searchListLength}} 条记录，其中：
-        </el-tag>
-        <el-tag size="small" v-if="searchList.sceneData !== undefined">
+        </div>
+        <el-divider></el-divider>
+        <el-tag v-if="searchList.sceneData !== undefined">
           工艺场景:查询到{{(searchList.sceneData||'').length}} 条记录
         </el-tag>
         <el-tag v-if="searchList.material !== undefined">
@@ -48,7 +46,7 @@
           环境负荷:查询到{{(searchList.envLoad||'').length}} 条记录
         </el-tag>
         <el-divider></el-divider>
-<!--        <search-item v-for="item in searchList" :key="item.index" :item="item"></search-item>-->
+        <search-item v-for="item in searchList" :key="item.index" :item="item"></search-item>
       </div>
     </div>
   </div>
@@ -56,13 +54,13 @@
 
 <script>
 import api from 'api'
-// import SearchItem from './widgets/SearchItem'
+import SearchItem from './widgets/SearchItem'
 const tableOptions = ['sceneData', 'material', 'energy', 'device', 'envLoad']
 export default {
   name: 'Search',
-  // components: {
-  //   SearchItem
-  // },
+  components: {
+    SearchItem
+  },
   data () {
     return {
       tables: tableOptions,
@@ -84,25 +82,25 @@ export default {
       searchListLength: 0
     }
   },
-  // beforeRouteEnter (to, from, next) {
-  //   next(vm => {
-  //     api.get({url: 'search', params: {content: to.query['content'] ? to.query['content'] : ''}}).then(res => {
-  //       vm.searchList = res
-  //       vm.searchForm.content = to.query['content']
-  //       vm.searchForm.searchType = to.query['searchType']
-  //       vm.searchForm.dataType = to.query['dataType']
-  //     })
-  //   })
-  // },
-  // beforeRouteUpdate (to, from, next) {
-  //   api.get({url: 'search', params: {searchType: to.query['searchType'] ? to.query['searchType'] : '', dataType: to.query['dataType'] ? to.query['dataType'] : '', content: to.query['content'] ? to.query['content'] : ''}}).then(res => {
-  //     this.searchList = res
-  //     this.searchForm.content = to.query['content']
-  //     this.searchForm.searchType = to.query['searchType']
-  //     this.searchForm.dataType = to.query['dataType']
-  //   })
-  //   next()
-  // }
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      api.get({url: 'search', params: {content: to.query['content'] ? to.query['content'] : ''}}).then(res => {
+        vm.searchList = res
+        vm.searchForm.content = to.query['content']
+        vm.searchForm.searchType = to.query['searchType']
+        vm.searchForm.dataType = to.query['dataType']
+      })
+    })
+  },
+  beforeRouteUpdate (to, from, next) {
+    api.get({url: 'search', params: {searchType: to.query['searchType'] ? to.query['searchType'] : '', dataType: to.query['dataType'] ? to.query['dataType'] : '', content: to.query['content'] ? to.query['content'] : ''}}).then(res => {
+      this.searchList = res
+      this.searchForm.content = to.query['content']
+      this.searchForm.searchType = to.query['searchType']
+      this.searchForm.dataType = to.query['dataType']
+    })
+    next()
+  },
   methods: {
     handleCheckAllChange (val) {
       this.checkedTables = val ? tableOptions : []
