@@ -113,19 +113,19 @@ export default {
     myUrl () {
       if (this.tableType === 'baseTable') {
         return 'http://localhost:8000/api/batch/excel/baseTable'
-        // return store.state.root + 'batch/excel/' + 'baseTable'
+        // return store.state.root + 'batch/excel/baseTable'
       } else if (this.tableType === 'sceneData') {
         return 'http://localhost:8000/api/batch/excel/sceneData'
-        // return store.state.root + 'batch/excel/' + 'sceneData'
+        // return store.state.root + 'batch/excel/sceneData'
       }
     },
     changeDefault () {
       if (this.tableType === 'baseTable') {
         this.variable = '请选择下载模板'
-        this.baseUrl = store.state.root + 'batch/excel/' + 'baseTable'
+        this.baseUrl = store.state.root + 'batch/excel/baseTable'
       } else if (this.tableType === 'sceneData') {
         this.variable = '请下载模板'
-        this.baseUrl = store.state.root + 'batch/excel/' + 'baseTable'
+        this.baseUrl = store.state.root + 'batch/excel/baseTable'
       }
     },
     nameExcel (command) {

@@ -48,7 +48,14 @@
       <div v-else>
         <p>
           <i class="fa fa-fw fa-bar-chart"></i>
-          查询统计：{{searchList.length}} 条记录
+<!--          <el-tag>一共搜索到{{this.checkedTables}}</el-tag>-->
+<!--          <el-tag v-for="datas in this.checkedTables" :lable="getRecordNumbers" :key="datas">{{data[0]}}</el-tag>-->
+<!--          查询统计：{{searchList.sceneData.length+searchList.material.length+searchList.energy.length+searchList.device.length+searchList.envLoad.length}}条记录，其中:-->
+<!--          工艺场景{{searchList.sceneData.length}}条记录-->
+<!--          物料{{searchList.material.length}}条记录-->
+<!--          能源{{searchList.energy.length}}条记录-->
+<!--          设备{{searchList.device.length}}条记录-->
+<!--          环境负荷{{searchList.envLoad.length}}条记录-->
         </p>
         <el-divider></el-divider>
 <!--        <search-item v-for="item in searchList" :key="item.index" :item="item"></search-item>-->
@@ -75,8 +82,7 @@ export default {
       searchForm: {
         searchType: null,
         dataType: null,
-        content: null,
-        checkTables: []
+        content: null
       },
       searchList: {
         sceneData: [],
@@ -84,7 +90,8 @@ export default {
         energy: [],
         device: [],
         envLoad: []
-      }
+      },
+      recordNumbers: 0
     }
   },
   // beforeRouteEnter (to, from, next) {
@@ -120,8 +127,12 @@ export default {
       console.log(this.checkedTables)
       api.get({url: 'search', params: {content: this.searchForm.content, tableType: this.checkedTables.join(',')}}).then(res => {
         this.searchList = res
+        console.log(this.searchList)
       })
       // this.$router.push({name: 'SearchItem', query: {searchType: this.searchForm.searchType, dataType: this.searchForm.dataType, content: this.searchForm.content}})
+    },
+    getRecordNumbers () {
+    //
     }
   }
 }
