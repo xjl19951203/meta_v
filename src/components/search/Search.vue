@@ -46,7 +46,12 @@
           环境负荷:查询到{{(searchList.envLoad||'').length}} 条记录
         </el-tag>
         <el-divider></el-divider>
-        <search-item v-for="item in searchList" :key="item.index" :item="item"></search-item>
+        <div v-for="itemsKey in searchList" :key="itemsKey">
+          <div  v-if="itemsKey !== ''">
+            <search-item v-for="item in searchList[itemsKey]" :key="item" :item="item"></search-item>
+          </div>
+        </div>
+<!--        <search-item :item="searchList">这是子组件</search-item>-->
       </div>
     </div>
   </div>
@@ -54,7 +59,7 @@
 
 <script>
 import api from 'api'
-import SearchItem from './widgets/SearchItem'
+import SearchItem from './widgets/SearchItem.vue'
 const tableOptions = ['sceneData', 'material', 'energy', 'device', 'envLoad']
 export default {
   name: 'Search',
@@ -114,13 +119,11 @@ export default {
         this.searchList = res
         for (var key in this.searchList) {
           this.searchListLength = this.searchListLength + this.searchList[key].length
-          console.log(key.index)
         }
         console.log(this.searchList)
       })
       // this.$router.push({name: 'SearchItem', query: {searchType: this.searchForm.searchType, dataType: this.searchForm.dataType, content: this.searchForm.content}})
-    },
-    getRecordNumbers () {}
+    }
   }
 }
 </script>

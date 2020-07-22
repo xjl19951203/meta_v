@@ -1,4 +1,5 @@
 <template>
+<div>
   <el-card shadow="hover" class="box-card SearchItem">
     <el-row>
       <el-col :span="12">
@@ -12,7 +13,7 @@
         </router-link>
       </el-col>
       <el-col :span="12" style="text-align: right; font-size: 14px;color: #999999">
-        创建时间：{{item['createdAt']}} &nbsp;&nbsp;
+        创建时间：{{item['createdAt']}}
         更新时间：{{item['updatedAt']}}
       </el-col>
     </el-row>
@@ -21,8 +22,13 @@
       {{item['description']}}
     </div>
   </el-card>
+  <div>
+    <ul>
+    <li v-for="ele in item" :key="ele">{{ele}}</li>
+    </ul>
+  </div>
+</div>
 </template>
-
 <script>
 export default {
   name: 'SearchItem',
