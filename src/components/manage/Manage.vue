@@ -104,6 +104,7 @@ export default {
   beforeRouteUpdate (to, from, next) {
     this.tableName = to.params['tableName']
     this.tableList = this.$store.state.baseTableMap[this.tableName]
+    console.log(this.$store.state.baseTableMap)
     this.handleColumns()
     this.initEditForm()
     next()

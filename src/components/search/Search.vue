@@ -47,12 +47,43 @@
         </el-tag>
         <el-divider></el-divider>
         <div>
+          <el-tag type="success" @click="sceneDataDeal">工艺场景</el-tag>
+          <el-divider></el-divider>
+          <div>
             <search-item v-if="searchList.sceneData!==undefined" v-for="item in searchList.sceneData" :key="item.index" :item="item"></search-item>
+          </div>
+          <el-divider></el-divider>
+          <el-tag type="primary" @click="materialDeal">物料</el-tag>
+          <el-divider></el-divider>
+          <div>
             <search-item v-if="searchList.material!==undefined" v-for="item in searchList.material" :key="item.index" :item="item"></search-item>
-            <search-item v-if="searchList.energy!==undefined" v-for="item in searchList.energy" :key="item.index" :item="item"></search-item>
+          </div>
+          <el-divider></el-divider>
+          <el-tag type="warning" @click="energyDeal">设备</el-tag>
+          <el-divider></el-divider>
+          <div>
             <search-item v-if="searchList.device!==undefined" v-for="item in searchList.device" :key="item.index" :item="item"></search-item>
+          </div>
+          <el-divider></el-divider>
+          <el-tag type="info" @click="energyDeal">能源</el-tag>
+          <el-divider></el-divider>
+          <div>
+            <search-item v-if="searchList.energy!==undefined" v-for="item in searchList.energy" :key="item.index" :item="item"></search-item>
+          </div>
+          <el-divider></el-divider>
+          <el-tag type="danger" @click="envLoadDeal">环境负荷</el-tag>
+          <el-divider></el-divider>
+          <div>
             <search-item v-if="searchList.envLoad!==undefined" v-for="item in searchList.envLoad" :key="item.index" :item="item"></search-item>
+          </div>
         </div>
+<!--        <div>-->
+<!--            <search-item v-if="searchList.sceneData!==undefined" v-for="item in searchList.sceneData" :key="item.index" :item="item"></search-item>-->
+<!--            <search-item v-if="searchList.material!==undefined" v-for="item in searchList.material" :key="item.index" :item="item"></search-item>-->
+<!--            <search-item v-if="searchList.energy!==undefined" v-for="item in searchList.energy" :key="item.index" :item="item"></search-item>-->
+<!--            <search-item v-if="searchList.device!==undefined" v-for="item in searchList.device" :key="item.index" :item="item"></search-item>-->
+<!--            <search-item v-if="searchList.envLoad!==undefined" v-for="item in searchList.envLoad" :key="item.index" :item="item"></search-item>-->
+<!--        </div>-->
       </div>
     </div>
   </div>
@@ -124,6 +155,10 @@ export default {
         console.log(this.searchList)
       })
       // this.$router.push({name: 'SearchItem', query: {searchType: this.searchForm.searchType, dataType: this.searchForm.dataType, content: this.searchForm.content}})
+    },
+    materialDeal () {
+      this.$store.state.baseTableMap = this.searchList.material
+      this.$router.push({name: 'Manage'})
     }
   }
 }
