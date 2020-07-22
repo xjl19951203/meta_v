@@ -1,34 +1,33 @@
 <template>
-<div>
-  <el-card shadow="hover" class="box-card SearchItem">
-    <el-row>
-      <el-col :span="12">
-        <el-tag :type="typeMap[item['modelType']]['tagType']">
-          {{typeMap[item['modelType']]['title']}}
-        </el-tag>
-        <router-link class="title" type="text" :to="{name: typeMap[item['modelType']]['router']['name'],
-         params: typeMap[item['modelType']]['router']['params'],
-         query: typeMap[item['modelType']]['router']['query']}">
-          {{item['title']}}
-        </router-link>
-      </el-col>
-      <el-col :span="12" style="text-align: right; font-size: 14px;color: #999999">
-        创建时间：{{item['createdAt']}}
-        更新时间：{{item['updatedAt']}}
-      </el-col>
-    </el-row>
-    <el-divider></el-divider>
-    <div class="description">
-      {{item['description']}}
-    </div>
-  </el-card>
   <div>
-    <ul>
-    <li v-for="ele in item" :key="ele">{{ele}}</li>
-    </ul>
+    <el-card shadow="hover" class="box-card SearchItem">
+      <el-row>
+        <el-col :span="12">
+          <el-tag :type="typeMap[item['modelType']]['tagType']">
+            {{typeMap[item['modelType']]['title']}}
+          </el-tag>
+          <el-tag class="title" @click="routerData">
+            {{item['title']}}
+          </el-tag>
+  <!--        <router-link class="title" type="text" :to="{name: typeMap[item['modelType']]['router']['name'],-->
+  <!--         params: typeMap[item['modelType']]['router']['params'],-->
+  <!--         query: typeMap[item['modelType']]['router']['query']}">-->
+  <!--          {{item['title']}}-->
+  <!--        </router-link>-->
+        </el-col>
+        <el-col v-if="item['modelType'] === 'scene'" :span="12" style="text-align: right; font-size: 14px;color: #999999">
+          创建时间：{{item['createdAt']}}
+          更新时间：{{item['updatedAt']}}
+        </el-col>
+      </el-row>
+      <el-divider></el-divider>
+      <div class="description">
+        {{item['description']}}
+      </div>
+    </el-card>
   </div>
-</div>
 </template>
+
 <script>
 export default {
   name: 'SearchItem',
@@ -44,7 +43,7 @@ export default {
           title: '工艺场景',
           tagType: 'success',
           router: {
-            name: 'SceneCategory',
+            name: 'SceneData',
             query: {
               id: this.item['id']
             }
@@ -72,7 +71,7 @@ export default {
         },
         energy: {
           title: '能源',
-          tagType: 'danger',
+          tagType: 'info',
           router: {
             name: 'ManageEdit',
             params: {
@@ -81,7 +80,7 @@ export default {
           }
         },
         env_load: {
-          title: '能源',
+          title: '环境负荷',
           tagType: 'danger',
           router: {
             name: 'ManageEdit',
@@ -91,6 +90,24 @@ export default {
           }
         }
       }
+    }
+  },
+  methods: {
+    routerData () {
+      // this.$router.push({name: 'SearchItem', query: {searchType: this.searchForm.searchType, dataType: this.searchForm.dataType, content: this.searchForm.content}})
+      let path
+      if (this.item['modelType'] === 'scene') {
+        path = 'sceneData/' + this.item.id
+      } else if (this.item['modelType'] === 'material') {
+        path = 'manage/material'
+      } else if (this.item['modelType'] === 'energy') {
+        path = 'manage/energy'
+      } else if (this.item['modelType'] === 'device') {
+        path = 'manage/device'
+      } else if (this.item['modelType'] === 'env_load') {
+        path = 'manage/envLoad'
+      }
+      this.$router.push(path)
     }
   }
 }
@@ -103,6 +120,7 @@ export default {
     .title{
       display: inline-block;
       font-weight: bolder;
+      font-size: large;
       padding: 0 10px;
     }
     .description {

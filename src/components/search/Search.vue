@@ -46,12 +46,13 @@
           环境负荷:查询到{{(searchList.envLoad||'').length}} 条记录
         </el-tag>
         <el-divider></el-divider>
-        <div v-for="itemsKey in searchList" :key="itemsKey">
-          <div  v-if="itemsKey !== ''">
-            <search-item v-for="item in searchList[itemsKey]" :key="item" :item="item"></search-item>
-          </div>
+        <div>
+            <search-item v-if="searchList.sceneData!==undefined" v-for="item in searchList.sceneData" :key="item.index" :item="item"></search-item>
+            <search-item v-if="searchList.material!==undefined" v-for="item in searchList.material" :key="item.index" :item="item"></search-item>
+            <search-item v-if="searchList.energy!==undefined" v-for="item in searchList.energy" :key="item.index" :item="item"></search-item>
+            <search-item v-if="searchList.device!==undefined" v-for="item in searchList.device" :key="item.index" :item="item"></search-item>
+            <search-item v-if="searchList.envLoad!==undefined" v-for="item in searchList.envLoad" :key="item.index" :item="item"></search-item>
         </div>
-<!--        <search-item :item="searchList">这是子组件</search-item>-->
       </div>
     </div>
   </div>
@@ -96,7 +97,7 @@ export default {
     })
   },
   beforeRouteUpdate (to, from, next) {
-    api.get({url: 'search', params: {content: to.query['content'] ? to.query['content'] : ''}, tableType: to.query[this.checkedTables.join(',')] ? to.query[this.checkedTables.join(',')] : ''}).then(res => {
+    api.get({url: 'search', params: {content: to.query.searchForm.content, tableType: to.query.checkedTables.join(',')}}).then(res => {
       this.searchList = res
       this.searchForm.content = to.query['content']
     })
