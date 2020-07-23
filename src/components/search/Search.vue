@@ -2,7 +2,7 @@
   <div class="Search">
     <div class="wrapper">
       <el-form ref="searchForm" v-model="searchForm">
-        <el-form-item prop="content">
+        <el-form-item prop="searchForm.content">
           <el-input placeholder="搜索" @keyup.enter.native="searchSubmit" v-model="searchForm.content" class="input-with-select">
 <!--            <el-button slot="append" icon="el-icon-search" @click="handleSubmit"></el-button>-->
             <el-button slot="append" icon="el-icon-search" @click="searchSubmit"></el-button>
@@ -11,7 +11,7 @@
         <el-form-item>
           <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
           <div style="margin: 15px 0;"></div>
-          <el-checkbox-group v-model="checkedTables" @change="handleCheckedTablesChange">
+          <el-checkbox-group v-model="searchForm.checkedTables" @change="handleCheckedTablesChange">
             <el-checkbox  label="sceneData">工艺场景</el-checkbox>
             <el-checkbox  label="material">物料</el-checkbox>
             <el-checkbox  label="energy">能源</el-checkbox>
@@ -108,12 +108,13 @@ export default {
     return {
       tables: tableOptions,
       checkAll: false,
-      checkedTables: ['sceneData', 'material', 'energy', 'device', 'envLoad'],
+      // checkedTables: ['sceneData', 'material', 'energy', 'device', 'envLoad'],
       isIndeterminate: true,
       searchForm: {
+        content: null,
+        checkedTables: ['sceneData', 'material', 'energy', 'device', 'envLoad'],
         searchType: null,
-        dataType: null,
-        content: null
+        dataType: null
       },
       searchList: {
         sceneData: [],
@@ -127,22 +128,57 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      api.get({url: 'search', params: {content: to.query['content'] ? to.query['content'] : ''}, tableType: to.query[vm.checkedTables.join(',')] ? to.query[vm.checkedTables.join(',')] : ''}).then(res => {
-        vm.searchList = res
-        vm.searchForm.content = to.query['content']
-      })
+      let searchForm = localStorage.getItem('searchForm')
+      if (searchForm !== undefined) {
+        vm.searchForm = JSON.parse(searchForm)
+        if (vm.searchForm) {
+          if (vm.searchForm || '') {
+            console.log('beforeRouteEnter')
+            api.get({url: 'search', params: {content: vm.searchForm.content, tableType: vm.searchForm.checkedTables.join(',')}}).then(res => {
+              console.log('hfkaj;fgnwg')
+              vm.searchList = res
+            })
+          }
+        }
+      }
     })
   },
-  beforeRouteUpdate (to, from, next) {
-    api.get({url: 'search', params: {content: to.query.searchForm.content, tableType: to.query.checkedTables.join(',')}}).then(res => {
-      this.searchList = res
-      this.searchForm.content = to.query['content']
-    })
+  // beforeRouteUpdate (to, from, next) {
+  //   api.get({url: 'search', params: {content: this.searchForm.content ? this.searchForm.content : '', tableType: this.searchForm.checkedTables.join(',') ? this.searchForm.checkedTables.join(',') : ''}}).then(res => {
+  //     this.searchList = res
+  //     this.searchForm.content = to.query['content']
+  //   })
+  //   next()
+  // },
+  beforeRouteLeave (to, from, next) {
+    console.log('beforeRouteLeave')
+    if (localStorage.getItem('searchForm') === undefined) {
+      console.log('beforeRouteLeave/searchForm')
+      let searchForm = JSON.stringify(this.searchForm)
+      localStorage.setItem('searchForm', searchForm)
+    } else {
+      localStorage.removeItem('searchForm')
+      let searchForm = JSON.stringify(this.searchForm)
+      localStorage.setItem('searchForm', searchForm)
+    }
     next()
   },
+  // created () {
+  //   // 从localStorage中读取条件并赋值给查询表单
+  //   let searchForm = localStorage.getItem('searchForm')
+  //   if (searchForm !== null) {
+  //     this.searchForm = JSON.parse(searchForm)
+  //   }
+  //   api.get({url: 'search', params: {content: this.searchForm !== null ? (this.searchForm.content !== null ? this.searchForm.content : '') : '', tableType: this.searchForm !== null ? (this.searchForm.checkedTables !== null ? this.searchForm.checkedTables.join(',') : '') : ''}})
+  //     .then((response) => {
+  //       console.log(response.data)
+  //     }).catch((error) => {
+  //       console.log(error)
+  //     })
+  // },
   methods: {
     handleCheckAllChange (val) {
-      this.checkedTables = val ? tableOptions : []
+      this.searchForm.checkedTables = val ? tableOptions : []
       this.isIndeterminate = false
     },
     handleCheckedTablesChange (value) {
@@ -152,8 +188,8 @@ export default {
     },
     searchSubmit () {
       this.searchListLength = 0
-      console.log(this.checkedTables)
-      api.get({url: 'search', params: {content: this.searchForm.content, tableType: this.checkedTables.join(',')}}).then(res => {
+      console.log(this.searchForm.checkedTables)
+      api.get({url: 'search', params: {content: this.searchForm.content, tableType: this.searchForm.checkedTables.join(',')}}).then(res => {
         this.searchList = res
         for (var key in this.searchList) {
           this.searchListLength = this.searchListLength + this.searchList[key].length
