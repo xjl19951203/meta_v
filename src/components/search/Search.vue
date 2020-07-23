@@ -47,31 +47,37 @@
         </el-tag>
         <el-divider></el-divider>
         <div>
-          <el-tag type="success" @click="sceneDataDeal">工艺场景</el-tag>
+          <el-button v-if="(searchList.sceneData||'').length!==0" @click="sceneDataDeal" type="success" plain>工艺场景
+<!--            <router-link :to="{name: 'SceneDataList', params: {tableName: 'sceneData', tableList: this.searchList.sceneData}}">工艺场景</router-link>-->
+          </el-button>
           <el-divider></el-divider>
           <div>
             <search-item v-if="searchList.sceneData!==undefined" v-for="item in searchList.sceneData" :key="item.index" :item="item"></search-item>
           </div>
-          <el-divider></el-divider>
-          <el-tag type="primary" @click="materialDeal">物料</el-tag>
+          <el-button v-if="(searchList.material||'').length!==0" @click="materialDeal" type="primary" plain>物料
+<!--            <router-link :to="{name: 'Manage', params: {tableName: 'material', tableList: this.searchList.material}}">物料</router-link>-->
+          </el-button>
           <el-divider></el-divider>
           <div>
             <search-item v-if="searchList.material!==undefined" v-for="item in searchList.material" :key="item.index" :item="item"></search-item>
           </div>
-          <el-divider></el-divider>
-          <el-tag type="warning" @click="energyDeal">设备</el-tag>
+          <el-button v-if="(searchList.device||'').length!==0" @click="deviceDeal" type="warning" plain>设备
+<!--            <router-link :to="{name: 'Manage', params: {tableName: 'device', tableList: this.searchList.device}}">设备</router-link>-->
+          </el-button>
           <el-divider></el-divider>
           <div>
             <search-item v-if="searchList.device!==undefined" v-for="item in searchList.device" :key="item.index" :item="item"></search-item>
           </div>
-          <el-divider></el-divider>
-          <el-tag type="info" @click="energyDeal">能源</el-tag>
+          <el-button v-if="(searchList.energy||'').length!==0" @click="energyDeal" type="info" plain>能源
+<!--            <router-link :to="{name: 'Manage', params: {tableName: 'energy', tableList: this.searchList.energy}}">能源</router-link>-->
+          </el-button>
           <el-divider></el-divider>
           <div>
             <search-item v-if="searchList.energy!==undefined" v-for="item in searchList.energy" :key="item.index" :item="item"></search-item>
           </div>
-          <el-divider></el-divider>
-          <el-tag type="danger" @click="envLoadDeal">环境负荷</el-tag>
+          <el-button v-if="(searchList.envLoad||'').length!==0" @click="envLoadDeal" type="danger" plain>环境负荷
+<!--            <router-link :to="{name: 'Manage', params: {tableName: 'envLoad', tableList: this.searchList.envLoad}}">环境负荷</router-link>-->
+          </el-button>
           <el-divider></el-divider>
           <div>
             <search-item v-if="searchList.envLoad!==undefined" v-for="item in searchList.envLoad" :key="item.index" :item="item"></search-item>
@@ -156,9 +162,20 @@ export default {
       })
       // this.$router.push({name: 'SearchItem', query: {searchType: this.searchForm.searchType, dataType: this.searchForm.dataType, content: this.searchForm.content}})
     },
+    sceneDataDeal () {
+      this.$router.push({name: 'SceneDataList', params: {sceneDataList: this.searchList.sceneData}})
+    },
     materialDeal () {
-      this.$store.state.baseTableMap = this.searchList.material
-      this.$router.push({name: 'Manage'})
+      this.$router.push({name: 'Manage', params: {tableName: 'material', tableList: this.searchList.material}})
+    },
+    deviceDeal () {
+      this.$router.push({name: 'Manage', params: {tableName: 'device', tableList: this.searchList.device}})
+    },
+    energyDeal () {
+      this.$router.push({name: 'Manage', params: {tableName: 'energy', tableList: this.searchList.energy}})
+    },
+    envLoadDeal () {
+      this.$router.push({name: 'Manage', params: {tableName: 'envLoad', tableList: this.searchList.envLoad}})
     }
   }
 }

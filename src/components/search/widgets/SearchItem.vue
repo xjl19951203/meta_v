@@ -9,13 +9,14 @@
           <el-tag class="title" @click="routerData">
             {{item['title']}}
           </el-tag>
+<!--          下面是另一种方式实现-->
 <!--          <router-link v-if="item['modelType'] !== 'scene'" class="title" type="text" :to="{name: typeMap[item['modelType']]['router']['name'],-->
 <!--           params: typeMap[item['modelType']]['router']['params'],-->
 <!--           query: typeMap[item['modelType']]['router']['query']}">-->
 <!--            {{item['title']}}-->
 <!--          </router-link>-->
         </el-col>
-        <el-col v-if="item['modelType'] === 'scene'" :span="12" style="text-align: right; font-size: 14px;color: #999999">
+        <el-col v-if="item['modelType'] === 'scene'" :span="12" style="text-align: right; font-size: 16px;color: #999999">
           创建时间：{{item['createdAt']}}
           更新时间：{{item['updatedAt']}}
         </el-col>
@@ -100,7 +101,6 @@ export default {
         path = 'sceneData/' + this.item.id
       } else if (this.item['modelType'] === 'material') {
         path = 'manage/material'
-        this.$store.state.baseTableMap = this.item
       } else if (this.item['modelType'] === 'energy') {
         path = 'manage/energy'
       } else if (this.item['modelType'] === 'device') {

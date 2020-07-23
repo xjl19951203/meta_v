@@ -128,14 +128,19 @@ export default {
         currentPage: to.query['currentPage'] ? to.query['currentPage'] : 1,
         pageSize: to.query['pageSize'] ? to.query['pageSize'] : 5
       }
-      let args = {
-        url: 'category/' + categoryId,
-        params: query
+      if (to.params['sceneDataList'] !== null) {
+        vm.sceneDataList = to.params['sceneDataList']
+      } else {
+        let args = {
+          url: 'category/' + categoryId,
+          params: query
+        }
+        api.get(args).then(res => {
+          vm.categoryRes = res
+          vm.sceneDataList = res['data']
+          console.log(vm.sceneDataList)
+        })
       }
-      api.get(args).then(res => {
-        vm.categoryRes = res
-        vm.sceneDataList = res['data']
-      })
     })
   },
   beforeRouteUpdate (to, from, next) {
@@ -151,6 +156,7 @@ export default {
     api.get(args).then(res => {
       this.categoryRes = res
       this.sceneDataList = res['data']
+      console.log(this.sceneDataList)
     })
     next()
   },
@@ -172,6 +178,7 @@ export default {
       api.get(args).then(res => {
         this.categoryRes = res
         this.sceneDataList = res['data']
+        console.log(this.sceneDataList)
       })
     },
     handleDetailDrawer (index, row) {
@@ -198,5 +205,9 @@ export default {
   .SceneDataList{
     height: 100%;
     max-height: 100%;
+    .input-with-select .el-input-group__prepend {
+      background-color: #fff;
+      border: cornflowerblue;
+    }
   }
 </style>

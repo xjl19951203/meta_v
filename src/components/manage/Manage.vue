@@ -1,19 +1,23 @@
 <template>
   <div class="Manage">
-    <el-button type="primary" @click="handleEditDrawer(null)">
+    <el-divider></el-divider>
+    <el-button type="primary" @click="handleEditDrawer(null)" :disabled="addVisible">
       <i class="fa fa-plus-circle fa-fw"></i> 添加新条目
     </el-button>
     <el-divider></el-divider>
     <el-table
       style="width: 100%"
       :data="tableList">
+      //创建表格的所有列并填入数据
       <el-table-column
-        :label="column['columnComment']"
         v-for="column in tableColumns"
+        :label="column['columnComment']"
         :key="column.index">
         <!--这段解释-->
+<!--        这里用slot-scope="scope"取到表格中的当前单元格-->
+<!--        scope.row 直接取到该单元格对象，就是数组里的元素对象-->
         <template slot-scope="scope">
-          <div  v-if="column['columnKey'] === 'MUL'">
+          <div v-if="column['columnKey'] === 'MUL'">
             {{scope.row[column['columnName'].substring(0, column['columnName'].length - 2)] ?
             scope.row[column['columnName'].substring(0, column['columnName'].length - 2)]['title'] : scope.row[column['columnName']]}}
           </div>
@@ -82,6 +86,7 @@ export default {
   },
   data () {
     return {
+      addVisible: false,
       tableName: 'tableName',
       editDrawer: false,
       showDrawer: false,
@@ -95,8 +100,13 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.tableName = to.params['tableName']
+      if (to.params['tableList'] !== undefined) {
+        vm.tableList = to.params['tableList']
+        vm.addVisible = true
+      } else {
+        vm.tableList = vm.$store.state.baseTableMap[vm.tableName]
+      }
       // 取消网络请求，直接从store中读取基础数据，注意键需要加上‘Id’
-      vm.tableList = vm.$store.state.baseTableMap[vm.tableName]
       vm.handleColumns()
       vm.initEditForm()
     })
@@ -104,7 +114,7 @@ export default {
   beforeRouteUpdate (to, from, next) {
     this.tableName = to.params['tableName']
     this.tableList = this.$store.state.baseTableMap[this.tableName]
-    console.log(this.$store.state.baseTableMap)
+    this.addVisible = false
     this.handleColumns()
     this.initEditForm()
     next()
