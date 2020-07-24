@@ -133,7 +133,6 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      console.log('beforeRouteEnter')
       let searchList = localStorage.getItem('searchList')
       if (searchList !== undefined) {
         vm.searchList = JSON.parse(searchList)
@@ -167,7 +166,7 @@ export default {
     }
     let searchList = JSON.stringify(this.searchList)
     localStorage.setItem('searchList', searchList)
-    console.log(localStorage.getItem('searchList'))
+    // console.log(localStorage.getItem('searchList'))
     // if (localStorage.getItem('searchForm') === undefined) {
     //   console.log('beforeRouteLeave/searchForm')
     //   let searchForm = JSON.stringify(this.searchForm)
