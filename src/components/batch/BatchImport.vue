@@ -85,7 +85,8 @@ export default {
       cTableName: null,
       postForm: null,
       fileUrl: null,
-      baseUrl: ''
+      baseUrl: '',
+      fileState: true
     }
   },
   computed: {
@@ -168,28 +169,65 @@ export default {
     handleExceed (files, fileList) {
       this.$message.warning(`单次限制上传1个文件`)
     },
-    // 文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用
+    // 文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用,(file[0].name || '')
     change (event, file, fileList) {
-      console.log('change', file, file[0].name)
-      // let fileName = file.name
-      const extension = (file[0].name || '').split('.')[1] === 'xls'
-      const extension2 = (file[0].name || '').split('.')[1] === 'xlsx'
-      const isLt1M = file[0].size / 1024 / 1024 <= 1
-      if (!extension && !extension2) {
-        this.$message({
-          message: '上传文件只能是 xls、xlsx格式!',
-          type: 'error'
-        })
-        return false
-        // alert('上传文件只能是 xls、xlsx格式!')
-      } else if (!isLt1M) {
-        this.$message({
-          message: '上传文件大小不能超过1MB',
-          type: 'error'
-        })
-        return false
+      // console.log('change', file, file[0].name)
+      if (this.fileType === 'xls') {
+        const extension = file[0].name.split('.')[1] === 'xls'
+        const extension2 = file[0].name.split('.')[1] === 'xlsx'
+        const extension3 = file[0].name.includes('工艺场景') && this.tableType === 'baseTable'
+        const extension4 = file[0].name.includes('基础') && this.tableType === 'sceneData'
+        const isLt1M = file[0].size / 1024 / 1024 <= 1
+        if (!extension && !extension2) {
+          this.$message({
+            message: '当前条件只能上传xls、xlsx格式的文件，请重新上传文件或选择xls、xlsx文件上传!',
+            type: 'error'
+          })
+          this.$refs.uploadFileRef.clearFiles()
+          // alert('上传文件只能是 xls、xlsx格式!')
+        } else if (!isLt1M) {
+          this.$message({
+            message: '上传文件大小不能超过1MB',
+            type: 'error'
+          })
+          console.log('beforeUpload')
+          this.$refs.uploadFileRef.clearFiles()
+        } else if (extension3 || extension4) {
+          this.$message({
+            message: '请选择正确的导入数据类型',
+            type: 'warning'
+          })
+        }
       }
-      return extension || extension2 || isLt1M
+      if (this.fileType === 'json') {
+        const extension = file[0].name.split('.')[1] === 'json'
+        const extension2 = file[0].name.includes('工艺场景') && !file[0].name.includes('批量') && this.tableType === 'sceneData'
+        const extension3 = file[0].name.includes('基础') && this.tableType === 'baseTable'
+        const extension4 = file[0].name.includes('批量工艺场景') && this.tableType === 'sceneDataList'
+        const extension5 = file[0].name.includes('输入数据帧') && this.tableType === 'inputFrameDataList'
+        const extension6 = file[0].name.includes('输出数据帧') && this.tableType === 'outputFrameDataList'
+        const isLt1M = file[0].size / 1024 / 1024 <= 1
+        if (!extension) {
+          this.$message({
+            message: '当前条件只能上传json格式的文件，请重新上传文件或选择json格式文件上传!',
+            type: 'error'
+          })
+          this.$refs.uploadFileRef.clearFiles()
+          // alert('上传文件只能是 xls、xlsx格式!')
+        } else if (!isLt1M) {
+          this.$message({
+            message: '上传文件大小不能超过1MB',
+            type: 'error'
+          })
+          console.log('beforeUpload')
+          this.$refs.uploadFileRef.clearFiles()
+        } else if (!(extension2 || extension3 || extension4 || extension5 || extension6)) {
+          this.$message({
+            message: '请选择正确的导入数据类型',
+            type: 'warning'
+          })
+        }
+      }
     },
     // 点击文件列表中已上传的文件时的钩子
     handlePreview (file) {
@@ -216,9 +254,11 @@ export default {
     uploadSuccess (response, file, fileList) {
       // console.log('文件导入成功', file, response)
       alert('文件导入成功')
+      this.$refs.uploadFileRef.clearFiles()
     },
     uploadFalse (response, file, fileList) {
       alert('文件导入失败！')
+      this.$refs.uploadFileRef.clearFiles()
     }
     // submitUpload () {
     //   let baseUrl
@@ -249,7 +289,6 @@ export default {
     //   }
     //   api.post(args, formData).then(res => {})
     // }
-
   }
 }
 </script>
