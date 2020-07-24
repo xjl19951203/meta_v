@@ -134,11 +134,13 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       console.log('beforeRouteEnter')
-      // let searchList = localStorage.getItem('searchList')
-      // if (searchList !== undefined) {
-      //   vm.searchList = searchList
-      //   localStorage.removeItem('searchList')
-      // }
+      let searchList = localStorage.getItem('searchList')
+      if (searchList !== undefined) {
+        vm.searchList = JSON.parse(searchList)
+        console.log(vm.searchList)
+        console.log(vm.searchList.sceneData)
+        localStorage.removeItem('searchList')
+      }
       // let searchForm = localStorage.getItem('searchForm')
       // if (searchForm !== undefined) {
       //   vm.searchForm = JSON.parse(searchForm)
@@ -160,44 +162,44 @@ export default {
     })
     next()
   },
-  // beforeRouteLeave (to, from, next) {
-  //   console.log('beforeRouteLeave')
-  //   if (localStorage.getItem('searchList') !== undefined) {
-  //     localStorage.removeItem('searchList')
-  //   }
-  //   let searchList = JSON.stringify(this.searchList)
-  //   localStorage.setItem('searchList', searchList)
-  //   console.log(localStorage.getItem('searchList'))
-  //   if (localStorage.getItem('searchForm') === undefined) {
-  //     console.log('beforeRouteLeave/searchForm')
-  //     let searchForm = JSON.stringify(this.searchForm)
-  //     localStorage.setItem('searchForm', searchForm)
-  //   } else {
-  //     localStorage.removeItem('searchForm')
-  //     let searchForm = JSON.stringify(this.searchForm)
-  //     localStorage.setItem('searchForm', searchForm)
-  //   }
-  //   next()
-  // },
-  created () {
-    let searchList = localStorage.getItem('searchList')
-    if (searchList !== undefined) {
-      this.searchList = searchList
-      console.log(this.searchList)
+  beforeRouteLeave (to, from, next) {
+    // console.log('beforeRouteLeave')
+    if (localStorage.getItem('searchList') !== undefined) {
       localStorage.removeItem('searchList')
     }
-    // 从localStorage中读取条件并赋值给查询表单
-    // let searchForm = localStorage.getItem('searchForm')
-    // if (searchForm !== null) {
-    //   this.searchForm = JSON.parse(searchForm)
+    let searchList = JSON.stringify(this.searchList)
+    localStorage.setItem('searchList', searchList)
+    // console.log(localStorage.getItem('searchList'))
+    // if (localStorage.getItem('searchForm') === undefined) {
+    //   console.log('beforeRouteLeave/searchForm')
+    //   let searchForm = JSON.stringify(this.searchForm)
+    //   localStorage.setItem('searchForm', searchForm)
+    // } else {
+    //   localStorage.removeItem('searchForm')
+    //   let searchForm = JSON.stringify(this.searchForm)
+    //   localStorage.setItem('searchForm', searchForm)
     // }
-    // api.get({url: 'search', params: {content: this.searchForm !== null ? (this.searchForm.content !== null ? this.searchForm.content : '') : '', tableType: this.searchForm !== null ? (this.searchForm.checkedTables !== null ? this.searchForm.checkedTables.join(',') : '') : ''}})
-    //   .then((response) => {
-    //     console.log(response.data)
-    //   }).catch((error) => {
-    //     console.log(error)
-    //   })
+    next()
   },
+  // created () {
+  //   let searchList = localStorage.getItem('searchList')
+  //   if (searchList !== undefined) {
+  //     this.searchList = searchList
+  //     console.log(this.searchList)
+  //     localStorage.removeItem('searchList')
+  //   }
+  // 从localStorage中读取条件并赋值给查询表单
+  // let searchForm = localStorage.getItem('searchForm')
+  // if (searchForm !== null) {
+  //   this.searchForm = JSON.parse(searchForm)
+  // }
+  // api.get({url: 'search', params: {content: this.searchForm !== null ? (this.searchForm.content !== null ? this.searchForm.content : '') : '', tableType: this.searchForm !== null ? (this.searchForm.checkedTables !== null ? this.searchForm.checkedTables.join(',') : '') : ''}})
+  //   .then((response) => {
+  //     console.log(response.data)
+  //   }).catch((error) => {
+  //     console.log(error)
+  //   })
+  // },
   methods: {
     handleCheckAllChange (val) {
       this.searchForm.checkedTables = val ? tableOptions : []

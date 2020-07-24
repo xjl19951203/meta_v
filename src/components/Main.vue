@@ -9,7 +9,9 @@
       </el-aside>
       <div class="Wrapper">
         <el-main>
-          <router-view></router-view>
+          <keep-alive>
+            <router-view></router-view>
+          </keep-alive>
         </el-main>
       </div>
     </el-container>

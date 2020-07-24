@@ -136,6 +136,10 @@ export default {
       }
       if (to.params['sceneDataList'] !== undefined) {
         vm.sceneDataList = to.params['sceneDataList']
+      } else if (localStorage.getItem('sceneDataList') !== undefined) {
+        vm.sceneDataList = JSON.parse(localStorage.getItem('sceneDataList'))
+        console.log(vm.sceneDataList)
+        localStorage.removeItem('sceneDataList')
       } else {
         let args = {
           url: 'category/',
