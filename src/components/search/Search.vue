@@ -137,8 +137,6 @@ export default {
       let searchList = localStorage.getItem('searchList')
       if (searchList !== undefined) {
         vm.searchList = JSON.parse(searchList)
-        console.log(vm.searchList)
-        console.log(vm.searchList.sceneData)
         localStorage.removeItem('searchList')
       }
       // let searchForm = localStorage.getItem('searchForm')
@@ -169,7 +167,7 @@ export default {
     }
     let searchList = JSON.stringify(this.searchList)
     localStorage.setItem('searchList', searchList)
-    // console.log(localStorage.getItem('searchList'))
+    console.log(localStorage.getItem('searchList'))
     // if (localStorage.getItem('searchForm') === undefined) {
     //   console.log('beforeRouteLeave/searchForm')
     //   let searchForm = JSON.stringify(this.searchForm)
