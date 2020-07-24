@@ -1,14 +1,31 @@
 <template>
   <div class="Manage">
     <el-divider></el-divider>
-    <el-button type="primary" @click="handleEditDrawer(null)" :disabled="addVisible">
-      <i class="fa fa-plus-circle fa-fw"></i> 添加新条目
-    </el-button>
+<!--    <el-button type="primary" @click="handleEditDrawer(null)" :disabled="addVisible">-->
+<!--      <i class="fa fa-plus-circle fa-fw"></i> 添加新条目-->
+<!--    </el-button>-->
+<!--    <el-divider></el-divider>-->
+<!--    &lt;!&ndash;    v-model="searchForm.content"&ndash;&gt;-->
+<!--    <el-input class="base-input" placeholder="检索数据">-->
+<!--      <el-button slot="append" icon="el-icon-search"></el-button>-->
+<!--    </el-input>-->
+    <el-row :gutter="20">
+      <el-col :span="16">
+        <el-input class="base-input" placeholder="检索数据" v-model="searchContent">
+          <el-button slot="append" icon="el-icon-search"></el-button>
+        </el-input>
+      </el-col>
+      <el-col :span="8" style="text-align:right">
+        <el-button type="primary" @click="handleEditDrawer(null)" :disabled="addVisible">
+          <i class="fa fa-plus-circle fa-fw"></i> 添加新条目
+        </el-button>
+      </el-col>
+    </el-row>
     <el-divider></el-divider>
     <el-table
       style="width: 100%"
-      :data="tableList">
-      //创建表格的所有列并填入数据
+      :data="tableList.filter(data => !searchContent || data.title.toLowerCase().includes(searchContent.toLowerCase()))">
+<!--      创建表格的所有列并填入数据-->
       <el-table-column
         v-for="column in tableColumns"
         :label="column['columnComment']"
@@ -94,7 +111,8 @@ export default {
       tableList: [],
       editForm: {},
       showForm: {},
-      tableColumns: []
+      tableColumns: [],
+      searchContent: ''
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -131,11 +149,11 @@ export default {
     },
     handleSubmit () {
       if (this.editForm['id'] === undefined) {
-        api.post({url: this.tableName, params: this.editForm}).then(res => {
+        api.post({url: 'manage/' + this.tableName, params: this.editForm}).then(res => {
           history.go(0)
         })
       } else {
-        api.put({url: this.tableName, params: this.editForm}).then(res => {
+        api.put({url: 'manage/' + this.tableName, params: this.editForm}).then(res => {
           history.go(0)
         })
       }
@@ -160,7 +178,7 @@ export default {
     },
     handleDelete () {
       this.deleteDialogVisible = false
-      api.delete({url: this.tableName + '/' + this.editForm['id']}).then(res => {
+      api.delete({url: 'manage/' + this.tableName + '/' + this.editForm['id']}).then(res => {
         history.go(0)
       })
     }
@@ -180,5 +198,11 @@ export default {
     }
   }
   .Manage{
+    .base-input{
+      width: 700px;
+      border-style: ridge;
+      border-color: cornflowerblue;
+      border-width: 5px
+    }
   }
 </style>

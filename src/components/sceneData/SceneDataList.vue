@@ -8,14 +8,19 @@
           </el-breadcrumb>
         </div>
         <el-row :gutter="20">
+<!--          <el-col :span="16">-->
+<!--            <el-form class="searchForm" ref="searchForm" :model="searchForm" :rules="searchRules">-->
+<!--              <el-form-item prop="content">-->
+<!--                <el-input class="input-with-select" placeholder="搜索工艺场景" v-model="searchForm.content">-->
+<!--                  <el-button slot="append" icon="el-icon-search"></el-button>-->
+<!--                </el-input>-->
+<!--              </el-form-item>-->
+<!--            </el-form>-->
+<!--          </el-col>-->
           <el-col :span="16">
-            <el-form class="searchForm" ref="searchForm" :model="searchForm" :rules="searchRules">
-              <el-form-item prop="content">
-                <el-input placeholder="搜索工艺场景" v-model="searchForm.content" class="input-with-select">
-                  <el-button slot="append" icon="el-icon-search"></el-button>
-                </el-input>
-              </el-form-item>
-            </el-form>
+            <el-input class="input-with-select" placeholder="搜索工艺场景" v-model="searchForm.content">
+              <el-button slot="append" icon="el-icon-search"></el-button>
+            </el-input>
           </el-col>
           <el-col :span="8" style="text-align:right">
             <el-button type="primary" @click="postSceneDrawer=true">
@@ -123,16 +128,17 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      let categoryId = to.query['category'] ? to.query['category'] : 1
+      // let categoryId = to.query['category'] ? to.query['category'] : 1
       let query = {
+        categoryId: to.query['category'] ? to.query['category'] : 1,
         currentPage: to.query['currentPage'] ? to.query['currentPage'] : 1,
         pageSize: to.query['pageSize'] ? to.query['pageSize'] : 5
       }
-      if (to.params['sceneDataList'] !== null) {
+      if (to.params['sceneDataList'] !== undefined) {
         vm.sceneDataList = to.params['sceneDataList']
       } else {
         let args = {
-          url: 'category/' + categoryId,
+          url: 'category/',
           params: query
         }
         api.get(args).then(res => {
@@ -144,13 +150,15 @@ export default {
     })
   },
   beforeRouteUpdate (to, from, next) {
-    let categoryId = to.query['category'] ? to.query['category'] : 1
+    // let categoryId = to.query['category'] ? to.query['category'] : 1
     let query = {
+      categoryId: to.query['category'] ? to.query['category'] : 1,
       currentPage: to.query['currentPage'] ? to.query['currentPage'] : 1,
       pageSize: to.query['pageSize'] ? to.query['pageSize'] : 5
     }
     let args = {
-      url: 'category/' + categoryId,
+      // url: 'category/' + categoryId,
+      url: 'category/',
       params: query
     }
     api.get(args).then(res => {
@@ -205,9 +213,10 @@ export default {
   .SceneDataList{
     height: 100%;
     max-height: 100%;
-    .input-with-select .el-input-group__prepend {
-      background-color: #fff;
-      border: cornflowerblue;
+    .input-with-select{
+      border-style: ridge;
+      border-color: cornflowerblue;
+      border-width: 5px
     }
   }
 </style>
