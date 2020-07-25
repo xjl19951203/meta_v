@@ -58,18 +58,33 @@
         </el-table-column>
         <el-table-column
           label="创建时间"
-          sortable
-          width="180">
+          width="100">
           <template slot-scope="scope">
-            <el-popover trigger="hover" placement="top">
-              <span style="margin-left: 10px">创建时间：{{ scope.row['createdAt'] }}</span>
-              <span style="margin-left: 10px">更新时间：{{ scope.row['updatedAt'] }}</span>
-            </el-popover>
-            <div slot="reference" class="name-wrapper">
-              <el-tag size="medium">{{ scope.row['createdAt'] }}</el-tag>
-            </div>
+            {{ scope.row['createdAt'] }}
           </template>
         </el-table-column>
+        <el-table-column
+          label="更新时间"
+          width="100">
+          <template slot-scope="scope">
+            {{ scope.row['updatedAt'] }}
+          </template>
+        </el-table-column>
+<!--        创建时间的另一种实现方式-->
+<!--        <el-table-column-->
+<!--          label="创建时间"-->
+<!--          sortable-->
+<!--          width="180">-->
+<!--          <template slot-scope="scope">-->
+<!--            <el-popover trigger="hover" placement="top">-->
+<!--              <span style="margin-left: 10px">创建时间：{{ scope.row['createdAt'] }}</span>-->
+<!--              <span style="margin-left: 10px">更新时间：{{ scope.row['updatedAt'] }}</span>-->
+<!--            </el-popover>-->
+<!--            <div slot="reference" class="name-wrapper">-->
+<!--              <el-tag size="medium">{{ scope.row['createdAt'] }}</el-tag>-->
+<!--            </div>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
         <el-table-column label="操作" width="250">
           <template slot-scope="scope">
             <el-button
@@ -138,7 +153,6 @@ export default {
         vm.sceneDataList = to.params['sceneDataList']
       } else if (localStorage.getItem('sceneDataList') !== undefined) {
         vm.sceneDataList = JSON.parse(localStorage.getItem('sceneDataList'))
-        console.log(vm.sceneDataList)
         localStorage.removeItem('sceneDataList')
       } else {
         let args = {
@@ -148,7 +162,6 @@ export default {
         api.get(args).then(res => {
           vm.categoryRes = res
           vm.sceneDataList = res['data']
-          console.log(vm.sceneDataList)
         })
       }
     })
@@ -168,7 +181,6 @@ export default {
     api.get(args).then(res => {
       this.categoryRes = res
       this.sceneDataList = res['data']
-      console.log(this.sceneDataList)
     })
     next()
   },

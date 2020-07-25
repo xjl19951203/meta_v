@@ -178,9 +178,10 @@ export default {
     },
     handleDelete () {
       this.deleteDialogVisible = false
-      api.delete({url: 'manage/' + this.tableName + '/' + this.editForm['id']}).then(res => {
-        history.go(0)
-      })
+      alert('暂不允许删除数据！！')
+      // api.delete({url: 'manage/' + this.tableName + '/' + this.editForm['id']}).then(res => {
+      //   history.go(0)
+      // })
     }
   }
 }

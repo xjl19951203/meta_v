@@ -132,6 +132,8 @@ export default {
       console.log(data['tableName'])
       if (data['tableName'] !== undefined) {
         this.$router.push({name: 'Manage', params: {tableName: data['tableName']}})
+      } else {
+        this.$router.push({name: 'ManageIndex'})
       }
     },
     handleNodeClick (data) {

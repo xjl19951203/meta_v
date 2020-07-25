@@ -9,6 +9,7 @@ import BatchDoc from '../components/batch/BatchDoc'
 import BatchImport from '../components/batch/BatchImport'
 import BatchExport from '../components/batch/BatchExport'
 import Manage from '../components/manage/Manage'
+import ManageIndex from '../components/manage/ManageIndex'
 import User from '../components/user/User'
 import Search from '../components/search/Search'
 
@@ -59,6 +60,11 @@ export default new Router({
           path: '/manage/:tableName',
           name: 'Manage',
           component: Manage
+        },
+        {
+          path: '/manage',
+          name: 'ManageIndex',
+          component: ManageIndex
         },
         {
           path: '/user',
