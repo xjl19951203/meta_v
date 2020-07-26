@@ -1,30 +1,33 @@
 <template>
-  <div class="Login">
-    <el-card class="box-card">
-      <div class="Title">
-        账户注册
-      </div>
-      <el-divider></el-divider>
-      <el-form ref="form" :model="postForm" :rules="rules">
-        <el-form-item prop="userName">
-          <el-input prefix-icon="el-icon-user" placeholder="用户名" v-model="postForm.userName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input prefix-icon="el-icon-lock" placeholder="密码" type="password" v-model="postForm.password" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item prop="passwordAgain">
-          <el-input prefix-icon="el-icon-lock" placeholder="确认密码" type="password" v-model="postForm.passwordAgain" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="success" @click="handlePost">注册</el-button>
-        </el-form-item>
-        <el-row>
-          <el-col :span="12">
-            <router-link :to="{name: 'Home', query:{type: 'login'}}" type="warning">前往登录</router-link>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-card>
+  <div class="Register">
+    <div class="box">
+      <el-card class="card">
+        <div class="title">
+          账户注册
+        </div>
+        <el-divider></el-divider>
+        <el-form ref="form" :model="postForm" :rules="rules">
+          <el-form-item prop="userName">
+            <el-input prefix-icon="el-icon-user" placeholder="用户名" v-model="postForm.userName" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input prefix-icon="el-icon-lock" placeholder="密码" type="password" v-model="postForm.password" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item prop="passwordAgain">
+            <el-input prefix-icon="el-icon-lock" placeholder="确认密码" type="password" v-model="postForm.passwordAgain" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="success" @click="handlePost">注册</el-button>
+          </el-form-item>
+          <el-row>
+            <el-col :span="12">
+              <router-link :to="{name: 'Home', query:{type: 'login'}}" type="warning">前往登录</router-link>
+            </el-col>
+          </el-row>
+        </el-form>
+      </el-card>
+    </div>
+
   </div>
 </template>
 <script>
@@ -80,4 +83,24 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+  .Register{
+    height: 100%;
+    max-height: 100%;
+    .box{
+      display: flex;
+      justify-content: center;
+      margin-top: 150px;
+    }
+    .card{
+      width: 500px;
+      height: 400px;
+    }
+    .title{
+      display: flex;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: 700;
+      color: dodgerblue;
+    }
+  }
 </style>

@@ -37,15 +37,33 @@
       <div class="Wrap">
         <p v-if="auth" style="text-align: center">
           <router-link :to="{name: 'User'}">
-            <el-avatar :size="100">{{auth['userName']}}</el-avatar>
+            <el-avatar :size="200">
+              <div class="font">{{auth['userName']}}</div>
+<!--              <el-tag hit="false" color="#BFC3CB">{{auth['userName']}}</el-tag>-->
+            </el-avatar>
           </router-link>
         </p>
         <div class="buttonTag" v-if="auth">
-          <el-button v-for="item in list" :key="item.index">
-            <router-link :to="{name: item['name']}">
-              {{item['title']}}
-            </router-link>
+          <el-button @click="enterSceneMenu" class="my-btn" type="primary" plain>
+            工艺场景管理
           </el-button>
+          <el-button @click="enterBaseMenu" class="my-btn" type="primary" plain>
+            基础数据管理
+          </el-button>
+          <el-button @click="enterBatchMenu" class="my-btn" type="primary" plain>
+            数据批处理
+          </el-button>
+          <el-button @click="enterSearchMenu" class="my-btn" type="primary" plain>
+            数据查询
+          </el-button>
+          <el-button @click="enterUserMenu" class="my-btn" type="primary" plain>
+            用户管理
+          </el-button>
+<!--          <el-button v-for="item in list" :key="item.index" class="my-btn" type="primary" plain>-->
+<!--            <router-link :to="{name: item['name']}">-->
+<!--              {{item['title']}}-->
+<!--            </router-link>-->
+<!--          </el-button>-->
         </div>
         <Login v-else-if="type === 'login'"></Login>
         <Register v-else-if="type === 'register'"></Register>
@@ -68,6 +86,7 @@ export default {
   },
   data () {
     return {
+      functionName: '',
       type: 'login',
       navList: [
         {
@@ -86,22 +105,27 @@ export default {
       list: [
         {
           name: 'SceneDataList',
+          path: '/sceneDataList',
           title: '工艺场景管理'
         },
         {
           name: 'ManageIndex',
+          path: '/manage',
           title: '基础数据管理'
         },
         {
           name: 'BatchDoc',
+          path: '/batch/doc',
           title: '数据批处理'
         },
         {
           name: 'Search',
+          path: '/search',
           title: '数据查询'
         },
         {
           name: 'User',
+          path: '/user',
           title: '用户管理'
         }
       ]
@@ -129,6 +153,21 @@ export default {
     next()
   },
   methods: {
+    enterSceneMenu () {
+      this.$router.push('/sceneDataList')
+    },
+    enterBaseMenu () {
+      this.$router.push('/manage')
+    },
+    enterSearchMenu () {
+      this.$router.push('/search')
+    },
+    enterBatchMenu () {
+      this.$router.push('/batch/doc')
+    },
+    enterUserMenu () {
+      this.$router.push('/user')
+    }
   }
 }
 </script>
@@ -137,59 +176,91 @@ export default {
 <style lang="scss">
   .Home{
     height: 100%;
+    /*a{*/
+    /*  text-decoration: none;*/
+    /*}*/
+    /*.buttonTag{*/
+    /*  text-align: center;*/
+    /*}*/
+    /*.el-col{*/
+    /*  height: 100%;*/
+    /*}*/
+    /*.Wrap{*/
+    /*  max-width: 600px!important;*/
+    /*  margin: auto;*/
+    /*}*/
+    /*.Login{*/
+    /*  .Title{*/
+    /*    font-size: larger;*/
+    /*    font-weight: bolder;*/
+    /*  }*/
+    /*  .el-button{*/
+    /*    width: 100%;*/
+    /*  }*/
+    /*}*/
+    /*.Left{*/
+    /*  background-color: #4A524F;*/
+    /*  color: #fff;*/
+    /*  .Title{*/
+    /*    text-align: center;*/
+    /*    padding: 60px 0;*/
+    /*    margin-bottom: 50px;*/
+    /*    font-size: 35px;*/
+    /*  }*/
+    /*  .Wrapper{*/
+    /*    max-width: 300px!important;*/
+    /*  }*/
+    /*  .el-col{*/
+    /*    height: 200px;*/
+    /*    .el-card{*/
+    /*      background: transparent;*/
+    /*      height: 160px;*/
+    /*      font-size: x-large;*/
+    /*      text-align: center;*/
+    /*      color: #aaa;*/
+    /*      border-color: #888;*/
+    /*      i{*/
+    /*        display: block;*/
+    /*        font-size: 60px;*/
+    /*        padding: 30px 0;*/
+    /*      }*/
+    /*    }*/
+    /*  }*/
+    /*}*/
+    /*.Right{*/
+    /*  padding-top: 200px;*/
+    /*}*/
+  }
+  .Wrap{
+    position: relative;
+    margin:  30px auto;
+    left:0;
+    top:0;
+    right: 0;
+    bottom: 0;
+    width: 1250px;
+    height: 750px;
+    box-sizing: border-box;
     a{
       text-decoration: none;
+      color: #409EFF !important;
+      /*font-weight: bold;*/
+      &:hover{
+        color:#fff !important;
+      }
     }
     .buttonTag{
-      text-align: center;
-    }
-    .el-col{
-      height: 100%;
-    }
-    .Wrap{
-      max-width: 600px!important;
-      margin: auto;
-    }
-    .Login{
-      .Title{
-        font-size: larger;
-        font-weight: bolder;
-      }
-      .el-button{
-        width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      .my-btn{
+
+        margin:70px 120px !important;
+        transform: scale(2.5);
       }
     }
-    .Left{
-      background-color: #4A524F;
-      color: #fff;
-      .Title{
-        text-align: center;
-        padding: 60px 0;
-        margin-bottom: 50px;
-        font-size: 35px;
-      }
-      .Wrapper{
-        max-width: 300px!important;
-      }
-      .el-col{
-        height: 200px;
-        .el-card{
-          background: transparent;
-          height: 160px;
-          font-size: x-large;
-          text-align: center;
-          color: #aaa;
-          border-color: #888;
-          i{
-            display: block;
-            font-size: 60px;
-            padding: 30px 0;
-          }
-        }
-      }
-    }
-    .Right{
-      padding-top: 200px;
+    .font{
+      font-size: 27px;
     }
   }
 </style>
