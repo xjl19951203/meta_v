@@ -145,7 +145,7 @@ export default {
     next(vm => {
       // let categoryId = to.query['category'] ? to.query['category'] : 1
       let query = {
-        categoryId: to.query['category'] ? to.query['category'] : 1,
+        categoryId: to.query['categoryId'] ? to.query['categoryId'] : 1,
         currentPage: to.query['currentPage'] ? to.query['currentPage'] : 1,
         pageSize: to.query['pageSize'] ? to.query['pageSize'] : 5
       }

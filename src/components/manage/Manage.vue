@@ -1,7 +1,7 @@
 <template>
   <div class="Manage">
     <el-divider></el-divider>
-<!--    <el-button type="primary" @click="handleEditDrawer(null)" :disabled="addVisible">-->
+<!--    <el-button type="primary" @click="handleEditDrawer(null)" :disabled="searchVisible">-->
 <!--      <i class="fa fa-plus-circle fa-fw"></i> 添加新条目-->
 <!--    </el-button>-->
 <!--    <el-divider></el-divider>-->
@@ -16,7 +16,7 @@
         </el-input>
       </el-col>
       <el-col :span="8" style="text-align:right">
-        <el-button type="primary" @click="handleEditDrawer(null)" :disabled="addVisible">
+        <el-button type="primary" @click="handleEditDrawer(null)" :disabled="searchVisible">
           <i class="fa fa-plus-circle fa-fw"></i> 添加新条目
         </el-button>
       </el-col>
@@ -46,8 +46,8 @@
       <el-table-column
         label="操作">
         <template slot-scope="scope">
-          <el-button @click="handleEditDrawer(scope.row)" type="text" size="small">编辑</el-button>
-          <el-button @click="handleDeleteDialog(scope.row)" type="text" size="small">删除</el-button>
+          <el-button @click="handleEditDrawer(scope.row)" :disabled="searchVisible" type="text" size="small">编辑</el-button>
+          <el-button @click="handleDeleteDialog(scope.row)" :disabled="searchVisible" type="text" size="small">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -103,7 +103,7 @@ export default {
   },
   data () {
     return {
-      addVisible: false,
+      searchVisible: false,
       tableName: 'tableName',
       editDrawer: false,
       showDrawer: false,
@@ -120,7 +120,7 @@ export default {
       vm.tableName = to.params['tableName']
       if (to.params['tableList'] !== undefined) {
         vm.tableList = to.params['tableList']
-        vm.addVisible = true
+        vm.searchVisible = true
       } else {
         vm.tableList = vm.$store.state.baseTableMap[vm.tableName]
       }
@@ -132,7 +132,7 @@ export default {
   beforeRouteUpdate (to, from, next) {
     this.tableName = to.params['tableName']
     this.tableList = this.$store.state.baseTableMap[this.tableName]
-    this.addVisible = false
+    this.searchVisible = false
     this.handleColumns()
     this.initEditForm()
     next()

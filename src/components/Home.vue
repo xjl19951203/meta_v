@@ -20,7 +20,7 @@
             <el-avatar :size="100">{{auth['userName']}}</el-avatar>
           </router-link>
         </p>
-        <el-row :gutter="20" v-if="auth">
+        <el-row :gutter="25" v-if="auth">
           <el-col :span="4.8" v-for="item in list" :key="item.index">
             <router-link :to="{name: item['name']}">
              <el-card shadow="hover" style="text-align: center">
@@ -70,15 +70,15 @@ export default {
       list: [
         {
           name: 'SceneDataList',
-          title: '工艺场景'
+          title: '工艺场景管理'
         },
         {
-          name: 'Manage',
-          title: '基础数据'
+          name: 'ManageIndex',
+          title: '基础数据管理'
         },
         {
           name: 'BatchDoc',
-          title: '批处理'
+          title: '数据批处理'
         },
         {
           name: 'Search',

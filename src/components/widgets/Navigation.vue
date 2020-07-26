@@ -3,8 +3,9 @@
     <el-tree
      :data="sceneTree"
      :props="defaultProps"
-     :default-expand-all="false"
+     :default-expand-all="true"
      icon-class="el-icon-folder-opened"
+     highlightCurrent
      @node-click="handleScene">
     </el-tree>
     <el-tree
@@ -12,6 +13,7 @@
      :props="defaultProps"
      :default-expand-all="false"
      icon-class="el-icon-folder-opened"
+     highlightCurrent
      @node-click="handleBase">
     </el-tree>
     <el-tree
@@ -19,6 +21,7 @@
      :props="defaultProps"
      :default-expand-all="false"
      icon-class="el-icon-folder-opened"
+     highlightCurrent
      @node-click="handleNodeClick">
     </el-tree>
   </div>
