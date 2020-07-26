@@ -1,7 +1,7 @@
 <template>
-  <div class="Login">
-    <el-card class="box-card">
-      <div class="Title">
+  <div>
+    <el-card class="login-el-card">
+      <div>
         账户登录
       </div>
       <el-divider></el-divider>
@@ -10,7 +10,7 @@
           <el-input prefix-icon="el-icon-user" placeholder="用户名" v-model="postForm.userName"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input prefix-icon="el-icon-lock" type="password" placeholder="密码" v-model="postForm.password"></el-input>
+          <el-input prefix-icon="el-icon-lock" type="password" placeholder="密码" v-model="postForm.password" @keyup.enter.native="handlePost"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="success" @click="handlePost">登录</el-button>
@@ -62,7 +62,8 @@ export default {
               this.$message.error('账户名或密码错误')
             } else {
               this.$store.commit('login', res)
-              this.$router.push({name: 'SceneDataList'})
+              // this.$router.push({name: 'SceneDataList'})
+              this.$router.push({name: 'HomeIndex'})
             }
           })
         } else {

@@ -1,39 +1,55 @@
 <template>
-  <el-row class="Home">
-    <el-col class="Left" :span="12">
-      <div class="Title">基础制造工艺资源环境负荷数据库</div>
-      <div class="Wrap">
-        <el-row :gutter="50">
-          <el-col :span="12" v-for="item in navList" :key="item.index">
-            <el-card shadow="hover">
-              <div>{{item.title}}</div>
-              <div><i class="el-icon-coin"></i></div>
-            </el-card>
-          </el-col>
-        </el-row>
-      </div>
-    </el-col>
-    <el-col class="Right" :span="12">
+<!--  <el-row class="Home">-->
+<!--    <el-col class="Left" :span="12">-->
+<!--      <div class="Title">基础制造工艺资源环境负荷数据库</div>-->
+<!--      <div class="Wrap">-->
+<!--        <el-row :gutter="50">-->
+<!--          <el-col :span="12" v-for="item in navList" :key="item.index">-->
+<!--            <el-card shadow="hover">-->
+<!--              <div>{{item.title}}</div>-->
+<!--              <div><i class="el-icon-coin"></i></div>-->
+<!--            </el-card>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
+<!--      </div>-->
+<!--    </el-col>-->
+<!--    <el-col class="Right" :span="12">-->
+<!--      <div class="Wrap">-->
+<!--        <p v-if="auth" style="text-align: center">-->
+<!--          <router-link :to="{name: 'User'}">-->
+<!--            <el-avatar :size="100">{{auth['userName']}}</el-avatar>-->
+<!--          </router-link>-->
+<!--        </p>-->
+<!--        <el-row :gutter="25" v-if="auth">-->
+<!--          <el-col :span="4.8" v-for="item in list" :key="item.index">-->
+<!--            <router-link :to="{name: item['name']}">-->
+<!--             <el-card shadow="hover" style="text-align: center">-->
+<!--              {{item['title']}}-->
+<!--            </el-card>-->
+<!--            </router-link>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
+<!--        <Login v-else-if="type === 'login'"></Login>-->
+<!--        <Register v-else-if="type === 'register'"></Register>-->
+<!--      </div>-->
+<!--    </el-col>-->
+<!--  </el-row>-->
       <div class="Wrap">
         <p v-if="auth" style="text-align: center">
           <router-link :to="{name: 'User'}">
             <el-avatar :size="100">{{auth['userName']}}</el-avatar>
           </router-link>
         </p>
-        <el-row :gutter="25" v-if="auth">
-          <el-col :span="4.8" v-for="item in list" :key="item.index">
+        <div class="buttonTag" v-if="auth">
+          <el-button v-for="item in list" :key="item.index">
             <router-link :to="{name: item['name']}">
-             <el-card shadow="hover" style="text-align: center">
               {{item['title']}}
-            </el-card>
             </router-link>
-          </el-col>
-        </el-row>
+          </el-button>
+        </div>
         <Login v-else-if="type === 'login'"></Login>
         <Register v-else-if="type === 'register'"></Register>
       </div>
-    </el-col>
-  </el-row>
 </template>
 
 <script>
@@ -124,6 +140,9 @@ export default {
     a{
       text-decoration: none;
     }
+    .buttonTag{
+      text-align: center;
+    }
     .el-col{
       height: 100%;
     }
@@ -150,7 +169,7 @@ export default {
         font-size: 35px;
       }
       .Wrapper{
-        max-width: 600px!important;
+        max-width: 300px!important;
       }
       .el-col{
         height: 200px;

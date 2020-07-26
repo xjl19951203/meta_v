@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '../components/Home'
+import HomeIndex from '../components/HomeIndex'
 import Main from '../components/Main'
 import SceneDataList from '../components/sceneData/SceneDataList'
 import SceneData from '../components/sceneData/SceneData'
@@ -20,7 +21,14 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
+      children: [
+        {
+          path: '/category',
+          name: 'HomeIndex',
+          component: HomeIndex
+        }
+      ]
     },
     {
       path: '/main',
