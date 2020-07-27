@@ -63,7 +63,7 @@ export default {
     top: 0;
     right: 0;
     bottom: 0;
-    width: 1000px;
+    width: 1250px;
     height: 200px;
     box-sizing: border-box;
   }
@@ -73,7 +73,7 @@ export default {
     justify-content: center;
   }
   .my-btn {
-    margin: 80px 300px !important;
-    transform: scale(4);
+    margin: 80px 200px !important;
+    transform: scale(3);
   }
 </style>
