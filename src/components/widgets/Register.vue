@@ -10,6 +10,9 @@
           <el-form-item prop="userName">
             <el-input prefix-icon="el-icon-user" placeholder="用户名" v-model="postForm.userName" autocomplete="off"></el-input>
           </el-form-item>
+          <el-form-item prop="email">
+            <el-input prefix-icon="el-icon-message" placeholder="注册邮箱(登录账号)" v-model="postForm.email" autocomplete="off"></el-input>
+          </el-form-item>
           <el-form-item prop="password">
             <el-input prefix-icon="el-icon-lock" placeholder="密码" type="password" v-model="postForm.password" autocomplete="off"></el-input>
           </el-form-item>
@@ -39,12 +42,13 @@ export default {
       postForm: {
         userName: '',
         password: '',
-        passwordAgain: ''
+        passwordAgain: '',
+        email: ''
       },
       rules: {
         userName: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 3, max: 16, message: '长度在 3 到 16 个字符', trigger: 'blur' }
+          { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
@@ -53,6 +57,20 @@ export default {
         passwordAgain: [
           { required: true, message: '请输入确认密码', trigger: 'blur' },
           { min: 3, max: 16, message: '长度在 3 到 16 个字符', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: '请填写邮箱', trigger: 'blur' },
+          { type: 'string',
+            message: '邮箱格式不正确',
+            trigger: 'blur',
+            transform (value) {
+              if (!/^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/.test(value)) {
+                return true
+              } else {
+              }
+            }
+          },
+          { type: 'string', message: '长度不能超过25位', trigger: 'blur', max: 25 }
         ]
       }
     }
@@ -67,10 +85,10 @@ export default {
           }
           api.post(args).then(res => {
             if (res === '') {
-              this.$message.error('账户名或密码错误')
+              this.$message.error('当前用户名或邮箱已被注册!')
             } else {
               this.$store.commit('login', res)
-              this.$router.push({name: 'SceneDataList'})
+              this.$router.push({name: 'Home'})
             }
           })
         } else {
@@ -92,8 +110,9 @@ export default {
       margin-top: 150px;
     }
     .card{
+      /*border-color: #409EFF;*/
       width: 500px;
-      height: 400px;
+      height: 450px;
     }
     .title{
       display: flex;

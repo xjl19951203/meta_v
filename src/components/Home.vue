@@ -88,20 +88,6 @@ export default {
     return {
       functionName: '',
       type: 'login',
-      navList: [
-        {
-          title: '机加工数据库'
-        },
-        {
-          title: '热处理数据库'
-        },
-        {
-          title: '焊接数据库'
-        },
-        {
-          title: '铸造数据库'
-        }
-      ],
       list: [
         {
           name: 'SceneDataList',
@@ -176,6 +162,40 @@ export default {
 <style lang="scss">
   .Home{
     height: 100%;
+  }
+  .Wrap{
+    position: relative;
+    margin:  30px auto;
+    left:0;
+    top:0;
+    right: 0;
+    bottom: 0;
+    width: 1250px;
+    height: 750px;
+    box-sizing: border-box;
+    a{
+      text-decoration: none;
+      color: #409EFF !important;
+      /*font-weight: bold;*/
+      &:hover{
+        color:#fff !important;
+      }
+    }
+    .buttonTag{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      .my-btn{
+        margin:70px 120px !important;
+        transform: scale(2.5);
+      }
+    }
+    .font{
+      word-break:break-all;
+      word-wrap:break-word;
+      font-size: 37px;
+      color: cornflowerblue;
+    }
     /*a{*/
     /*  text-decoration: none;*/
     /*}*/
@@ -230,37 +250,5 @@ export default {
     /*.Right{*/
     /*  padding-top: 200px;*/
     /*}*/
-  }
-  .Wrap{
-    position: relative;
-    margin:  30px auto;
-    left:0;
-    top:0;
-    right: 0;
-    bottom: 0;
-    width: 1250px;
-    height: 750px;
-    box-sizing: border-box;
-    a{
-      text-decoration: none;
-      color: #409EFF !important;
-      /*font-weight: bold;*/
-      &:hover{
-        color:#fff !important;
-      }
-    }
-    .buttonTag{
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      .my-btn{
-
-        margin:70px 120px !important;
-        transform: scale(2.5);
-      }
-    }
-    .font{
-      font-size: 27px;
-    }
   }
 </style>

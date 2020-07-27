@@ -128,7 +128,7 @@ export default {
   methods: {
     handleScene (data) {
       // if (data['id'] !== undefined) {
-      this.$router.push({name: 'SceneDataList', query: {category: data['id']}})
+      this.$router.push({name: 'SceneDataList', query: {categoryId: data['id']}})
       // }
     },
     handleBase (data) {

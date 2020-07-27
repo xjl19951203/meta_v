@@ -20,15 +20,13 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'HomeIndex',
+      component: HomeIndex
+    },
+    {
+      path: '/home',
       name: 'Home',
-      component: Home,
-      children: [
-        {
-          path: '/category',
-          name: 'HomeIndex',
-          component: HomeIndex
-        }
-      ]
+      component: Home
     },
     {
       path: '/main',

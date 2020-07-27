@@ -34,7 +34,9 @@
     <el-main>
       <el-table
         :data="sceneDataList.filter(data => !searchForm.content || data.title.toLowerCase().includes(searchForm.content.toLowerCase()))"
-        style="width: 100%">
+        style="width: 100%"
+        height="350"
+        border>
         <el-table-column
           label="工艺分类"
           width="120">
@@ -143,7 +145,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      // let categoryId = to.query['category'] ? to.query['category'] : 1
+      // let categoryId = to.query['categoryId'] ? to.query['categoryId'] : 1
       let query = {
         categoryId: to.query['categoryId'] ? to.query['categoryId'] : 1,
         currentPage: to.query['currentPage'] ? to.query['currentPage'] : 1,
@@ -151,7 +153,7 @@ export default {
       }
       if (to.params['sceneDataList'] !== undefined) {
         vm.sceneDataList = to.params['sceneDataList']
-      } else if (localStorage.getItem('sceneDataList') !== undefined) {
+      } else if (localStorage.getItem('sceneDataList') !== undefined && localStorage.getItem('sceneDataList') !== null) {
         vm.sceneDataList = JSON.parse(localStorage.getItem('sceneDataList'))
         localStorage.removeItem('sceneDataList')
       } else {
@@ -169,7 +171,7 @@ export default {
   beforeRouteUpdate (to, from, next) {
     // let categoryId = to.query['category'] ? to.query['category'] : 1
     let query = {
-      categoryId: to.query['category'] ? to.query['category'] : 1,
+      categoryId: to.query['categoryId'] ? to.query['categoryId'] : 1,
       currentPage: to.query['currentPage'] ? to.query['currentPage'] : 1,
       pageSize: to.query['pageSize'] ? to.query['pageSize'] : 5
     }
@@ -190,19 +192,20 @@ export default {
     },
     handleCurrentChange (val) {
       let routeQuery = this.$route['query']
-      let categoryId = routeQuery['category'] ? routeQuery['category'] : 1
+      // let categoryId = routeQuery['category'] ? routeQuery['category'] : 1
       let query = {
+        categoryId: routeQuery['categoryId'] ? routeQuery['categoryId'] : 1,
         currentPage: val,
         pageSize: routeQuery['pageSize'] ? routeQuery['pageSize'] : 5
       }
       let args = {
-        url: 'category/' + categoryId,
+        url: 'category/',
         params: query
       }
       api.get(args).then(res => {
         this.categoryRes = res
         this.sceneDataList = res['data']
-        console.log(this.sceneDataList)
+        // console.log(this.sceneDataList)
       })
     },
     handleDetailDrawer (index, row) {
