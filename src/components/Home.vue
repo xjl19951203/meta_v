@@ -34,40 +34,91 @@
 <!--      </div>-->
 <!--    </el-col>-->
 <!--  </el-row>-->
-      <div class="Wrap">
+  <div class="Home">
+    <div class="Wrap">
+      <h3 v-if="title">
+        欢迎进入{{title}}工艺资源环境负荷数据库
+      </h3>
+      <h3 v-else>
+        欢迎进入基础制造工艺资源环境负荷数据库
+      </h3>
+      <div class="wrapper">
         <p v-if="auth" style="text-align: center">
           <router-link :to="{name: 'User'}">
             <el-avatar :size="200">
               <div class="font">{{auth['userName']}}</div>
-<!--              <el-tag hit="false" color="#BFC3CB">{{auth['userName']}}</el-tag>-->
+              <!--              <el-tag hit="false" color="#BFC3CB">{{auth['userName']}}</el-tag>-->
             </el-avatar>
           </router-link>
         </p>
-        <div class="buttonTag" v-if="auth">
-          <el-button @click="enterSceneMenu" class="my-btn" type="primary" plain>
-            工艺场景管理
-          </el-button>
-          <el-button @click="enterBaseMenu" class="my-btn" type="primary" plain>
-            基础数据管理
-          </el-button>
-          <el-button @click="enterBatchMenu" class="my-btn" type="primary" plain>
-            数据批处理
-          </el-button>
-          <el-button @click="enterSearchMenu" class="my-btn" type="primary" plain>
-            数据查询
-          </el-button>
-          <el-button @click="enterUserMenu" class="my-btn" type="primary" plain>
-            用户管理
-          </el-button>
-<!--          <el-button v-for="item in list" :key="item.index" class="my-btn" type="primary" plain>-->
-<!--            <router-link :to="{name: item['name']}">-->
-<!--              {{item['title']}}-->
-<!--            </router-link>-->
-<!--          </el-button>-->
+        <div v-if="auth">
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <router-link :to="{name: 'SceneDataList'}">
+                <el-card always="always">
+                  工艺场景管理
+                </el-card>
+              </router-link>
+            </el-col>
+            <el-col :span="12">
+              <router-link :to="{name: 'ManageIndex'}">
+                <el-card always="always">
+                  基础数据管理
+                </el-card>
+              </router-link>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="8">
+              <router-link :to="{name: 'BatchDoc'}">
+                <el-card always="always">
+                  批量数据处理
+                </el-card>
+              </router-link>
+            </el-col>
+            <el-col :span="8">
+              <router-link :to="{name: 'SearchIndex'}">
+                <el-card always="always">
+                  <i class="fa fa-fw fa-search"></i> 数据查询
+                </el-card>
+              </router-link>
+            </el-col>
+            <el-col :span="8">
+              <router-link :to="{name: 'User'}">
+                <el-card always="always">
+                  <i class="fa fa-fw fa-users"></i> 用户管理
+                </el-card>
+              </router-link>
+            </el-col>
+          </el-row>
         </div>
+        <!--      <div class="buttonTag" v-if="auth">-->
+        <!--        <el-button @click="enterSceneMenu" class="my-btn" type="primary" plain>-->
+        <!--          工艺场景管理-->
+        <!--        </el-button>-->
+        <!--        <el-button @click="enterBaseMenu" class="my-btn" type="primary" plain>-->
+        <!--          基础数据管理-->
+        <!--        </el-button>-->
+        <!--        <el-button @click="enterBatchMenu" class="my-btn" type="primary" plain>-->
+        <!--          数据批处理-->
+        <!--        </el-button>-->
+        <!--        <el-button @click="enterSearchMenu" class="my-btn" type="primary" plain>-->
+        <!--          数据查询-->
+        <!--        </el-button>-->
+        <!--        <el-button @click="enterUserMenu" class="my-btn" type="primary" plain>-->
+        <!--          用户管理-->
+        <!--        </el-button>-->
+        <!--        &lt;!&ndash;          <el-button v-for="item in list" :key="item.index" class="my-btn" type="primary" plain>&ndash;&gt;-->
+        <!--        &lt;!&ndash;            <router-link :to="{name: item['name']}">&ndash;&gt;-->
+        <!--        &lt;!&ndash;              {{item['title']}}&ndash;&gt;-->
+        <!--        &lt;!&ndash;            </router-link>&ndash;&gt;-->
+        <!--        &lt;!&ndash;          </el-button>&ndash;&gt;-->
+        <!--      </div>-->
         <Login v-else-if="type === 'login'"></Login>
         <Register v-else-if="type === 'register'"></Register>
       </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -82,10 +133,20 @@ export default {
   computed: {
     auth () {
       return this.$store.state.auth
+    },
+    title () {
+      let temp = null
+      this.$store.state.categories[0]['children'].forEach(item => {
+        if (parseInt(this.categoryId) === item['id']) {
+          temp = item['title']
+        }
+      })
+      return temp
     }
   },
   data () {
     return {
+      categoryId: 0,
       functionName: '',
       type: 'login',
       list: [
@@ -119,6 +180,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
+      vm.categoryId = to.params['categoryId']
       if (to.query['type'] === 'register') {
         vm.type = 'register'
       } else if (to.query['type'] === 'forget') {
@@ -161,34 +223,13 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
   .Home{
-    height: 100%;
-  }
-  .Wrap{
-    position: relative;
-    margin:  30px auto;
-    left:0;
-    top:0;
-    right: 0;
-    bottom: 0;
-    width: 1250px;
-    height: 750px;
-    box-sizing: border-box;
-    a{
-      text-decoration: none;
-      color: #409EFF !important;
-      /*font-weight: bold;*/
-      &:hover{
-        color:#fff !important;
-      }
-    }
-    .buttonTag{
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      .my-btn{
-        margin:70px 120px !important;
-        transform: scale(2.5);
-      }
+    h3{
+      margin: 0 0 50px 0;
+      padding: 20px;
+      font-size: 25px;
+      text-align: center;
+      background: #4A524F;
+      color: gold;
     }
     .font{
       word-break:break-all;
@@ -196,6 +237,43 @@ export default {
       font-size: 37px;
       color: cornflowerblue;
     }
+  }
+  /*.Home{*/
+  /*  height: 100%;*/
+  /*}*/
+  /*.Wrap{*/
+  /*  position: relative;*/
+  /*  margin:  30px auto;*/
+  /*  left:0;*/
+  /*  top:0;*/
+  /*  right: 0;*/
+  /*  bottom: 0;*/
+  /*  width: 1250px;*/
+  /*  height: 750px;*/
+  /*  box-sizing: border-box;*/
+  /*  a{*/
+  /*    text-decoration: none;*/
+  /*    color: #409EFF !important;*/
+  /*    !*font-weight: bold;*!*/
+  /*    &:hover{*/
+  /*      color:#fff !important;*/
+  /*    }*/
+  /*  }*/
+  /*  .buttonTag{*/
+  /*    display: flex;*/
+  /*    flex-wrap: wrap;*/
+  /*    justify-content: center;*/
+  /*    .my-btn{*/
+  /*      margin:70px 120px !important;*/
+  /*      transform: scale(2.5);*/
+  /*    }*/
+  /*  }*/
+  /*  .font{*/
+  /*    word-break:break-all;*/
+  /*    word-wrap:break-word;*/
+  /*    font-size: 37px;*/
+  /*    color: cornflowerblue;*/
+  /*  }*/
     /*a{*/
     /*  text-decoration: none;*/
     /*}*/
@@ -249,6 +327,6 @@ export default {
     /*}*/
     /*.Right{*/
     /*  padding-top: 200px;*/
+    /*}
     /*}*/
-  }
 </style>

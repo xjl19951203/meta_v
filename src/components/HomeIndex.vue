@@ -1,12 +1,12 @@
 <template>
   <div class="HomeIndex">
     <h1>
-      欢迎来到，基础制造工艺资源环境负荷数据库
+      欢迎访问基础制造工艺资源环境负荷数据库
     </h1>
     <div class="wrapper">
-      <el-row :gutter="20" v-for="sub in navList" :key="sub.title">
-        <el-col :span="12">
-          <router-link :to="{name: 'Home'}">
+      <el-row :gutter="20">
+        <el-col :span="10" v-for="sub in navList" :key="sub.index">
+          <router-link :to="{name: 'Home', params: {categoryId: sub['categoryId']}}">
             <el-card always="always">
               <i class="fa fa-fw fa-database"></i> {{ sub['title'] }}
             </el-card>
@@ -52,18 +52,22 @@ export default {
       navList: [
         {
           title: '机加工数据库',
+          categoryId: 2,
           name: 'Home'
         },
         {
           title: '热处理数据库',
+          categoryId: 3,
           name: 'Home'
         },
         {
           title: '焊接数据库',
+          categoryId: 4,
           name: 'Home'
         },
         {
           title: '铸造数据库',
+          categoryId: 2,
           name: 'Home'
         }
       ]
