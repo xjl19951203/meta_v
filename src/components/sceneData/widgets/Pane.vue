@@ -30,7 +30,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <el-drawer
+    <el-drawer
       class="PaneEditDrawer"
       :title="'新增' + label"
       :visible.sync="editDrawer"
@@ -51,7 +51,6 @@
           </el-option>
           </el-select>
           <span v-if="column['columnKey'] === 'MUL'" class="AddManageDataTips">
-            &nbsp;&nbsp;
             <el-button type="text" @click="handlManageDrawer(column['columnName'], column['columnComment'])">
               缺少数据？前往添加
             </el-button>
@@ -66,12 +65,12 @@
     </el-drawer>
     <el-drawer
       class="AddManageDataDrawer"
-      :title="'新增' + addManageData.label"
+      :title="'新增'"
       :visible.sync="addManageData.visible"
       :direction="'ltr'"
       :size="'50%'">
       <AddManageData :tableName="addManageData.tableName"></AddManageData>
-    </el-drawer> -->
+    </el-drawer>
   </div>
 </template>
 <script>

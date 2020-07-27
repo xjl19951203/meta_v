@@ -36,7 +36,7 @@
           </template>
         </el-table-column>
           <el-table-column
-          label="关键参数"
+          label="关键工艺参数"
           width="180">
           <template slot-scope="scope">
             <div v-for="item in scope.row['keyParameterDataList']" :key="item.index" class="text item">

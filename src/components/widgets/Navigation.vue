@@ -11,7 +11,6 @@
     <el-tree
      :data="baseTree"
      :props="defaultProps"
-     :default-expand-all="false"
      icon-class="el-icon-folder-opened"
      highlightCurrent
      @node-click="handleBase">
@@ -19,7 +18,6 @@
     <el-tree
      :data="navTree"
      :props="defaultProps"
-     :default-expand-all="false"
      icon-class="el-icon-folder-opened"
      highlightCurrent
      @node-click="handleNodeClick">

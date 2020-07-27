@@ -35,7 +35,7 @@
       <el-table
         :data="sceneDataList.filter(data => !searchForm.content || data.title.toLowerCase().includes(searchForm.content.toLowerCase()))"
         style="width: 100%"
-        height="350"
+        height="400"
         border>
         <el-table-column
           label="工艺分类"
@@ -106,6 +106,34 @@
         :total="categoryRes.count">
       </el-pagination>
     </el-footer>
+    <el-drawer
+      class="manageEditDrawer"
+      title="新增工艺场景"
+      :visible.sync="addScene"
+      :direction="'rtl'"
+      :size="'80%'">
+      <el-form ref="sceneDataForm" v-model="sceneDataForm" label-width="150px">
+        <el-form-item v-for="item in tableColumns" :key="item.index" :prop="item['columnName']"
+                      :label="item['columnComment']" v-show="item['columnName'] !== 'id'">
+          <el-input v-if="item['columnKey'] !== 'MUL'" v-model="sceneDataForm[item['columnName']]"
+                    :type="item['dataType'] === 'int' ? 'number' : 'textarea'">
+          </el-input>
+          <el-select v-if="item['columnKey'] === 'MUL'"  v-model="editForm[item['columnName']]" filterable placeholder="请选择">
+            <el-option
+              v-for="item in baseTableMap[item['columnName'].substring(0, item['columnName'].length - 2)]"
+              :key="item.id"
+              :label="item['title']"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="success" @click="handleSubmit">
+            保存
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-drawer>
   </el-container>
 </template>
 <script>
@@ -140,7 +168,14 @@ export default {
         description: '',
         categoryId: 1
       },
-      postSceneRules: {}
+      postSceneRules: {},
+      addScene: false,
+      sceneDataForm: {
+        title: '',
+        categoryId: '',
+        categoryRootId: '',
+        description: ''
+      }
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -166,6 +201,7 @@ export default {
           vm.sceneDataList = res['data']
         })
       }
+      vm.initialColumns()
     })
   },
   beforeRouteUpdate (to, from, next) {
