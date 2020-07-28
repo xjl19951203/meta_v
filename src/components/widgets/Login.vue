@@ -1,8 +1,5 @@
 <template>
   <div class="Login">
-<!--    <div style="display: flex;justify-content: center;margin-top: 150px">-->
-<!--      <el-card style="width: 500px;height: 350px">-->
-<!--        <div style="display: flex;justify-content: center;font-size: 26px;font-weight: 700;color: dodgerblue">-->
     <div class="box">
       <el-card class="card">
         <div class="title">
@@ -10,9 +7,6 @@
         </div>
         <el-divider></el-divider>
         <el-form ref="form" :model="postForm" :rules="rules">
-<!--          <el-form-item prop="userName">-->
-<!--            <el-input prefix-icon="el-icon-user" placeholder="用户名" v-model="postForm.userName"></el-input>-->
-<!--          </el-form-item>-->
           <el-form-item prop="email">
             <el-input prefix-icon="el-icon-message" placeholder="邮箱" v-model="postForm.email"></el-input>
           </el-form-item>
@@ -23,13 +17,13 @@
             <el-button type="success" @click="handlePost">登录</el-button>
           </el-form-item>
           <el-row>
-            <el-col :span="4">
+            <el-col :span="5">
               <router-link :to="{name: 'Home', query:{type: 'register'}}" type="warning">注册账户</router-link>
             </el-col>
-            <el-col :span="10" style="text-align:right">
+            <el-col :span="9" style="text-align:right">
               <router-link :to="{name: 'Home', query:{type: 'forget'}}" type="warning">忘记密码</router-link>
             </el-col>
-            <el-col :span="10" style="text-align:right">
+            <el-col :span="9" style="text-align:right">
               <router-link :to="{name: 'HomeIndex'}">系统首页</router-link>
             </el-col>
           </el-row>
@@ -42,6 +36,9 @@
 import api from 'api'
 export default {
   name: 'Login',
+  props: {
+    categoryId: {}
+  },
   data () {
     return {
       postForm: {
@@ -88,8 +85,7 @@ export default {
               this.$message.error('账户名或密码错误!')
             } else {
               this.$store.commit('login', res)
-              // this.$router.push({name: 'SceneDataList'})
-              this.$router.push({name: 'Home'})
+              this.$router.push({name: 'Home', params: {categoryId: this.categoryId}})
             }
           })
         } else {
@@ -108,7 +104,7 @@ export default {
     .box{
       display: flex;
       justify-content: center;
-      margin-top: 150px
+      margin-top: 50px
     }
     .card{
       /*border-color: #409EFF;*/

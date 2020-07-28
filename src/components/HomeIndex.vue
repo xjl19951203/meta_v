@@ -3,9 +3,9 @@
     <h1>
       欢迎访问基础制造工艺资源环境负荷数据库
     </h1>
-    <div class="wrapper">
-      <el-row :gutter="20">
-        <el-col :span="10" v-for="sub in navList" :key="sub.index">
+    <div class="wrapperHome">
+      <el-row :gutter="24">
+        <el-col :span="12" v-for="sub in navList" :key="sub.index">
           <router-link :to="{name: 'Home', params: {categoryId: sub['categoryId']}}">
             <el-card always="always">
               <i class="fa fa-fw fa-database"></i> {{ sub['title'] }}
@@ -22,26 +22,6 @@
       </el-row>
     </div>
   </div>
-<!--  <div>-->
-<!--    <div class="title">基础制造工艺资源环境负荷数据库</div>-->
-<!--    <div class="Wrap">-->
-<!--      <div class="buttonTag">-->
-<!--        <el-button v-for="item in navList" :key="item.index" class="my-btn" type="primary" plain>-->
-<!--          <router-link :to="{name: item['name']}">-->
-<!--            {{item['title']}}-->
-<!--          </router-link>-->
-<!--        </el-button>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--      <el-row :gutter="50">-->
-<!--        <el-col  v-for="item in navList" :key="item.index">-->
-<!--          <el-card shadow="hover">-->
-<!--            <div>{{item.title}}</div>-->
-<!--            <div><i class="el-icon-coin"></i></div>-->
-<!--          </el-card>-->
-<!--        </el-col>-->
-<!--      </el-row>-->
 </template>
 
 <script>
@@ -67,7 +47,7 @@ export default {
         },
         {
           title: '铸造数据库',
-          categoryId: 2,
+          categoryId: 5,
           name: 'Home'
         }
       ]
@@ -86,31 +66,37 @@ export default {
     h1{
       margin-bottom: 50px;
     }
+    .wrapperHome{
+      max-width: 850px;
+      max-height: 500px;
+      margin: 50px 475px 0 475px;
+      a{
+        font-weight: bolder;
+        font-size: larger;
+        text-align: center!important;
+        &:hover{
+          .el-card{
+            background: darkslategray!important;
+            color: #ffffff;
+          }
+        }
+      }
+      .el-row{
+        // margin: 50px 0;
+      }
+      .el-card__body{
+        padding: 50px;
+        text-align: center!important;
+        i{
+          font-size: x-large;
+        }
+      }
+      .el-card{
+        margin-bottom: 10px!important;
+      }
+      .add .el-card__body{
+        padding: 30px!important;
+      }
+    }
   }
-  /*.title {*/
-  /*  text-align:center;*/
-  /*  font-size: 50px;*/
-  /*  color: cornflowerblue;*/
-  /*  margin: 40px;*/
-  /*}*/
-  /*.Wrap {*/
-  /*  position: relative;*/
-  /*  margin: 30px auto;*/
-  /*  left: 0;*/
-  /*  top: 0;*/
-  /*  right: 0;*/
-  /*  bottom: 0;*/
-  /*  width: 1250px;*/
-  /*  height: 200px;*/
-  /*  box-sizing: border-box;*/
-  /*}*/
-  /*.buttonTag {*/
-  /*  display: flex;*/
-  /*  flex-wrap: wrap;*/
-  /*  justify-content: center;*/
-  /*}*/
-  /*.my-btn {*/
-  /*  margin: 80px 200px !important;*/
-  /*  transform: scale(3);*/
-  /*}*/
 </style>

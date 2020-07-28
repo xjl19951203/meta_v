@@ -5,7 +5,7 @@
     </h1>
     <el-divider></el-divider>
     <el-row :gutter="12" v-for="sub in navList" :key="sub.index">
-      <el-col :span="24">
+      <el-col :span="20">
         <el-tag class="tag" v-if="sub.title === '基础表'" type="success">{{sub.title}}</el-tag>
         <el-tag class="tag" v-if="sub.title === '辅助表'" type="info">{{sub.title}}</el-tag>
       </el-col>
@@ -58,10 +58,11 @@ export default {
 
 <style lang="scss">
   .ManageIndex{
-    padding: 0 20px;
+    width: 100%;
+    height: 100%;
     h1{
       text-align: center;
-      margin: 20px 20px 50px 20px;
+      margin: 20px 20px 20px 20px;
       color: cornflowerblue;
       font-size: 30px;
     }
@@ -72,7 +73,7 @@ export default {
       padding: 0 10px;
     }
     .el-row{
-      margin: 20px 0;
+      width: 100%;
     }
     .el-card{
       margin-bottom: 20px!important;

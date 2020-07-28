@@ -1,42 +1,25 @@
 <template>
   <el-container class="SceneDataList">
     <el-header>
-      <el-card class="hover">
-        <div slot="header" class="clearfix">
-          <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          </el-breadcrumb>
-        </div>
-        <el-row :gutter="20">
-<!--          <el-col :span="16">-->
-<!--            <el-form class="searchForm" ref="searchForm" :model="searchForm" :rules="searchRules">-->
-<!--              <el-form-item prop="content">-->
-<!--                <el-input class="input-with-select" placeholder="搜索工艺场景" v-model="searchForm.content">-->
-<!--                  <el-button slot="append" icon="el-icon-search"></el-button>-->
-<!--                </el-input>-->
-<!--              </el-form-item>-->
-<!--            </el-form>-->
-<!--          </el-col>-->
-          <el-col :span="16">
-            <el-input class="input-with-select" placeholder="搜索工艺场景" v-model="searchForm.content">
-              <el-button slot="append" icon="el-icon-search"></el-button>
-            </el-input>
-          </el-col>
-          <el-col :span="8" style="text-align:right">
-            <el-button type="primary" @click="postSceneDrawer=true">
-              <i class="el-icon-circle-plus-outline"></i> 新增工艺场景
-            </el-button>     <!--以弹窗（drawer抽屉）的形式新增工艺场景-->
-          </el-col>
-        </el-row>
-      </el-card>
+      <el-row :gutter="12" class="hover">
+        <el-col :span="15">
+          <el-input class="input-with-select" placeholder="搜索工艺场景" v-model="searchForm.content">
+            <el-button slot="append" icon="el-icon-search"></el-button>
+          </el-input>
+        </el-col>
+        <el-col :span="8" style="text-align:right">
+          <el-button type="primary" @click="postSceneDrawer=true">
+            <i class="el-icon-circle-plus-outline"></i> 新增工艺场景
+          </el-button>     <!--以弹窗（drawer抽屉）的形式新增工艺场景-->
+        </el-col>
+      </el-row>
       <el-divider></el-divider>
     </el-header>
     <el-main>
       <el-table
         :data="sceneDataList.filter(data => !searchForm.content || data.title.toLowerCase().includes(searchForm.content.toLowerCase()))"
         style="width: 100%"
-        height="400"
-        border>
+        >
         <el-table-column
           label="工艺分类"
           width="120">
@@ -46,7 +29,7 @@
         </el-table-column>
         <el-table-column
           label="工艺名称"
-          width="200">
+          width="170">
           <template slot-scope="scope">
             {{scope.row['title']}}
           </template>
@@ -72,22 +55,7 @@
             {{ scope.row['updatedAt'] }}
           </template>
         </el-table-column>
-<!--        创建时间的另一种实现方式-->
-<!--        <el-table-column-->
-<!--          label="创建时间"-->
-<!--          sortable-->
-<!--          width="180">-->
-<!--          <template slot-scope="scope">-->
-<!--            <el-popover trigger="hover" placement="top">-->
-<!--              <span style="margin-left: 10px">创建时间：{{ scope.row['createdAt'] }}</span>-->
-<!--              <span style="margin-left: 10px">更新时间：{{ scope.row['updatedAt'] }}</span>-->
-<!--            </el-popover>-->
-<!--            <div slot="reference" class="name-wrapper">-->
-<!--              <el-tag size="medium">{{ scope.row['createdAt'] }}</el-tag>-->
-<!--            </div>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-        <el-table-column label="操作" width="250">
+        <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -101,17 +69,18 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="categoryRes.currentPage"
+        :page-sizes="[5, 7, 10]"
         :page-size="categoryRes.pageSize"
-        layout="total, prev, pager, next, jumper"
+        layout="total, sizes, prev, pager, next, jumper"
         :total="categoryRes.count">
       </el-pagination>
     </el-footer>
     <el-drawer
       class="manageEditDrawer"
       title="新增工艺场景"
-      :visible.sync="addScene"
+      :visible.sync="postSceneDrawer"
       :direction="'rtl'"
-      :size="'80%'">
+      :size="'50%'">
       <el-form ref="sceneDataForm" v-model="sceneDataForm" label-width="150px">
         <el-form-item v-for="item in tableColumns" :key="item.index" :prop="item['columnName']"
                       :label="item['columnComment']" v-show="item['columnName'] !== 'id'">
@@ -201,7 +170,6 @@ export default {
           vm.sceneDataList = res['data']
         })
       }
-      vm.initialColumns()
     })
   },
   beforeRouteUpdate (to, from, next) {
@@ -224,15 +192,27 @@ export default {
   },
   methods: {
     handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
+      // let routeQuery = this.$route['query']
+      let query = {
+        categoryId: this.categoryId,
+        currentPage: this.categoryRes.currentPage,
+        pageSize: val
+      }
+      let args = {
+        url: 'category/',
+        params: query
+      }
+      api.get(args).then(res => {
+        this.categoryRes = res
+        this.sceneDataList = res['data']
+      })
     },
     handleCurrentChange (val) {
-      let routeQuery = this.$route['query']
-      // let categoryId = routeQuery['category'] ? routeQuery['category'] : 1
+      // let routeQuery = this.$route['query']
       let query = {
-        categoryId: routeQuery['categoryId'] ? routeQuery['categoryId'] : 1,
+        categoryId: this.categoryId,
         currentPage: val,
-        pageSize: routeQuery['pageSize'] ? routeQuery['pageSize'] : 5
+        pageSize: this.categoryRes.pageSize
       }
       let args = {
         url: 'category/',
@@ -258,6 +238,8 @@ export default {
         }
       })
     },
+    handleSubmit () {
+    },
     handlePut (index, row) {
       this.$router.push({name: 'SceneEdit', params: {sceneId: row.id}})
     }
@@ -272,6 +254,10 @@ export default {
       border-style: ridge;
       border-color: cornflowerblue;
       border-width: 5px
+    }
+    .hover {
+      margin-top: 20px;
+      padding: 0
     }
   }
 </style>

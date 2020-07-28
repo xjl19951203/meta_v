@@ -32,7 +32,7 @@ export default {
     color: #aaa;
     a{
       text-decoration: none;
-      color: #aaa;
+      color: gold;
     }
   }
 </style>

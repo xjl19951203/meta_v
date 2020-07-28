@@ -12,11 +12,11 @@ export default {
   methods: {
     handleLogout () {
       this.$store.commit('logout')
-      this.$router.push({name: 'Home'})
+      this.$router.push({name: 'HomeIndex'})
     },
     handleClear () {
       this.$store.commit('clear')
-      this.$router.push({name: 'Home'})
+      this.$router.push({name: 'HomeIndex'})
     }
   }
 }

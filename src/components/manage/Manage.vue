@@ -1,14 +1,6 @@
 <template>
   <div class="Manage">
     <el-divider></el-divider>
-<!--    <el-button type="primary" @click="handleEditDrawer(null)" :disabled="searchVisible">-->
-<!--      <i class="fa fa-plus-circle fa-fw"></i> 添加新条目-->
-<!--    </el-button>-->
-<!--    <el-divider></el-divider>-->
-<!--    &lt;!&ndash;    v-model="searchForm.content"&ndash;&gt;-->
-<!--    <el-input class="base-input" placeholder="检索数据">-->
-<!--      <el-button slot="append" icon="el-icon-search"></el-button>-->
-<!--    </el-input>-->
     <el-row :gutter="20">
       <el-col :span="16">
         <el-input class="base-input" placeholder="检索数据" v-model="searchContent">
@@ -25,14 +17,14 @@
     <el-table
       style="width: 100%"
       :data="tableList.filter(data => !searchContent || data.title.toLowerCase().includes(searchContent.toLowerCase()))">
-<!--      创建表格的所有列并填入数据-->
+      <!--      创建表格的所有列并填入数据-->
       <el-table-column
         v-for="column in tableColumns"
         :label="column['columnComment']"
         :key="column.index">
         <!--这段解释-->
-<!--        这里用slot-scope="scope"取到表格中的当前单元格-->
-<!--        scope.row 直接取到该单元格对象，就是数组里的元素对象-->
+        <!--        这里用slot-scope="scope"取到表格中的当前单元格-->
+        <!--        scope.row 直接取到该单元格对象，就是数组里的元素对象-->
         <template slot-scope="scope">
           <div v-if="column['columnKey'] === 'MUL'">
             {{scope.row[column['columnName'].substring(0, column['columnName'].length - 2)] ?

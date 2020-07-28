@@ -20,13 +20,13 @@
             <el-input prefix-icon="el-icon-lock" placeholder="确认密码" type="password" v-model="postForm.passwordAgain" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="success" @click="handlePost">注册</el-button>
+            <el-row>
+              <el-col>
+                <el-button type="success" @click="handlePost">注册</el-button>
+                <router-link :to="{name: 'Home', query:{type: 'login'}}" type="warning" class="routeLink">前往登录</router-link>
+              </el-col>
+            </el-row>
           </el-form-item>
-          <el-row>
-            <el-col :span="12">
-              <router-link :to="{name: 'Home', query:{type: 'login'}}" type="warning">前往登录</router-link>
-            </el-col>
-          </el-row>
         </el-form>
       </el-card>
     </div>
@@ -37,6 +37,9 @@
 import api from 'api'
 export default {
   name: 'Login',
+  props: {
+    categoryId: {}
+  },
   data () {
     return {
       postForm: {
@@ -88,7 +91,7 @@ export default {
               this.$message.error('当前用户名或邮箱已被注册!')
             } else {
               this.$store.commit('login', res)
-              this.$router.push({name: 'Home'})
+              this.$router.push({name: 'Home', params: {categoryId: this.categoryId}})
             }
           })
         } else {
@@ -107,12 +110,11 @@ export default {
     .box{
       display: flex;
       justify-content: center;
-      margin-top: 150px;
+      margin-top: 40px;
     }
     .card{
-      /*border-color: #409EFF;*/
       width: 500px;
-      height: 450px;
+      height: 500px;
     }
     .title{
       display: flex;
@@ -120,6 +122,9 @@ export default {
       font-size: 26px;
       font-weight: 700;
       color: dodgerblue;
+    }
+    .routeLink{
+      margin: 0 0 0 150px;
     }
   }
 </style>
