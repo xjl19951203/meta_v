@@ -12,11 +12,11 @@
           <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
           <div style="margin: 15px 0;"></div>
           <el-checkbox-group v-model="searchForm.checkedTables" @change="handleCheckedTablesChange">
-            <el-checkbox  label="sceneData">工艺场景</el-checkbox>
-            <el-checkbox  label="material">物料</el-checkbox>
-            <el-checkbox  label="energy">能源</el-checkbox>
-            <el-checkbox  label="device">设备</el-checkbox>
-            <el-checkbox  label="envLoad">环境负荷</el-checkbox>
+            <el-checkbox label="sceneData">工艺场景</el-checkbox>
+            <el-checkbox label="material">物料</el-checkbox>
+            <el-checkbox label="energy">能源</el-checkbox>
+            <el-checkbox label="device">设备</el-checkbox>
+            <el-checkbox label="envLoad">环境负荷</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-form>
