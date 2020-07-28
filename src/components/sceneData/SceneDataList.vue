@@ -80,7 +80,7 @@
       title="新增工艺场景"
       :visible.sync="postSceneDrawer"
       :direction="'rtl'"
-      :size="'50%'">
+      :size="'40%'">
       <el-form ref="sceneDataForm" v-model="sceneDataForm" label-width="150px">
         <el-tag class="title" type="success">场景基本信息
           <el-form-item label="场景名称" prop="title">
@@ -128,8 +128,8 @@
             <el-input v-model="postSceneForm.keyParameterDataList"></el-input>
           </el-form-item>
         </el-tag>
-        <el-tag>
-          <el-form-item>
+        <el-tag type="margin=100px">
+          <el-form-item type="margin=100px">
             <el-button type="primary" @click="handlePost('postSceneForm')">立即创建</el-button>
           </el-form-item>  <!--点击创建调用提交方法handlePost-->
         </el-tag>
