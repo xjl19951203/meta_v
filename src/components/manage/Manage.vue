@@ -1,18 +1,20 @@
 <template>
   <div class="Manage">
     <el-divider></el-divider>
-    <el-row :gutter="20">
-      <el-col :span="16">
-        <el-input class="base-input" placeholder="检索数据" v-model="searchContent">
-          <el-button slot="append" icon="el-icon-search"></el-button>
-        </el-input>
-      </el-col>
-      <el-col :span="8" style="text-align:right">
-        <el-button type="primary" @click="handleEditDrawer(null)" :disabled="searchVisible">
-          <i class="fa fa-plus-circle fa-fw"></i> 添加新条目
-        </el-button>
-      </el-col>
-    </el-row>
+    <div style="margin:0 6px;">
+      <el-row :gutter="12" class="hover">
+        <el-col :span="15">
+          <el-input class="base-input" placeholder="检索数据" v-model="searchContent">
+            <el-button slot="append" icon="el-icon-search"></el-button>
+          </el-input>
+        </el-col>
+        <el-col :span="8" style="text-align:right">
+          <el-button type="primary" @click="handleEditDrawer(null)" :disabled="searchVisible">
+            <i class="fa fa-plus-circle fa-fw"></i> 添加新条目
+          </el-button>
+        </el-col>
+      </el-row>
+    </div>
     <el-divider></el-divider>
     <el-table
       style="width: 100%"

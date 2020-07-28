@@ -17,8 +17,9 @@ html, body, #app{
     color: gold;
   }
   .wrapper{
-    max-width: 1000px;
+    max-width: 1200px;
     margin: auto;
+    width: 100%;
     a{
       font-weight: bolder;
       font-size: larger;
@@ -52,12 +53,6 @@ html, body, #app{
   max-width: 1000px!important;
   min-width: 1000px!important;
   margin: auto;
-}
-.el-table{
-  width: fit-content!important;
-}
-.el-drawer__body{
-  padding: 20px!important;
 }
 .el-container, .el-header, .el-aside, .el-main{
   padding: 0;

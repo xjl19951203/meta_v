@@ -82,7 +82,7 @@ export default {
         }
       }
       .el-row{
-        // margin: 50px 0;
+        /*margin: 50px 0;*/
       }
       .el-card__body{
         padding: 50px;

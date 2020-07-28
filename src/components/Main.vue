@@ -34,6 +34,9 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+  /*.center{*/
+  /*  margin: 0 auto;*/
+  /*}*/
   .Main{
     height: 100%;
     max-height: 100%;

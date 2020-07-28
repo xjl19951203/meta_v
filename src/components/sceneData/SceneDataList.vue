@@ -1,21 +1,21 @@
 <template>
   <el-container class="SceneDataList">
-    <el-header>
+    <div style="margin:0 6px">
       <el-row :gutter="12" class="hover">
         <el-col :span="15">
           <el-input class="input-with-select" placeholder="搜索工艺场景" v-model="searchForm.content">
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
-        <el-col :span="8" style="text-align:right">
+        <el-col :span="6" style="text-align:right">
           <el-button type="primary" @click="postSceneDrawer=true">
             <i class="el-icon-circle-plus-outline"></i> 新增工艺场景
           </el-button>     <!--以弹窗（drawer抽屉）的形式新增工艺场景-->
         </el-col>
       </el-row>
       <el-divider></el-divider>
-    </el-header>
-    <el-main>
+    </div>
+        <el-main>
       <el-table
         :data="sceneDataList.filter(data => !searchForm.content || data.title.toLowerCase().includes(searchForm.content.toLowerCase()))"
         style="width: 100%"
