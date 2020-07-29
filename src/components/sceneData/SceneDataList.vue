@@ -81,7 +81,8 @@
       :visible.sync="postSceneDrawer"
       :direction="'rtl'"
       :size="'50%'">
-      <el-form ref="sceneDataForm" v-model="sceneDataForm" label-width="150px">
+      <el-card>
+        <el-form ref="sceneDataForm" v-model="sceneDataForm" label-width="150px">
           <el-row>
             <el-tag class="title" type="success">场景基本信息</el-tag>
           </el-row>
@@ -148,6 +149,7 @@
             <el-button type="primary" @click="handlePost('postSceneForm')" class="buttonType">立即创建</el-button>
           </el-row>  <!--点击创建调用提交方法handlePost-->
         </el-form>
+      </el-card>
     </el-drawer>
   </el-container>
 </template>
