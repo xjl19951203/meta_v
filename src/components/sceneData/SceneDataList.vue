@@ -81,75 +81,79 @@
       :visible.sync="postSceneDrawer"
       :direction="'rtl'"
       :size="'50%'">
-      <el-card>
-        <el-form ref="sceneDataForm" v-model="sceneDataForm" label-width="150px">
-          <el-row>
-            <el-tag class="title" type="success">场景基本信息</el-tag>
-          </el-row>
-          <el-card>
-            <el-form-item label="场景名称" prop="title">
-              <el-input class="input-box" v-model="postSceneForm.title"></el-input>  <!--输入-->
-            </el-form-item>
-            <el-form-item label="场景描述" prop="description">
-              <el-input type="textarea"
-                        :autosize="{ minRows: 5, maxRows: 10}" v-model="postSceneForm.description"></el-input>
-            </el-form-item>
-            <el-form-item label="场景分类" prop="categoryId">
-              <el-cascader
-                v-model="postCategoryList"
-                clearable
-                :options="categories"
-                :props="{ checkStrictly: true, expandTrigger: 'hover', label: 'title', value: 'id' }">
-              </el-cascader>  <!--级联选择器，选择场景分类，三级场景分类-->
-            </el-form-item>
-          </el-card>
-          <el-row>
-            <el-tag class="title" type="primary">场景物料种类</el-tag>
-          </el-row>
-          <el-form-item label="所用物料" prop="materialDataList">
-            <el-select v-model="postSceneForm.materialDataList" multiple placeholder="请选择">
-              <el-option
-                v-for="item in materialOptions"
-                :key="item.index"
-                :label="item.title"
-                :value="item.id">
-              </el-option>
-            </el-select>
+      <el-form ref="sceneDataForm" v-model="sceneDataForm" label-width="150px">
+        <el-row>
+          <el-tag class="title" type="success">场景基本信息</el-tag>
+        </el-row>
+        <el-form-item label="场景名称" prop="title">
+          <el-col :span="20">
+            <el-input v-model="postSceneForm.title"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="场景描述" prop="description">
+          <el-col :span="20">
+            <el-input type="textarea" :autosize="{ minRows:2, maxRows: 10}" v-model="postSceneForm.description"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="场景分类" prop="categoryId">
+          <el-cascader
+            v-model="postCategoryList"
+            clearable
+            :options="categories"
+            :props="{ checkStrictly: true, expandTrigger: 'hover', label: 'title', value: 'id' }">
+          </el-cascader>  <!--级联选择器，选择场景分类，三级场景分类-->
+        </el-form-item>
+        <el-row>
+          <el-tag class="title" type="primary">场景物料种类</el-tag>
+        </el-row>
+        <el-form-item label="所用物料" prop="materialDataList">
+          <el-select v-model="postSceneForm.materialDataList" multiple placeholder="请选择">
+            <el-option
+              v-for="item in materialOptions"
+              :key="item.index"
+              :label="item.title"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-row>
+          <el-tag class="title" type="warning">场景设备种类</el-tag>
+        </el-row>
+        <el-form-item label="所用设备" prop="deviceDataList">
+          <el-select v-model="postSceneForm.deviceDataList" multiple placeholder="请选择">
+            <el-option
+              v-for="item in deviceOptions"
+              :key="item.index"
+              :label="item.title"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-row>
+          <el-tag class="title" type="info">场景关键工艺参数</el-tag>
+        </el-row>
+        <el-form-item label="关键工艺参数" prop="keyParameterDataList">
+          <el-col :span="20">
+            <el-input v-model="postSceneForm.keyParameterDataList[0]" placeholder="请填写"></el-input>
+          </el-col>
+          <el-col :span="4">
+            <el-button size="small" type="info" icon="el-icon-plus" @click="addItem"></el-button>
+          </el-col>
+        </el-form-item>
+        <div v-for="(item, index) in postSceneForm.keyParameterDataList" :key="index">
+          <el-form-item label="关键工艺参数">
+            <el-col :span="20">
+              <el-input v-model="postSceneForm.keyParameterDataList[index+1]" placeholder="请填写"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <el-button size="small" type="info" icon="el-icon-delete" @click="deleteItem(item, index)"></el-button>
+            </el-col>
           </el-form-item>
-          <el-row>
-            <el-tag class="title" type="warning">场景设备种类</el-tag>
-          </el-row>
-          <el-form-item label="所用设备" prop="deviceDataList">
-            <el-select v-model="postSceneForm.deviceDataList" multiple placeholder="请选择">
-              <el-option
-                v-for="item in deviceOptions"
-                :key="item.index"
-                :label="item.title"
-                :value="item.id">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-row>
-            <el-tag class="title" type="info">场景关键工艺参数</el-tag>
-          </el-row>
-          <el-row>
-            <el-form-item label="关键工艺参数" prop="deviceDataList">
-              <el-input v-model="postSceneForm.keyParameterData" @change="addItem"></el-input>
-              <el-button @click="addItem">+</el-button>
-            </el-form-item>
-            <div v-for="(item, index) in postSceneForm.keyParameterDataList" :key="index">
-              <el-form-item label="关键工艺参数">
-                <el-input v-model="postSceneForm.keyParameterDataList[index]" size="small" placeholder="请填写">
-                  <i class="el-icon-delete" @click="deleteItem(item, index)"></i>
-                </el-input>
-              </el-form-item>
-            </div>
-          </el-row>
-          <el-row>
-            <el-button type="primary" @click="handlePost('postSceneForm')" class="buttonType">立即创建</el-button>
-          </el-row>  <!--点击创建调用提交方法handlePost-->
-        </el-form>
-      </el-card>
+        </div>
+        <el-row>
+          <el-button type="primary" @click="handlePost('postSceneForm')" class="buttonType">立即创建</el-button>
+        </el-row>  <!--点击创建调用提交方法handlePost-->
+      </el-form>
     </el-drawer>
   </el-container>
 </template>
@@ -292,21 +296,27 @@ export default {
       this.$router.push({name: 'SceneData', params: {sceneDataId: row['id']}})
     },
     handlePost () {
+      console.log(this.postSceneForm)
       this.postSceneForm.categoryId = this.postCategoryList[this.postCategoryList.length - 1]
       this.postSceneForm.categoryRootId = this.postCategoryList[1] // 二级分类ID
-      api.post({url: 'sceneData', params: this.postSceneForm}).then(result => {
-        if (result > 0) {
-          this.$router.push({name: 'SceneData', params: {sceneId: result}})
-        } else {
-          this.$message.error('出错了！')
-        }
-      })
+      // api.post({url: 'sceneData', params: this.postSceneForm}).then(result => {
+      //   if (result > 0) {
+      //     this.$router.push({name: 'SceneData', params: {sceneId: result}})
+      //   } else {
+      //     this.$message.error('出错了！')
+      //   }
+      // })
     },
     addItem () {
       this.postSceneForm.keyParameterDataList.push(this.postSceneForm.keyParameterData)
     },
-    deleteItem (item, index) {
-      this.postSceneForm.keyParameterDataList.splice(index, 1)
+    deleteItem (item) {
+      this.postSceneForm.keyParameterDataList.forEach(ech => {
+        if (ech === item) {
+          this.postSceneForm.keyParameterDataList.splice(item)
+        }
+      })
+      // this.postSceneForm.keyParameterDataList.splice(index, 1)
     }
   }
 }
@@ -329,10 +339,7 @@ export default {
       font-weight: bolder;
       font-size: large;
       padding: 0 10px;
-      margin: 0 0 0 20px;
-    }
-    .input-box{
-      weight: 100px
+      margin: 0 0 0 10px;
     }
     .buttonType{
       display: inline-block;
