@@ -86,7 +86,7 @@
           <el-tag class="title" type="success">场景基本信息</el-tag>
         </el-row>
         <el-form-item label="场景名称" prop="title">
-          <el-input v-model="postSceneForm.title"></el-input>  <!--输入-->
+          <el-input class="input-box" v-model="postSceneForm.title"></el-input>  <!--输入-->
         </el-form-item>
         <el-form-item label="场景描述" prop="description">
           <el-input type="textarea"
@@ -103,7 +103,7 @@
         <el-row>
           <el-tag class="title" type="primary">场景物料种类</el-tag>
         </el-row>
-        <el-form-item label="物料名称" prop="materialDataList">
+        <el-form-item label="所用物料" prop="materialDataList">
             <el-select v-model="postSceneForm.materialDataList" multiple placeholder="请选择">
               <el-option
                 v-for="item in materialOptions"
@@ -116,7 +116,7 @@
         <el-row>
           <el-tag class="title" type="warning">场景设备种类</el-tag>
         </el-row>
-        <el-form-item label="设备名称" prop="deviceDataList">
+        <el-form-item label="所用设备" prop="deviceDataList">
           <el-select v-model="postSceneForm.deviceDataList" multiple placeholder="请选择">
             <el-option
               v-for="item in deviceOptions"
@@ -129,9 +129,16 @@
         <el-row>
           <el-tag class="title" type="info">场景关键工艺参数</el-tag>
         </el-row>
-        <el-form-item label="关键工艺参数" prop="keyParameterDataList">
-          <el-input v-model="postSceneForm.keyParameterDataList"></el-input>
+        <el-form-item label="关键工艺参数" prop="deviceDataList">
+          <el-input v-model="postSceneForm.keyParameterData" @change="addItem"></el-input>
+          <el-button @click="addItem">+</el-button>
         </el-form-item>
+        <div v-for="(item, index) in postSceneForm.keyParameterDataList" :key="index">
+          <el-form-item label="关键工艺参数">
+            <el-input v-model="postSceneForm.keyParameterDataList[index]" size="small" placeholder="请填写"></el-input>
+            <i class="el-icon-delete" @click="deleteItem(item, index)"></i>
+          </el-form-item>
+        </div>
         <el-row>
           <el-button type="primary" @click="handlePost('postSceneForm')" class="buttonType">立即创建</el-button>
         </el-row>  <!--点击创建调用提交方法handlePost-->
@@ -148,7 +155,6 @@ export default {
       return this.$store.state.categories[0].children
     },
     materialOptions () {
-      console.log(this.$store.state.baseTableMap['material'])
       return this.$store.state.baseTableMap['material']
     },
     deviceOptions () {
@@ -184,8 +190,8 @@ export default {
         categoryId: 1,
         materialDataList: [],
         deviceDataList: [],
-        keyParameterDataList: [],
-        dynamicItem: []
+        keyParameterData: '',
+        keyParameterDataList: []
       },
       postSceneRules: {},
       addScene: false,
@@ -194,7 +200,8 @@ export default {
         categoryId: '',
         categoryRootId: '',
         description: ''
-      }
+      },
+      isLastItem: false
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -289,12 +296,10 @@ export default {
       })
     },
     addItem () {
-      this.form.dynamicItem.push({
-        keyParameter: ''
-      })
+      this.postSceneForm.keyParameterDataList.push(this.postSceneForm.keyParameterData)
     },
     deleteItem (item, index) {
-      this.postSceneForm.dynamicItem.splice(index, 1)
+      this.postSceneForm.keyParameterDataList.splice(index, 1)
     }
   }
 }
@@ -317,7 +322,10 @@ export default {
       font-weight: bolder;
       font-size: large;
       padding: 0 10px;
-      margin: 10px 20px 20px 20px;
+      margin: 0 0 0 20px;
+    }
+    .input-box{
+      weight: 100px
     }
     .buttonType{
       display: inline-block;
