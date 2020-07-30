@@ -72,8 +72,7 @@
         :page-sizes="[5, 7, 10]"
         :page-size="categoryRes.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="categoryRes.count"
-        :disabled="pageVisible">
+        :total="categoryRes.count">
       </el-pagination>
     </el-footer>
     <el-drawer
@@ -177,7 +176,6 @@ export default {
   },
   data () {
     return {
-      pageVisible: true,
       postCategoryList: [],
       selectScene: {
         category: {}
@@ -228,9 +226,9 @@ export default {
       if (to.params['sceneDataList'] !== undefined) {
         vm.sceneDataList = to.params['sceneDataList']
       } else if (localStorage.getItem('sceneDataList') !== undefined) {
+      // && localStorage.getItem('sceneDataList') !== null
         vm.sceneDataList = JSON.parse(localStorage.getItem('sceneDataList'))
         localStorage.removeItem('sceneDataList')
-        vm.pageVisible = false
       } else {
         let args = {
           url: 'category/',
@@ -261,6 +259,9 @@ export default {
     })
     next()
   },
+  // beforeRouteLeave (to, from, next) {
+  //   this.pageVisible = false
+  // },
   methods: {
     handleSizeChange (val) {
       // let routeQuery = this.$route['query']
@@ -299,19 +300,13 @@ export default {
       this.$router.push({name: 'SceneData', params: {sceneDataId: row['id']}})
     },
     handlePost () {
-      this.$refs['postSceneForm'].validate((valid) => {
-        if (valid) {
-          this.postSceneForm.categoryId = this.postCategoryList[this.postCategoryList.length - 1]
-          this.postSceneForm.categoryRootId = this.postCategoryList[1] // 二级分类ID
-          // api.post({url: 'sceneData', params: this.postSceneForm}).then(result => {
-          //   if (result > 0) {
-          //     this.$router.push({name: 'SceneData', params: {sceneId: result}})
-          //   } else {
-          //     this.$message.error('出错了！')
-          //   }
-          // })
+      this.postSceneForm.categoryId = this.postCategoryList[this.postCategoryList.length - 1]
+      this.postSceneForm.categoryRootId = this.postCategoryList[1] // 二级分类ID
+      api.post({url: 'manage/scene_data', params: this.postSceneForm}).then(result => {
+        if (result > 0) {
+          this.$router.push({name: 'SceneData', params: {sceneId: result}})
         } else {
-          this.$message.error('请填写所有必填项')
+          this.$message.error('出错了！')
         }
       })
     },
@@ -348,7 +343,8 @@ export default {
       display: inline-block;
       font-weight: bolder;
       font-size: larger;
-      margin: 10px 20px 20px 370px;
+      margin: 0 0 0 10px;
+      /*margin: 10px 20px 20px 370px;*/
     }
   }
 </style>
