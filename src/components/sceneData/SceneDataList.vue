@@ -72,7 +72,8 @@
         :page-sizes="[5, 7, 10]"
         :page-size="categoryRes.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="categoryRes.count">
+        :total="categoryRes.count"
+        :disabled="pageVisible">
       </el-pagination>
     </el-footer>
     <el-drawer
@@ -176,6 +177,7 @@ export default {
   },
   data () {
     return {
+      pageVisible: true,
       postCategoryList: [],
       selectScene: {
         category: {}
@@ -228,6 +230,7 @@ export default {
       } else if (localStorage.getItem('sceneDataList') !== undefined) {
         vm.sceneDataList = JSON.parse(localStorage.getItem('sceneDataList'))
         localStorage.removeItem('sceneDataList')
+        vm.pageVisible = false
       } else {
         let args = {
           url: 'category/',
