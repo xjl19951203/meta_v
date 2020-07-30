@@ -81,11 +81,11 @@
       :visible.sync="postSceneDrawer"
       :direction="'rtl'"
       :size="'50%'">
-      <div style="max-height:800px;overflow-y:auto;">
-        <el-form ref="sceneDataForm" v-model="sceneDataForm" label-width="150px">
+      <div style="max-height:700px;overflow-y:auto;">
+        <el-form ref="postSceneForm" v-model="postSceneForm" label-width="150px">
           <el-row>
-          <el-tag class="title" type="success">场景基本信息</el-tag>
-        </el-row>
+            <el-tag class="title" type="success">场景基本信息</el-tag>
+          </el-row>
           <el-form-item label="场景名称" prop="title">
             <el-col :span="20">
               <el-input v-model="postSceneForm.title"></el-input>
@@ -93,7 +93,7 @@
           </el-form-item>
           <el-form-item label="场景描述" prop="description">
             <el-col :span="20">
-              <el-input type="textarea" :autosize="{ minRows:2, maxRows: 10}" v-model="postSceneForm.description"></el-input>
+              <el-input type="textarea" autosize v-model="postSceneForm.description"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="场景分类" prop="categoryId">
@@ -108,52 +108,52 @@
             <el-tag class="title" type="primary">场景物料种类</el-tag>
           </el-row>
           <el-form-item label="所用物料" prop="materialDataList">
-          <el-select v-model="postSceneForm.materialDataList" multiple placeholder="请选择">
-            <el-option
-              v-for="item in materialOptions"
-              :key="item.index"
-              :label="item.title"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
+            <el-select v-model="postSceneForm.materialDataList" multiple placeholder="请选择">
+              <el-option
+                v-for="item in materialOptions"
+                :key="item.index"
+                :label="item.title"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-row>
             <el-tag class="title" type="warning">场景设备种类</el-tag>
           </el-row>
           <el-form-item label="所用设备" prop="deviceDataList">
-          <el-select v-model="postSceneForm.deviceDataList" multiple placeholder="请选择">
-            <el-option
-              v-for="item in deviceOptions"
-              :key="item.index"
-              :label="item.title"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
+            <el-select v-model="postSceneForm.deviceDataList" multiple placeholder="请选择">
+              <el-option
+                v-for="item in deviceOptions"
+                :key="item.index"
+                :label="item.title"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-row>
-          <el-tag class="title" type="info">场景关键工艺参数</el-tag>
-        </el-row>
+            <el-tag class="title" type="info">场景关键工艺参数</el-tag>
+          </el-row>
           <el-form-item label="关键工艺参数" prop="keyParameterDataList">
-          <el-col :span="20">
-            <el-input v-model="postSceneForm.keyParameterDataList[0]" placeholder="请填写"></el-input>
-          </el-col>
-          <el-col :span="4">
-            <el-button size="small" type="info" icon="el-icon-plus" @click="addItem"></el-button>
-          </el-col>
-        </el-form-item>
-          <div v-for="(item, index) in postSceneForm.keyParameterDataList" :key="index">
-          <el-form-item label="关键工艺参数">
             <el-col :span="20">
-              <el-input v-model="postSceneForm.keyParameterDataList[index+1]" placeholder="请填写"></el-input>
+              <el-input v-model="postSceneForm.keyParameterDataList[0]" placeholder="请填写"></el-input>
             </el-col>
             <el-col :span="4">
-              <el-button size="small" type="info" icon="el-icon-delete" @click="deleteItem(item, index)"></el-button>
+              <el-button size="small" type="info" icon="el-icon-plus" @click="addItem"></el-button>
             </el-col>
           </el-form-item>
-        </div>
+          <div v-for="(item, index) in postSceneForm.keyParameterDataList" :key="index">
+            <el-form-item label="关键工艺参数" v-if="index !== 0">
+              <el-col :span="20">
+                <el-input v-model="postSceneForm.keyParameterDataList[index]" placeholder="请填写"></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button size="small" type="info" icon="el-icon-delete" @click="deleteItem(item, index)"></el-button>
+              </el-col>
+            </el-form-item>
+          </div>
           <el-row>
-          <el-button type="primary" @click="handlePost('postSceneForm')" class="buttonType">立即创建</el-button>
-        </el-row>  <!--点击创建调用提交方法handlePost-->
+            <el-button type="primary" @click="handlePost('postSceneForm')" class="buttonType">立即创建</el-button>
+          </el-row>  <!--点击创建调用提交方法handlePost-->
         </el-form>
       </div>
     </el-drawer>
@@ -203,18 +203,16 @@ export default {
         categoryId: 1,
         materialDataList: [],
         deviceDataList: [],
-        keyParameterData: '',
         keyParameterDataList: []
       },
       postSceneRules: {},
-      addScene: false,
-      sceneDataForm: {
-        title: '',
-        categoryId: '',
-        categoryRootId: '',
-        description: ''
-      },
-      isLastItem: false
+      addScene: false
+      // sceneDataForm: {
+      //   title: '',
+      //   categoryId: '',
+      //   categoryRootId: '',
+      //   description: ''
+      // },
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -227,7 +225,7 @@ export default {
       }
       if (to.params['sceneDataList'] !== undefined) {
         vm.sceneDataList = to.params['sceneDataList']
-      } else if (localStorage.getItem('sceneDataList') !== undefined && localStorage.getItem('sceneDataList') !== null) {
+      } else if (localStorage.getItem('sceneDataList') !== undefined) {
         vm.sceneDataList = JSON.parse(localStorage.getItem('sceneDataList'))
         localStorage.removeItem('sceneDataList')
       } else {
@@ -298,27 +296,27 @@ export default {
       this.$router.push({name: 'SceneData', params: {sceneDataId: row['id']}})
     },
     handlePost () {
-      console.log(this.postSceneForm)
-      this.postSceneForm.categoryId = this.postCategoryList[this.postCategoryList.length - 1]
-      this.postSceneForm.categoryRootId = this.postCategoryList[1] // 二级分类ID
-      // api.post({url: 'sceneData', params: this.postSceneForm}).then(result => {
-      //   if (result > 0) {
-      //     this.$router.push({name: 'SceneData', params: {sceneId: result}})
-      //   } else {
-      //     this.$message.error('出错了！')
-      //   }
-      // })
-    },
-    addItem () {
-      this.postSceneForm.keyParameterDataList.push(this.postSceneForm.keyParameterData)
-    },
-    deleteItem (item) {
-      this.postSceneForm.keyParameterDataList.forEach(ech => {
-        if (ech === item) {
-          this.postSceneForm.keyParameterDataList.splice(item)
+      this.$refs['postSceneForm'].validate((valid) => {
+        if (valid) {
+          this.postSceneForm.categoryId = this.postCategoryList[this.postCategoryList.length - 1]
+          this.postSceneForm.categoryRootId = this.postCategoryList[1] // 二级分类ID
+          // api.post({url: 'sceneData', params: this.postSceneForm}).then(result => {
+          //   if (result > 0) {
+          //     this.$router.push({name: 'SceneData', params: {sceneId: result}})
+          //   } else {
+          //     this.$message.error('出错了！')
+          //   }
+          // })
+        } else {
+          this.$message.error('请填写所有必填项')
         }
       })
-      // this.postSceneForm.keyParameterDataList.splice(index, 1)
+    },
+    addItem () {
+      this.postSceneForm.keyParameterDataList.push('')
+    },
+    deleteItem (item, index) {
+      this.postSceneForm.keyParameterDataList.splice(index, 1)
     }
   }
 }
