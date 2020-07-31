@@ -195,7 +195,7 @@ export default {
         } else if (extension3 || extension4) {
           this.$message({
             message: '请选择正确的导入数据类型',
-            type: 'warning'
+            type: 'warn'
           })
         }
       }
@@ -224,7 +224,7 @@ export default {
         } else if (!(extension2 || extension3 || extension4 || extension5 || extension6)) {
           this.$message({
             message: '请选择正确的导入数据类型',
-            type: 'warning'
+            type: 'warn'
           })
         }
       }

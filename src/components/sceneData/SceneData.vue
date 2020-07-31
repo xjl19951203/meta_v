@@ -1,7 +1,8 @@
 <template>
   <el-container class="SceneData">
     <el-header>
-      <SceneBasic :sceneData="sceneData"></SceneBasic>
+        <SceneBasic :sceneData="sceneData"></SceneBasic>
+        <el-button type="primary" @click="postInputFrame">新增输入帧</el-button>
       <el-divider></el-divider>
     </el-header>
     <el-main>
@@ -127,6 +128,10 @@ export default {
     },
     handleDelete (index, row) {
       console.log(index, row)
+    },
+    postInputFrame () {
+      console.log('您好')
+      alert('fuck!!')
     }
   }
 }

@@ -82,21 +82,21 @@
       :direction="'rtl'"
       :size="'50%'">
       <div style="max-height:700px;overflow-y:auto;">
-        <el-form ref="postSceneForm" v-model="postSceneForm" label-width="150px">
+        <el-form ref="postForm" v-model="postForm" label-width="150px">
           <el-row>
             <el-tag class="title" type="success">场景基本信息</el-tag>
           </el-row>
-          <el-form-item label="场景名称" prop="title">
+          <el-form-item label="场景名称" prop="sceneData.title">
             <el-col :span="20">
-              <el-input v-model="postSceneForm.title"></el-input>
+              <el-input v-model="postForm.sceneData.title"></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item label="场景描述" prop="description">
+          <el-form-item label="场景描述" prop="sceneData.description">
             <el-col :span="20">
-              <el-input type="textarea" autosize v-model="postSceneForm.description"></el-input>
+              <el-input type="textarea" autosize v-model="postForm.sceneData.description"></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item label="场景分类" prop="categoryId">
+          <el-form-item label="场景分类" prop="sceneData.categoryId">
             <el-cascader
               v-model="postCategoryList"
               clearable
@@ -108,7 +108,7 @@
             <el-tag class="title" type="primary">场景物料种类</el-tag>
           </el-row>
           <el-form-item label="所用物料" prop="materialDataList">
-            <el-select v-model="postSceneForm.materialDataList" multiple placeholder="请选择">
+            <el-select v-model="postForm.materialDataList" multiple placeholder="请选择">
               <el-option
                 v-for="item in materialOptions"
                 :key="item.index"
@@ -121,7 +121,7 @@
             <el-tag class="title" type="warning">场景设备种类</el-tag>
           </el-row>
           <el-form-item label="所用设备" prop="deviceDataList">
-            <el-select v-model="postSceneForm.deviceDataList" multiple placeholder="请选择">
+            <el-select v-model="postForm.deviceDataList" multiple placeholder="请选择">
               <el-option
                 v-for="item in deviceOptions"
                 :key="item.index"
@@ -135,16 +135,16 @@
           </el-row>
           <el-form-item label="关键工艺参数" prop="keyParameterDataList">
             <el-col :span="20">
-              <el-input v-model="postSceneForm.keyParameterDataList[0]" placeholder="请填写"></el-input>
+              <el-input v-model="postForm.keyParameterDataList[0]" placeholder="请填写"></el-input>
             </el-col>
             <el-col :span="4">
               <el-button size="small" type="info" icon="el-icon-plus" @click="addItem"></el-button>
             </el-col>
           </el-form-item>
-          <div v-for="(item, index) in postSceneForm.keyParameterDataList" :key="index">
+          <div v-for="(item, index) in postForm.keyParameterDataList" :key="index">
             <el-form-item label="关键工艺参数" v-if="index !== 0">
               <el-col :span="20">
-                <el-input v-model="postSceneForm.keyParameterDataList[index]" placeholder="请填写"></el-input>
+                <el-input v-model="postForm.keyParameterDataList[index]" placeholder="请填写"></el-input>
               </el-col>
               <el-col :span="4">
                 <el-button size="small" type="info" icon="el-icon-delete" @click="deleteItem(item, index)"></el-button>
@@ -152,7 +152,7 @@
             </el-form-item>
           </div>
           <el-row>
-            <el-button type="primary" @click="handlePost('postSceneForm')" class="buttonType">立即创建</el-button>
+            <el-button type="primary" @click="handlePost('postForm')" class="buttonType">立即创建</el-button>
           </el-row>  <!--点击创建调用提交方法handlePost-->
         </el-form>
       </div>
@@ -186,7 +186,7 @@ export default {
         category: '',
         selectCategoryId: null
       },
-      searchRules: {},
+      // searchRules: {},
       categoryRes: {
         count: 1,
         currentPage: 1,
@@ -197,22 +197,20 @@ export default {
       },
       sceneDataList: [],
       postSceneDrawer: false,
-      postSceneForm: {
-        title: '',
-        description: '',
-        categoryId: 1,
+      postForm: {
+        sceneData: {
+          title: '',
+          description: '',
+          categoryId: 1,
+          categoryRootId: 0,
+          userId: 1
+        },
         materialDataList: [],
         deviceDataList: [],
         keyParameterDataList: []
       },
       postSceneRules: {},
       addScene: false
-      // sceneDataForm: {
-      //   title: '',
-      //   categoryId: '',
-      //   categoryRootId: '',
-      //   description: ''
-      // },
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -225,10 +223,23 @@ export default {
       }
       if (to.params['sceneDataList'] !== undefined) {
         vm.sceneDataList = to.params['sceneDataList']
+        localStorage.setItem('sceneDataList', vm.sceneDataList)
       } else if (localStorage.getItem('sceneDataList') !== undefined) {
-      // && localStorage.getItem('sceneDataList') !== null
-        vm.sceneDataList = JSON.parse(localStorage.getItem('sceneDataList'))
-        localStorage.removeItem('sceneDataList')
+        console.log(localStorage.getItem('sceneDataList'))
+        if (localStorage.getItem('sceneDataList') !== null) {
+          vm.sceneDataList = JSON.parse(localStorage.getItem('sceneDataList'))
+          localStorage.removeItem('sceneDataList')
+        } else {
+          let args = {
+            url: 'category/',
+            params: query
+          }
+          api.get(args).then(res => {
+            vm.categoryRes = res
+            vm.sceneDataList = res['data']
+          })
+          // console.log(localStorage.getItem('sceneDataList'))
+        }
       } else {
         let args = {
           url: 'category/',
@@ -260,7 +271,9 @@ export default {
     next()
   },
   // beforeRouteLeave (to, from, next) {
-  //   this.pageVisible = false
+  //   if (to !== 'SceneData') {
+  //     localStorage.removeItem('sceneDataList')
+  //   }
   // },
   methods: {
     handleSizeChange (val) {
@@ -293,28 +306,33 @@ export default {
       api.get(args).then(res => {
         this.categoryRes = res
         this.sceneDataList = res['data']
-        // console.log(this.sceneDataList)
       })
     },
     handleDetailDrawer (index, row) {
       this.$router.push({name: 'SceneData', params: {sceneDataId: row['id']}})
     },
     handlePost () {
-      this.postSceneForm.categoryId = this.postCategoryList[this.postCategoryList.length - 1]
-      this.postSceneForm.categoryRootId = this.postCategoryList[1] // 二级分类ID
-      api.post({url: 'manage/scene_data', params: this.postSceneForm}).then(result => {
+      this.postSceneDrawer = false
+      this.postForm.sceneData.categoryId = this.postCategoryList[this.postCategoryList.length - 1]
+      this.postForm.sceneData.categoryRootId = this.postCategoryList[0] // 一级分类ID
+      this.postForm.sceneData.userId = JSON.parse(localStorage.getItem('auth')).id
+      api.post({url: 'manage/sceneData', params: this.postForm}).then(result => {
         if (result > 0) {
-          this.$router.push({name: 'SceneData', params: {sceneId: result}})
+          this.$router.push({name: 'SceneData', params: {sceneDataId: result}})
+        } else if (result === 0) {
+          this.$message.warning('场景重复！请在已存在的场景下添加输入输出数据！')
+          history.go(0)
+          this.$router.push({name: 'SceneData', params: {sceneDataId: result}})
         } else {
-          this.$message.error('出错了！')
+          this.$message.error('新增失败！')
         }
       })
     },
     addItem () {
-      this.postSceneForm.keyParameterDataList.push('')
+      this.postForm.keyParameterDataList.push('')
     },
     deleteItem (item, index) {
-      this.postSceneForm.keyParameterDataList.splice(index, 1)
+      this.postForm.keyParameterDataList.splice(index, 1)
     }
   }
 }

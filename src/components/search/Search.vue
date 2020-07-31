@@ -161,7 +161,7 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     // console.log('beforeRouteLeave')
-    if (localStorage.getItem('searchList') !== undefined) {
+    if (localStorage.getItem('searchList') !== null) {
       localStorage.removeItem('searchList')
     }
     let searchList = JSON.stringify(this.searchList)
@@ -214,7 +214,6 @@ export default {
         for (var key in this.searchList) {
           this.searchListLength = this.searchListLength + this.searchList[key].length
         }
-        console.log(this.searchList)
       })
       // this.$router.push({name: 'SearchItem', query: {searchType: this.searchForm.searchType, dataType: this.searchForm.dataType, content: this.searchForm.content}})
     },
