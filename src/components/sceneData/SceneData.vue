@@ -14,7 +14,8 @@
           width="180">
           <template slot-scope="scope">
             <div v-for="item in scope.row['materialDataList']" :key="item.index" class="text item">
-              {{item['material']['title']}} ： {{item['value']}} {{item['unit']['title']}}
+<!--              {{item['material']['title']}} ： {{item['value']}} {{item['unit']['title']}}-->
+              {{item['material']['title']?item['material']['title']:''}} ： {{item['value']?item['value']:''}} {{item['unit']?item['unit']['title']:''}}
             </div>
           </template>
         </el-table-column>
@@ -23,7 +24,8 @@
           width="180">
           <template slot-scope="scope">
             <div v-for="item in scope.row['energyDataList']" :key="item.index" class="text item">
-              {{item['energy']['title']}} ： {{item['value']}} {{item['unit']['title']}}
+<!--              {{item['energy']['title']}} ： {{item['value']}} {{item['unit']['title']}}-->
+              {{item['energy']['title']?item['energy']['title']:''}} ： {{item['value']?item['value']:''}} {{item['unit']?item['unit']['title']:''}}
             </div>
           </template>
         </el-table-column>
@@ -32,7 +34,8 @@
           width="180">
           <template slot-scope="scope">
             <div v-for="item in scope.row['deviceDataList']" :key="item.index" class="text item">
-              {{item['device']['title']}}
+<!--              {{item['device']['title']}}-->
+              {{item['device']['title']?item['device']['title']:''}}
             </div>
           </template>
         </el-table-column>
@@ -41,7 +44,7 @@
           width="180">
           <template slot-scope="scope">
             <div v-for="item in scope.row['keyParameterDataList']" :key="item.index" class="text item">
-              {{item['title']}}
+              {{item['title']?item['title']:''}}
             </div>
           </template>
         </el-table-column>
@@ -50,7 +53,7 @@
           width="180">
           <template slot-scope="scope">
             <div v-for="item in scope.row['functionUnitDataList']" :key="item.index" class="text item">
-              {{item['title']}}
+              {{item['title']?item['title']:''}}
             </div>
           </template>
         </el-table-column>
@@ -105,6 +108,11 @@ export default {
   data () {
     return {
       sceneData: {}
+      // postInputFrameData: {
+      //   sceneDataId: this.sceneData['id'],
+      //   materialDataList: this.sceneData['inputFrameDataList']['materialDataList'],
+      //   deviceDataList: this.sceneData['inputFrameDataList']['deviceDataList']
+      // }
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -131,7 +139,11 @@ export default {
     },
     postInputFrame () {
       console.log('您好')
-      alert('fuck!!')
+      // let args = {
+      //   inputFrameDataId: 1
+      // }
+      // api.post()
+      // this.$router.push({name: 'SceneFrameData', params: {inputFrameDataId: this.sceneData['inputFrameDataList']['id']}})
     }
   }
 }

@@ -203,7 +203,12 @@ export default {
           description: '',
           categoryId: 1,
           categoryRootId: 0,
-          userId: 1
+          userId: 1,
+          inputFrameData: {
+            materialDataList: [],
+            deviceDataList: [],
+            keyParameterDataList: []
+          }
         },
         materialDataList: [],
         deviceDataList: [],
@@ -316,6 +321,10 @@ export default {
       this.postForm.sceneData.categoryId = this.postCategoryList[this.postCategoryList.length - 1]
       this.postForm.sceneData.categoryRootId = this.postCategoryList[0] // 一级分类ID
       this.postForm.sceneData.userId = JSON.parse(localStorage.getItem('auth')).id
+      this.postForm.sceneData.inputFrameData.materialDataList = this.postForm.materialDataList
+      this.postForm.sceneData.inputFrameData.deviceDataList = this.postForm.deviceDataList
+      this.postForm.sceneData.inputFrameData.keyParameterDataList = this.postForm.keyParameterDataList
+      console.log(this.postForm)
       api.post({url: 'manage/sceneData', params: this.postForm}).then(result => {
         if (result > 0) {
           this.$router.push({name: 'SceneData', params: {sceneDataId: result}})
