@@ -15,31 +15,31 @@
           <template slot-scope="scope">
             <div v-for="item in scope.row['materialDataList']" :key="item.index" class="text item">
 <!--              {{item['material']['title']}} ： {{item['value']}} {{item['unit']['title']}}-->
-              {{item['material']['title']?item['material']['title']:''}} ： {{item['value']?item['value']:''}} {{item['unit']?item['unit']['title']:''}}
+              {{item['material']?item['material']['title']:''}} ： {{item['value']?item['value']:''}} {{item['unit']?item['unit']['title']:''}}
             </div>
           </template>
         </el-table-column>
-          <el-table-column
+        <el-table-column
           label="能源数据"
           width="180">
           <template slot-scope="scope">
             <div v-for="item in scope.row['energyDataList']" :key="item.index" class="text item">
 <!--              {{item['energy']['title']}} ： {{item['value']}} {{item['unit']['title']}}-->
-              {{item['energy']['title']?item['energy']['title']:''}} ： {{item['value']?item['value']:''}} {{item['unit']?item['unit']['title']:''}}
+              {{item['energy']?item['energy']['title']:''}} ： {{item['value']?item['value']:''}} {{item['unit']?item['unit']['title']:''}}
             </div>
           </template>
         </el-table-column>
-          <el-table-column
+        <el-table-column
           label="设备数据"
           width="180">
           <template slot-scope="scope">
             <div v-for="item in scope.row['deviceDataList']" :key="item.index" class="text item">
 <!--              {{item['device']['title']}}-->
-              {{item['device']['title']?item['device']['title']:''}}
+              {{item['device']?item['device']['title']:''}}
             </div>
           </template>
         </el-table-column>
-          <el-table-column
+        <el-table-column
           label="关键工艺参数"
           width="180">
           <template slot-scope="scope">
@@ -75,7 +75,7 @@
                   width="180">
                   <template slot-scope="scope">
                     <div v-for="item in scope.row['envLoadDataList']" :key="item.index" class="text item">
-                      {{item['envLoad']['title']}} ： {{item['value']}} {{item['unit']['title']}}
+                      {{item['envLoad']?item['envLoad']['title']:''}} ： {{item['value']}} {{item['unit']?item['unit']['title']:''}}
                     </div>
                   </template>
                 </el-table-column>
@@ -107,12 +107,13 @@ export default {
   },
   data () {
     return {
-      sceneData: {}
-      // postInputFrameData: {
-      //   sceneDataId: this.sceneData['id'],
-      //   materialDataList: this.sceneData['inputFrameDataList']['materialDataList'],
-      //   deviceDataList: this.sceneData['inputFrameDataList']['deviceDataList']
-      // }
+      sceneData: {},
+      postInputFrameData: {
+        sceneDataId: null,
+        materialDataList: [],
+        deviceDataList: [],
+        keyParameterDataList: []
+      }
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -138,12 +139,41 @@ export default {
       console.log(index, row)
     },
     postInputFrame () {
-      console.log('您好')
-      // let args = {
-      //   inputFrameDataId: 1
-      // }
-      // api.post()
-      // this.$router.push({name: 'SceneFrameData', params: {inputFrameDataId: this.sceneData['inputFrameDataList']['id']}})
+      if (this.sceneData['inputFrameDataList'] !== null) {
+        this.postInputFrameData.sceneDataId = this.sceneData['id']
+        this.postInputFrameData.materialDataList = this.sceneData['inputFrameDataList'][0]['materialDataList']
+        this.postInputFrameData.deviceDataList = this.sceneData['inputFrameDataList'][0]['deviceDataList']
+        this.postInputFrameData.keyParameterDataList = this.sceneData['inputFrameDataList'][0]['keyParameterDataList']
+        console.log(this.postInputFrameData['sceneDataId'])
+        console.log(this.postInputFrameData['materialDataList'])
+        console.log(this.postInputFrameData['deviceDataList'])
+        console.log(this.postInputFrameData['keyParameterDataList'])
+        //   let args = {
+        //     url: 'inputFrameData/',
+        //     params: this.postInputFrameData
+        //   }
+        //   api.post(args).then(res => {
+        //     if (res > 0) {
+        //       history.go(0)
+        //     } else {
+        //       alert('新增失败！！！')
+        //     }
+        //   })
+        // } else {
+        //   this.$router.push({name: 'SceneFrameData', params: {sceneDataId: this.sceneData.id}})
+        // }
+        // console.log(this.postInputFrameData['sceneDataId'])
+        // console.log(this.postInputFrameData['materialDataList'])
+        // console.log(this.postInputFrameData['deviceDataList'])
+        // console.log(this.postInputFrameData['keyParameterDataList'])
+        // let args = {
+        //   inputFrameDataId: 1
+        // }
+        // api.post()
+        // this.$router.push({name: 'SceneFrameData', params: {inputFrameDataId: this.sceneData['inputFrameDataList']['id']}})
+      } else {
+        console.log('nihao')
+      }
     }
   }
 }

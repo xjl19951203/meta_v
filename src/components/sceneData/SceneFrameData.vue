@@ -76,7 +76,7 @@ export default {
         {
           label: '关键工艺参数',
           name: '3',
-          tableName: 'materialData'
+          tableName: 'keyParameterData'
         },
         {
           label: '设备数据',
