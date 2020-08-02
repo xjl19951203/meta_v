@@ -124,6 +124,18 @@ export default {
       }
       api.get(args).then(res => {
         vm.sceneData = res
+        vm.postInputFrameData.sceneDataId = vm.sceneData['id']
+        if (vm.sceneData['inputFrameDataList'].length !== 0) {
+          vm.sceneData['inputFrameDataList'][0]['materialDataList'].forEach((item) => {
+            vm.postInputFrameData.materialDataList.push(item['materialId'])
+          })
+          vm.sceneData['inputFrameDataList'][0]['deviceDataList'].forEach((item) => {
+            vm.postInputFrameData.deviceDataList.push(item['deviceId'])
+          })
+          vm.sceneData['inputFrameDataList'][0]['keyParameterDataList'].forEach((item) => {
+            vm.postInputFrameData.keyParameterDataList.push(item['title'])
+          })
+        }
       })
     })
   },
@@ -139,40 +151,34 @@ export default {
       console.log(index, row)
     },
     postInputFrame () {
-      if (this.sceneData['inputFrameDataList'] !== null) {
-        this.postInputFrameData.sceneDataId = this.sceneData['id']
-        this.postInputFrameData.materialDataList = this.sceneData['inputFrameDataList'][0]['materialDataList']
-        this.postInputFrameData.deviceDataList = this.sceneData['inputFrameDataList'][0]['deviceDataList']
-        this.postInputFrameData.keyParameterDataList = this.sceneData['inputFrameDataList'][0]['keyParameterDataList']
-        console.log(this.postInputFrameData['sceneDataId'])
-        console.log(this.postInputFrameData['materialDataList'])
-        console.log(this.postInputFrameData['deviceDataList'])
-        console.log(this.postInputFrameData['keyParameterDataList'])
-        //   let args = {
-        //     url: 'inputFrameData/',
-        //     params: this.postInputFrameData
-        //   }
-        //   api.post(args).then(res => {
-        //     if (res > 0) {
-        //       history.go(0)
-        //     } else {
-        //       alert('新增失败！！！')
-        //     }
-        //   })
-        // } else {
-        //   this.$router.push({name: 'SceneFrameData', params: {sceneDataId: this.sceneData.id}})
-        // }
-        // console.log(this.postInputFrameData['sceneDataId'])
-        // console.log(this.postInputFrameData['materialDataList'])
-        // console.log(this.postInputFrameData['deviceDataList'])
-        // console.log(this.postInputFrameData['keyParameterDataList'])
-        // let args = {
-        //   inputFrameDataId: 1
-        // }
-        // api.post()
-        // this.$router.push({name: 'SceneFrameData', params: {inputFrameDataId: this.sceneData['inputFrameDataList']['id']}})
+      if (this.sceneData['inputFrameDataList'].length !== 0) {
+        let args = {
+          url: 'manage/inputFrameData',
+          params: this.postInputFrameData
+        }
+        api.post(args).then(res => {
+          if (res > 0) {
+            history.go(0)
+          } else {
+            alert('新增失败！！！')
+          }
+        })
       } else {
-        console.log('nihao')
+        let args = {
+          url: 'manage/inputFrameData',
+          params: this.postInputFrameData
+        }
+        api.post(args).then(res => {
+          if (res > 0) {
+            let params = {
+              sceneDataId: this.sceneData['id'],
+              inputFrameDataId: res
+            }
+            this.$router.push({name: 'SceneFrameData', params: params})
+          } else {
+            alert('新增失败！！！')
+          }
+        })
       }
     }
   }

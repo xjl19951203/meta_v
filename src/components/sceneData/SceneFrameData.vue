@@ -10,7 +10,7 @@
           </el-button>
         </div>
         <el-radio-group v-model="outputIndex" size="small">
-          <el-radio :label="index" v-for="(item, index) in frame['outputFrameDataList']" :key="index">
+          <el-radio :label="index" v-for="(item, index) in frame['outputFrameDataList']?frame['outputFrameDataList']:null" :key="index">
             {{item['collectionDescription']}}
           </el-radio>
         </el-radio-group>
@@ -20,25 +20,25 @@
     <el-main>
       <el-tabs v-model="activeName">
         <el-tab-pane :label="tabPaneList[0].label" name="1">
-          <Pane :list="frame['materialDataList']" :label="tabPaneList[0].label" :tableName="tabPaneList[0].tableName"></Pane>
+          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['materialDataList']?frame['materialDataList']:null" :label="tabPaneList[0].label" :tableName="tabPaneList[0].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[1].label" name="2">
-          <Pane :list="frame['deviceDataList']" :label="tabPaneList[1].label" :tableName="tabPaneList[1].tableName"></Pane>
+          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['deviceDataList']?frame['deviceDataList']:null" :label="tabPaneList[1].label" :tableName="tabPaneList[1].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[2].label" name="3">
-          <Pane :list="frame['energyDataList']" :label="tabPaneList[2].label" :tableName="tabPaneList[2].tableName"></Pane>
+          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['energyDataList']?frame['energyDataList']:null" :label="tabPaneList[2].label" :tableName="tabPaneList[2].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[3].label" name="4">
-          <Pane :list="frame['keyParameterDataList']" :label="tabPaneList[3].label" :tableName="tabPaneList[3].tableName"></Pane>
+          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['keyParameterDataList']?frame['keyParameterDataList']:null" :label="tabPaneList[3].label" :tableName="tabPaneList[3].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[4].label" name="5">
-          <Pane :list="frame['functionUnitDataList']" :label="tabPaneList[4].label" :tableName="tabPaneList[4].tableName"></Pane>
+          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['functionUnitDataList']?frame['functionUnitDataList']:null" :label="tabPaneList[4].label" :tableName="tabPaneList[4].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[5].label" name="6">
-          <Pane :list="frame['outputFrameDataList'][parseInt(outputIndex)]['envLoadDataList']" :label="tabPaneList[5].label" :tableName="tabPaneList[5].tableName"></Pane>
+          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['outputFrameDataList'][parseInt(outputIndex)]['envLoadDataList']?frame['outputFrameDataList'][parseInt(outputIndex)]['envLoadDataList']:null" :label="tabPaneList[5].label" :tableName="tabPaneList[5].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[6].label" name="7">
-          <Pane :list="frame['outputFrameDataList'][parseInt(outputIndex)]['outputPartDataList']" :label="tabPaneList[6].label" :tableName="tabPaneList[6].tableName"></Pane>
+          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['outputFrameDataList'][parseInt(outputIndex)]['outputPartDataList']?frame['outputFrameDataList'][parseInt(outputIndex)]['outputPartDataList']:null" :label="tabPaneList[6].label" :tableName="tabPaneList[6].tableName"></Pane>
         </el-tab-pane>
       </el-tabs>
     </el-main>
@@ -58,9 +58,18 @@ export default {
     return {
       activeName: '1',
       outputIndex: 0,
+      inputFrameDataId: 1,
       frame: {
         sceneData: {},
-        outputFrameDataList: [{}]
+        materialDataList: [],
+        energyDataList: [],
+        deviceDataList: [],
+        keyParameterDataList: [],
+        functionUnitDataList: [],
+        outputFrameDataList: [{
+          envLoadDataList: [],
+          outputPartDataList: []
+        }]
       },
       tabPaneList: [
         {
@@ -103,19 +112,21 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      let inputFrameDataId = to.params['inputFrameDataId']
+      vm.inputFrameDataId = to.params['inputFrameDataId']
+      console.log(vm.inputFrameDataId)
       let args = {
-        url: 'manage/inputFrameData/' + inputFrameDataId
+        url: 'manage/inputFrameData/' + vm.inputFrameDataId
       }
       api.get(args).then(res => {
+        console.log(vm.frame)
         vm.frame = res
       })
     })
   },
   beforeRouteUpdate (to, from, next) {
-    let inputFrameDataId = to.params['inputFrameDataId']
+    this.inputFrameDataId = to.params['inputFrameDataId']
     let args = {
-      url: 'manage/inputFrameData/' + inputFrameDataId
+      url: 'manage/inputFrameData/' + this.inputFrameDataId
     }
     api.get(args).then(res => {
       this.frame = res

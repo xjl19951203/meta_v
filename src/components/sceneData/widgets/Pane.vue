@@ -19,6 +19,7 @@
       <el-table-column
         :label="column['columnComment']"
         v-for="column in tableColumns"
+        v-if="column['columnComment']!=='所属工艺场景' && column['columnComment']!=='所属输入帧编号' && column['columnComment']!=='所属输出帧编号'"
         :key="column.index"
         width="150">
         <template slot-scope="scope">
@@ -37,8 +38,9 @@
       :direction="'rtl'"
       :size="'50%'">
       <el-form ref="editForm" :model="editForm" label-width="150px">
-        <el-form-item :prop="column['columnName']" :label="column['columnComment']"  v-show="column['columnName'] !== 'id'"
-         v-for="column in tableColumns" :key="column.index" v-if="column['columnName'] !== 'sceneDataId'">
+        <el-form-item :prop="column['columnName']" :label="column['columnComment']"
+          v-show="column['columnName'] !== 'id' && column['columnComment'] !== '所属输入帧编号' && column['columnComment'] !== '所属输出帧编号'"
+          v-for="column in tableColumns" :key="column.index" v-if="column['columnName'] !== 'sceneDataId'">
           <el-input v-if="column['columnKey'] !== 'MUL'" v-model="editForm[column['columnName']]"
            :type="column['dataType'] === 'int' ? 'number' : 'textarea'">
           </el-input>
@@ -48,7 +50,7 @@
             :key="item.id"
             :label="item['title']"
             :value="item.id">
-          </el-option>
+            </el-option>
           </el-select>
           <span v-if="column['columnKey'] === 'MUL'" class="AddManageDataTips">
             <el-button type="text" @click="handlManageDrawer(column['columnName'], column['columnComment'])">
@@ -74,7 +76,7 @@
   </div>
 </template>
 <script>
-import api from 'api'
+// import api from 'api'
 import AddManageData from './AddManageData'
 export default {
   name: 'Pane',
@@ -82,12 +84,18 @@ export default {
     AddManageData
   },
   props: {
+    inputFrameDataId: {
+      type: Number
+    },
     list: {
       type: Array
     },
     tableName: {
       type: String,
       default: 'materialData'
+    },
+    label: {
+      type: String
     }
   },
   watch: {
@@ -131,24 +139,25 @@ export default {
       })
     },
     handleSubmit () {
-      // 修复bug，
-      this.editForm['sceneDataId'] = this.scene['id']
-      if (this.editForm['id'] === undefined) {
-        api.post({url: this.tableName, params: this.editForm}).then(res => {
-          history.go(0)
-        })
-      } else {
-        api.put({url: this.tableName, params: this.editForm}).then(res => {
-          history.go(0)
-        })
-      }
+      // 修复bug
+      console.log(this.inputFrameDataId)
+      this.editForm['inputFrameDataId'] = this.inputFrameDataId
+      // if (this.editForm['id'] === undefined) {
+      //   api.post({url: this.tableName, params: this.editForm}).then(res => {
+      //     history.go(0)
+      //   })
+      // } else {
+      //   api.put({url: this.tableName, params: this.editForm}).then(res => {
+      //     history.go(0)
+      //   })
+      // }
     },
     handleEditDrawer (row) {
       this.editForm = {}
       if (row) {
         this.editForm = row
         // 修复bug，
-        this.editForm['sceneDataId'] = this.scene['id']
+        this.editForm['inputFrameDataId'] = this.inputFrameDataId
       }
       this.editDrawer = true
     },

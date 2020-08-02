@@ -24,8 +24,24 @@
 export default {
   name: 'Navigation',
   computed: {
+    // baseAuth () {
+    //   return this.$store.state.auth['baseAuth']
+    // },
     sceneTree () {
       let temp = this.$store.state.categories
+      // 权限管理控制显示的库的个数
+      // let baseList = temp[0]['children']
+      // baseList.forEach(base => {
+      //  if (base['title'] === '机加工') {
+      //    baseList.remove(base)
+      //  }
+      // })
+      // return [{
+      //   title: '工艺场景',
+      //   id: null,
+      //   name: 'SceneDataList',
+      //   children: baseList
+      // }]
       return [{
         title: '工艺场景',
         id: null,
