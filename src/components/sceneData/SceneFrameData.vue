@@ -5,7 +5,7 @@
       <el-card class="hover">
         <div slot="header" class="clearfix">
           <el-tag effect="dark" type="success">采集描述</el-tag>
-          <el-button style="float: right; padding: 3px 0" type="text">
+          <el-button style="float: right; padding: 3px 0" type="text" @click="handleClick">
             <i class="el-icon-circle-plus-outline"></i> 新增描述
           </el-button>
         </div>

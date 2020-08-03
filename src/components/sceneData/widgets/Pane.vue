@@ -55,7 +55,7 @@
             </el-option>
           </el-select>
           <span v-if="column['columnKey'] === 'MUL'" class="AddManageDataTips">
-            <el-button type="text" @click="handlManageDrawer(column['columnName'], column['columnComment'])">
+            <el-button type="text" @click="handleManageDrawer(column['columnName'], column['columnComment'])">
               缺少数据？前往添加
             </el-button>
           </span>
@@ -69,7 +69,7 @@
     </el-drawer>
     <el-drawer
       class="AddManageDataDrawer"
-      :title="'新增'"
+      :title="'新增'+addManageData.label"
       :visible.sync="addManageData.visible"
       :direction="'ltr'"
       :size="'50%'">
@@ -132,7 +132,7 @@ export default {
     }
   },
   methods: {
-    handlManageDrawer (columnName, columnComment) {
+    handleManageDrawer (columnName, columnComment) {
       this.addManageData.tableName = columnName.substring(0, columnName.length - 2)
       this.addManageData.visible = true
       this.addManageData.label = columnComment

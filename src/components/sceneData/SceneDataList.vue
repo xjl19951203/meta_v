@@ -8,7 +8,7 @@
           </el-input>
         </el-col>
         <el-col :span="6" style="text-align:right">
-          <el-button type="primary" @click="postSceneDrawer=true">
+          <el-button type="primary" @click="handleSceneDrawer(null)">
             <i class="el-icon-circle-plus-outline"></i>新增工艺场景
           </el-button>     <!--以弹窗（drawer抽屉）的形式新增工艺场景-->
         </el-col>
@@ -59,7 +59,14 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="handleDetailDrawer(scope.$index, scope.row)">详情</el-button>
+              @click="handleDetailDrawer(scope.$index, scope.row)">
+              详情
+            </el-button>
+            <el-button
+              size="mini"
+              @click="handleSceneDrawer(scope.row)">
+              编辑
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -108,7 +115,7 @@
             <el-tag class="title" type="primary">场景物料种类</el-tag>
           </el-row>
           <el-form-item label="所用物料" prop="materialDataList">
-            <el-select v-model="postForm.materialDataList" multiple placeholder="请选择">
+            <el-select v-model="postForm.materialDataList" multiple filterable placeholder="请选择">
               <el-option
                 v-for="item in materialOptions"
                 :key="item.index"
@@ -116,12 +123,15 @@
                 :value="item.id">
               </el-option>
             </el-select>
+            <el-button type="text" @click="handleManageDrawer('material','物料')">
+              缺少数据？前往添加
+            </el-button>
           </el-form-item>
           <el-row>
             <el-tag class="title" type="warning">场景设备种类</el-tag>
           </el-row>
           <el-form-item label="所用设备" prop="deviceDataList">
-            <el-select v-model="postForm.deviceDataList" multiple placeholder="请选择">
+            <el-select v-model="postForm.deviceDataList" multiple filterable placeholder="请选择">
               <el-option
                 v-for="item in deviceOptions"
                 :key="item.index"
@@ -129,6 +139,9 @@
                 :value="item.id">
               </el-option>
             </el-select>
+            <el-button type="text" @click="handleManageDrawer('device','设备')">
+              缺少数据？前往添加
+            </el-button>
           </el-form-item>
           <el-row>
             <el-tag class="title" type="info">场景关键工艺参数</el-tag>
@@ -152,17 +165,29 @@
             </el-form-item>
           </div>
           <el-row>
-            <el-button type="primary" @click="handlePost('postForm')" class="buttonType">立即创建</el-button>
+            <el-button type="primary" @click="handlePost('postForm')" class="buttonType">保存</el-button>
           </el-row>  <!--点击创建调用提交方法handlePost-->
         </el-form>
       </div>
+    </el-drawer>
+    <el-drawer
+      class="AddManageDataDrawer"
+      :title="'新增'+addManageData.label"
+      :visible.sync="addManageData.visible"
+      :direction="'ltr'"
+      :size="'50%'">
+      <AddManageData :tableName="addManageData.tableName"></AddManageData>
     </el-drawer>
   </el-container>
 </template>
 <script>
 import api from 'api'
+import AddManageData from './widgets/AddManageData'
 export default {
   name: 'SceneDataList',
+  components: {
+    AddManageData
+  },
   computed: {
     categories () {
       return this.$store.state.categories[0].children
@@ -215,7 +240,12 @@ export default {
         keyParameterDataList: []
       },
       postSceneRules: {},
-      addScene: false
+      addScene: false,
+      addManageData: {
+        tableName: '',
+        visible: false,
+        label: ''
+      }
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -317,31 +347,59 @@ export default {
       this.$router.push({name: 'SceneData', params: {sceneDataId: row['id']}})
     },
     handlePost () {
-      this.postSceneDrawer = false
-      this.postForm.sceneData.categoryId = this.postCategoryList[this.postCategoryList.length - 1]
-      this.postForm.sceneData.categoryRootId = this.postCategoryList[0] // 一级分类ID
-      this.postForm.sceneData.userId = JSON.parse(localStorage.getItem('auth')).id
-      this.postForm.sceneData.inputFrameData.materialDataList = this.postForm.materialDataList
-      this.postForm.sceneData.inputFrameData.deviceDataList = this.postForm.deviceDataList
-      this.postForm.sceneData.inputFrameData.keyParameterDataList = this.postForm.keyParameterDataList
-      console.log(this.postForm)
-      api.post({url: 'manage/sceneData', params: this.postForm}).then(result => {
-        if (result > 0) {
-          this.$router.push({name: 'SceneData', params: {sceneDataId: result}})
-        } else if (result === 0) {
-          this.$message.warning('场景重复！请在已存在的场景下添加输入输出数据！')
-          history.go(0)
-          this.$router.push({name: 'SceneData', params: {sceneDataId: result}})
-        } else {
-          this.$message.error('新增失败！')
-        }
-      })
+      if (this.postForm.sceneData['id'] === undefined) {
+        this.postSceneDrawer = false
+        this.postForm.sceneData.categoryId = this.postCategoryList[this.postCategoryList.length - 1]
+        this.postForm.sceneData.categoryRootId = this.postCategoryList[0] // 一级分类ID
+        this.postForm.sceneData.userId = JSON.parse(localStorage.getItem('auth')).id
+        this.postForm.sceneData.inputFrameData.materialDataList = this.postForm.materialDataList
+        this.postForm.sceneData.inputFrameData.deviceDataList = this.postForm.deviceDataList
+        this.postForm.sceneData.inputFrameData.keyParameterDataList = this.postForm.keyParameterDataList
+        console.log(this.postForm)
+        api.post({url: 'manage/sceneData', params: this.postForm}).then(result => {
+          if (result > 0) {
+            this.$router.push({name: 'SceneData', params: {sceneDataId: result}})
+          } else if (result === 0) {
+            alert('场景重复！请在已存在的场景下添加输入输出数据！')
+            // history.go(0)
+            this.$router.push({name: 'SceneData', params: {sceneDataId: result}})
+          } else {
+            this.$message.error('新增失败！')
+          }
+        })
+      } else {
+        console.log(this.postForm.sceneData)
+        this.postSceneDrawer = false
+        api.put({url: 'manage/sceneData', params: this.postForm.sceneData}).then(res => {
+          this.$router.push({name: 'SceneData', params: {sceneDataId: this.postForm.sceneData['id']}})
+          // history.go(0)
+          // if (res > 0) {
+          //   this.postForm = {}
+          // }
+        })
+      }
     },
     addItem () {
       this.postForm.keyParameterDataList.push('')
     },
     deleteItem (item, index) {
       this.postForm.keyParameterDataList.splice(index, 1)
+    },
+    handleSceneDrawer (row) {
+      if (row) {
+        // console.log(row)
+        this.postForm.sceneData = row
+        this.postForm.sceneData['id'] = row['id']
+        // this.postForm.sceneData['title'] = row['title']
+        // this.postForm.sceneData['description'] = row['description']
+        // this.postForm.sceneData['categoryId'] = row['categoryId']
+      }
+      this.postSceneDrawer = true
+    },
+    handleManageDrawer (tableName, label) {
+      this.addManageData.tableName = tableName
+      this.addManageData.visible = true
+      this.addManageData.label = label
     }
   }
 }
