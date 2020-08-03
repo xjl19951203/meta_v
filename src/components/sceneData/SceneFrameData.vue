@@ -35,10 +35,12 @@
           <Pane :inputFrameDataId="inputFrameDataId" :list="frame['functionUnitDataList']?frame['functionUnitDataList']:null" :label="tabPaneList[4].label" :tableName="tabPaneList[4].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[5].label" name="6">
-          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['outputFrameDataList'].length!==0?frame['outputFrameDataList'][parseInt(outputIndex)]['envLoadDataList']:null" :label="tabPaneList[5].label" :tableName="tabPaneList[5].tableName"></Pane>
+          <Pane :inputFrameDataId="inputFrameDataId" :outputFrameDataId="frame['outputFrameDataList'].length!==0?frame['outputFrameDataList'][parseInt(outputIndex)]['id']:0"
+                :list="frame['outputFrameDataList'].length!==0?frame['outputFrameDataList'][parseInt(outputIndex)]['envLoadDataList']:null" :label="tabPaneList[5].label" :tableName="tabPaneList[5].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[6].label" name="7">
-          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['outputFrameDataList'].length!==0?frame['outputFrameDataList'][parseInt(outputIndex)]['outputPartDataList']:null" :label="tabPaneList[6].label" :tableName="tabPaneList[6].tableName"></Pane>
+          <Pane :inputFrameDataId="inputFrameDataId" :outputFrameDataId="frame['outputFrameDataList'].length!==0?frame['outputFrameDataList'][parseInt(outputIndex)]['id']:0"
+                :list="frame['outputFrameDataList'].length!==0?frame['outputFrameDataList'][parseInt(outputIndex)]['outputPartDataList']:null" :label="tabPaneList[6].label" :tableName="tabPaneList[6].tableName"></Pane>
         </el-tab-pane>
       </el-tabs>
     </el-main>
@@ -113,12 +115,6 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      // vm.frame['materialDataList'] = []
-      // vm.frame['energyDataList'] = []
-      // vm.frame['deviceDataList'] = []
-      // vm.frame['functionUnitDataList'] = []
-      // vm.frame['outputFrameDataList'] = []
-      // console.log(vm.frame)
       vm.frame = {}
       vm.inputFrameDataId = parseInt(to.params['inputFrameDataId'])
       vm.sceneData = to.params['sceneData']
@@ -128,14 +124,7 @@ export default {
       }
       api.get(args).then(res => {
         vm.frame = res
-        // console.log(res)
-        // vm.frame['materialDataList'] = res['materialDataList']
-        // vm.frame['energyDataList'] = res['energyDataList']
-        // vm.frame['deviceDataList'] = res['deviceDataList']
-        // vm.frame['functionUnitDataList'] = res['functionUnitDataList']
-        // vm.frame['keyParameterDataList'] = res['keyParameterDataList']
-        // vm.frame['outputFrameDataList'] = res['outputFrameDataList']
-        // console.log(vm.frame)
+        console.log(vm.frame)
       })
     })
   },

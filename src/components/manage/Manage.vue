@@ -144,11 +144,11 @@ export default {
     handleSubmit () {
       if (this.editForm['id'] === undefined) {
         api.post({url: 'manage/' + this.tableName, params: this.editForm}).then(res => {
-          history.go(0)
+          // history.go(0)
         })
       } else {
         api.put({url: 'manage/' + this.tableName, params: this.editForm}).then(res => {
-          history.go(0)
+          // history.go(0)
         })
       }
     },

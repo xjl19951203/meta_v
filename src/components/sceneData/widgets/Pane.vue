@@ -34,13 +34,14 @@
     </el-table>
     <el-drawer
       class="PaneEditDrawer"
-      :title="'新增' + label"
+      :title="editType + label"
       :visible.sync="editDrawer"
       :direction="'rtl'"
       :size="'50%'">
       <el-form ref="editForm" :model="editForm" label-width="150px">
         <el-form-item :prop="column['columnName']" :label="column['columnComment']"
-          v-show="column['columnName'] !== 'id' && column['columnComment'] !== '所属输入帧编号' && column['columnComment'] !== '所属输出帧编号'"
+          v-show="column['columnName'] !== 'id' && !column['columnComment'].match('输入帧')
+          && !column['columnComment'].match('输出帧') && !column['columnComment'].match('时间')"
           v-for="column in tableColumns" :key="column.index" v-if="column['columnName'] !== 'sceneDataId'">
           <el-input v-if="column['columnKey'] !== 'MUL'" v-model="editForm[column['columnName']]"
            :type="column['dataType'] === 'int' ? 'number' : 'textarea'">
@@ -77,7 +78,7 @@
   </div>
 </template>
 <script>
-// import api from 'api'
+import api from 'api'
 import AddManageData from './AddManageData'
 export default {
   name: 'Pane',
@@ -86,6 +87,9 @@ export default {
   },
   props: {
     inputFrameDataId: {
+      type: Number
+    },
+    outputFrameDataId: {
       type: Number
     },
     list: {
@@ -114,6 +118,7 @@ export default {
   },
   data () {
     return {
+      editType: '新增',
       addManageData: {
         tableName: '',
         visible: false,
@@ -141,19 +146,28 @@ export default {
     },
     handleSubmit () {
       // 修复bug
-      console.log(this.inputFrameDataId)
-      this.editForm['inputFrameDataId'] = this.inputFrameDataId
-      // if (this.editForm['id'] === undefined) {
-      //   api.post({url: this.tableName, params: this.editForm}).then(res => {
-      //     history.go(0)
-      //   })
-      // } else {
-      //   api.put({url: this.tableName, params: this.editForm}).then(res => {
-      //     history.go(0)
-      //   })
-      // }
+      this.editType = '新增'
+      if (this.tableName.match('envLoadData') || this.tableName.match('outputPartData')) {
+        console.log(this.outputFrameDataId)
+        this.editForm['outputFrameDataId'] = this.outputFrameDataId
+      } else {
+        console.log(this.inputFrameDataId)
+        this.editForm['inputFrameDataId'] = this.inputFrameDataId
+      }
+      if (this.editForm['id'] === undefined) {
+        api.post({url: 'manage/' + this.tableName, params: this.editForm}).then(res => {
+          history.go(0)
+        })
+      } else {
+        api.put({url: 'manage/' + this.tableName, params: this.editForm}).then(res => {
+          history.go(0)
+        })
+      }
     },
     handleEditDrawer (row) {
+      if (row !== null) {
+        this.editType = '编辑'
+      }
       this.editForm = {}
       if (row) {
         this.editForm = row
