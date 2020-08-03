@@ -5,23 +5,27 @@
       <el-card class="hover">
         <div>
           <el-form>
-            <el-form-item>
-              <el-col :span="5">
-                <el-tag effect="dark" type="success">采集描述</el-tag>
-              </el-col>
-            </el-form-item>
-            <el-form-item>
-              <el-col :span="10">
-                <el-input v-model="outputFrameData.collectionDescription" placeholder="请输入采集条件"></el-input>
-              </el-col>
-            </el-form-item>
-             <el-form-item :span="5">
-              <el-col>
-                <el-button type="text" @click="handleClick">
-                  <i class="el-icon-circle-plus-outline"></i> 新增采集条件
-                </el-button>
-              </el-col>
-            </el-form-item>
+            <el-row>
+              <el-form-item class="line">
+                <el-col>
+                  <el-tag effect="dark" type="success">采集描述</el-tag>
+                </el-col>
+              </el-form-item>
+              <div class="line right">
+                <el-form-item class="line">
+                  <el-col>
+                    <el-input v-model="outputFrameData.collectionDescription" placeholder="请输入采集条件" class="my-input"></el-input>
+                  </el-col>
+                </el-form-item>
+                <el-form-item class="line">
+                  <el-col>
+                    <el-button type="text" @click="handleClick">
+                      <i class="el-icon-circle-plus-outline"></i> 新增采集条件
+                    </el-button>
+                  </el-col>
+                </el-form-item>
+              </div>
+            </el-row>
           </el-form>
         </div>
         <el-radio-group v-model="outputIndex" size="small">
@@ -172,5 +176,13 @@ export default {
 }
 </script>
 <style scoped>
-
+  .line{
+    display : inline-block
+  }
+  .my-input{
+    width:300px !important;
+  }
+  .right{
+    float :right
+  }
 </style>
