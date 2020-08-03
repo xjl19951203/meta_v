@@ -34,7 +34,6 @@
           width="180">
           <template slot-scope="scope">
             <div v-for="item in scope.row['deviceDataList']" :key="item.index" class="text item">
-<!--              {{item['device']['title']}}-->
               {{item['device']?item['device']['title']:''}}
             </div>
           </template>
@@ -118,8 +117,10 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.postForm = {}
       let sceneDataId = to.params['sceneDataId']
+      vm.postInputFrameData.materialDataList = []
+      vm.postInputFrameData.deviceDataList = []
+      vm.postInputFrameData.keyParameterDataList = []
       let args = {
         url: 'manage/sceneData/' + sceneDataId
       }
@@ -134,9 +135,11 @@ export default {
           vm.sceneData['inputFrameDataList'][0]['deviceDataList'].forEach((item) => {
             vm.postInputFrameData.deviceDataList.push(item['deviceId'])
           })
+          console.log(vm.postInputFrameData.deviceDataList)
           vm.sceneData['inputFrameDataList'][0]['keyParameterDataList'].forEach((item) => {
             vm.postInputFrameData.keyParameterDataList.push(item['title'])
           })
+          console.log(vm.postInputFrameData.keyParameterDataList)
         }
       })
     })
@@ -159,8 +162,10 @@ export default {
           url: 'manage/inputFrameData',
           params: this.postInputFrameData
         }
+        // console.log(this.postInputFrameData)
         api.post(args).then(res => {
           if (res > 0) {
+            // this.postInputFrameData = null
             history.go(0)
           } else {
             alert('新增失败！！！')

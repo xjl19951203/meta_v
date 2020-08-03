@@ -4,7 +4,7 @@
       <SceneBasic :sceneData="sceneData"></SceneBasic>
       <el-card class="hover">
         <div slot="header" class="clearfix">
-          <el-tag effect="dark">采集描述</el-tag>
+          <el-tag effect="dark" type="success">采集描述</el-tag>
           <el-button style="float: right; padding: 3px 0" type="text">
             <i class="el-icon-circle-plus-outline"></i> 新增描述
           </el-button>
@@ -35,7 +35,6 @@
           <Pane :inputFrameDataId="inputFrameDataId" :list="frame['functionUnitDataList']?frame['functionUnitDataList']:null" :label="tabPaneList[4].label" :tableName="tabPaneList[4].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[5].label" name="6">
-<!--          {{frame['outputFrameDataList']}}-->
           <Pane :inputFrameDataId="inputFrameDataId" :list="frame['outputFrameDataList'].length!==0?frame['outputFrameDataList'][parseInt(outputIndex)]['envLoadDataList']:null" :label="tabPaneList[5].label" :tableName="tabPaneList[5].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[6].label" name="7">
@@ -123,20 +122,20 @@ export default {
       vm.frame = {}
       vm.inputFrameDataId = parseInt(to.params['inputFrameDataId'])
       vm.sceneData = to.params['sceneData']
-      console.log(vm.sceneData)
+      // console.log(vm.sceneData)
       let args = {
         url: 'manage/inputFrameData/' + vm.inputFrameDataId
       }
       api.get(args).then(res => {
         vm.frame = res
-        console.log(res)
+        // console.log(res)
         // vm.frame['materialDataList'] = res['materialDataList']
         // vm.frame['energyDataList'] = res['energyDataList']
         // vm.frame['deviceDataList'] = res['deviceDataList']
         // vm.frame['functionUnitDataList'] = res['functionUnitDataList']
         // vm.frame['keyParameterDataList'] = res['keyParameterDataList']
         // vm.frame['outputFrameDataList'] = res['outputFrameDataList']
-        console.log(vm.frame)
+        // console.log(vm.frame)
       })
     })
   },

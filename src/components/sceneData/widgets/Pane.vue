@@ -19,7 +19,8 @@
       <el-table-column
         :label="column['columnComment']"
         v-for="column in tableColumns"
-        v-if="!column['columnComment'].match('所属工艺场景') && column['columnComment']!=='所属输入帧编号' && column['columnComment']!=='所属输出帧编号'"
+        v-if="!column['columnComment'].match('工艺场景') && !column['columnComment'].match('输入帧')
+        && !column['columnComment'].match('输出帧') && !column['columnComment'].match('编号')"
         :key="column.index"
         width="150">
         <template slot-scope="scope">
