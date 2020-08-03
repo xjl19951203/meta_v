@@ -3,11 +3,26 @@
     <el-header>
       <SceneBasic :sceneData="sceneData"></SceneBasic>
       <el-card class="hover">
-        <div slot="header" class="clearfix">
-          <el-tag effect="dark" type="success">采集描述</el-tag>
-          <el-button style="float: right; padding: 3px 0" type="text" @click="handleClick">
-            <i class="el-icon-circle-plus-outline"></i> 新增描述
-          </el-button>
+        <div>
+          <el-form>
+            <el-form-item>
+              <el-col :span="5">
+                <el-tag effect="dark" type="success">采集描述</el-tag>
+              </el-col>
+            </el-form-item>
+            <el-form-item>
+              <el-col :span="10">
+                <el-input v-model="outputFrameData.collectionDescription" placeholder="请输入采集条件"></el-input>
+              </el-col>
+            </el-form-item>
+             <el-form-item :span="5">
+              <el-col>
+                <el-button type="text" @click="handleClick">
+                  <i class="el-icon-circle-plus-outline"></i> 新增采集条件
+                </el-button>
+              </el-col>
+            </el-form-item>
+          </el-form>
         </div>
         <el-radio-group v-model="outputIndex" size="small">
           <el-radio :label="index" v-for="(item, index) in frame['outputFrameDataList']?frame['outputFrameDataList']:null" :key="index">
@@ -59,8 +74,12 @@ export default {
   data () {
     return {
       activeName: '1',
-      outputIndex: 0,
       inputFrameDataId: 1,
+      outputIndex: 0,
+      outputFrameData: {
+        inputFrameDataId: 1,
+        collectionDescription: ''
+      },
       sceneData: {},
       frame: {
         // materialDataList: [],
@@ -139,8 +158,15 @@ export default {
     next()
   },
   methods: {
-    handleClick (index) {
-      this.outputIndex = index
+    handleClick () {
+      this.outputFrameData.inputFrameDataId = this.inputFrameDataId
+      let args = {
+        url: 'manage/outputFrameData',
+        params: this.outputFrameData
+      }
+      api.post(args).then(res => {
+        history.go(0)
+      })
     }
   }
 }
