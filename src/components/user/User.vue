@@ -16,7 +16,8 @@ export default {
     },
     handleClear () {
       this.$store.commit('clear')
-      this.$router.push({name: 'HomeIndex'})
+      history.go(-1)
+      // this.$router.push({name: 'HomeIndex'})
     }
   }
 }

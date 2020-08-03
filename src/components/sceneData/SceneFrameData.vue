@@ -1,7 +1,7 @@
 <template>
   <el-container class="SceneFrameData">
     <el-header>
-      <SceneBasic :sceneData="frame['sceneData']"></SceneBasic>
+      <SceneBasic :sceneData="sceneData"></SceneBasic>
       <el-card class="hover">
         <div slot="header" class="clearfix">
           <el-tag effect="dark">采集描述</el-tag>
@@ -23,22 +23,23 @@
           <Pane :inputFrameDataId="inputFrameDataId" :list="frame['materialDataList']?frame['materialDataList']:null" :label="tabPaneList[0].label" :tableName="tabPaneList[0].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[1].label" name="2">
-          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['deviceDataList']?frame['deviceDataList']:null" :label="tabPaneList[1].label" :tableName="tabPaneList[1].tableName"></Pane>
+          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['energyDataList']?frame['energyDataList']:null" :label="tabPaneList[1].label" :tableName="tabPaneList[1].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[2].label" name="3">
-          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['energyDataList']?frame['energyDataList']:null" :label="tabPaneList[2].label" :tableName="tabPaneList[2].tableName"></Pane>
+          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['keyParameterDataList']?frame['keyParameterDataList']:null" :label="tabPaneList[2].label" :tableName="tabPaneList[2].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[3].label" name="4">
-          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['keyParameterDataList']?frame['keyParameterDataList']:null" :label="tabPaneList[3].label" :tableName="tabPaneList[3].tableName"></Pane>
+          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['deviceDataList']?frame['deviceDataList']:null" :label="tabPaneList[3].label" :tableName="tabPaneList[3].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[4].label" name="5">
           <Pane :inputFrameDataId="inputFrameDataId" :list="frame['functionUnitDataList']?frame['functionUnitDataList']:null" :label="tabPaneList[4].label" :tableName="tabPaneList[4].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[5].label" name="6">
-          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['outputFrameDataList'][parseInt(outputIndex)]['envLoadDataList']?frame['outputFrameDataList'][parseInt(outputIndex)]['envLoadDataList']:null" :label="tabPaneList[5].label" :tableName="tabPaneList[5].tableName"></Pane>
+<!--          {{frame['outputFrameDataList']}}-->
+          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['outputFrameDataList'].length!==0?frame['outputFrameDataList'][parseInt(outputIndex)]['envLoadDataList']:null" :label="tabPaneList[5].label" :tableName="tabPaneList[5].tableName"></Pane>
         </el-tab-pane>
         <el-tab-pane :label="tabPaneList[6].label" name="7">
-          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['outputFrameDataList'][parseInt(outputIndex)]['outputPartDataList']?frame['outputFrameDataList'][parseInt(outputIndex)]['outputPartDataList']:null" :label="tabPaneList[6].label" :tableName="tabPaneList[6].tableName"></Pane>
+          <Pane :inputFrameDataId="inputFrameDataId" :list="frame['outputFrameDataList'].length!==0?frame['outputFrameDataList'][parseInt(outputIndex)]['outputPartDataList']:null" :label="tabPaneList[6].label" :tableName="tabPaneList[6].tableName"></Pane>
         </el-tab-pane>
       </el-tabs>
     </el-main>
@@ -59,17 +60,18 @@ export default {
       activeName: '1',
       outputIndex: 0,
       inputFrameDataId: 1,
+      sceneData: {},
       frame: {
-        sceneData: {},
-        materialDataList: [],
-        energyDataList: [],
-        deviceDataList: [],
-        keyParameterDataList: [],
-        functionUnitDataList: [],
-        outputFrameDataList: [{
-          envLoadDataList: [],
-          outputPartDataList: []
-        }]
+        // materialDataList: [],
+        // energyDataList: [],
+        // deviceDataList: [],
+        // keyParameterDataList: [],
+        // functionUnitDataList: [],
+        // outputFrameDataList: []
+        // outputFrameDataList: [{
+        //   envLoadDataList: [],
+        //   outputPartDataList: []
+        // }]
       },
       tabPaneList: [
         {
@@ -112,14 +114,29 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.inputFrameDataId = to.params['inputFrameDataId']
-      console.log(vm.inputFrameDataId)
+      // vm.frame['materialDataList'] = []
+      // vm.frame['energyDataList'] = []
+      // vm.frame['deviceDataList'] = []
+      // vm.frame['functionUnitDataList'] = []
+      // vm.frame['outputFrameDataList'] = []
+      // console.log(vm.frame)
+      vm.frame = {}
+      vm.inputFrameDataId = parseInt(to.params['inputFrameDataId'])
+      vm.sceneData = to.params['sceneData']
+      console.log(vm.sceneData)
       let args = {
         url: 'manage/inputFrameData/' + vm.inputFrameDataId
       }
       api.get(args).then(res => {
-        console.log(vm.frame)
         vm.frame = res
+        console.log(res)
+        // vm.frame['materialDataList'] = res['materialDataList']
+        // vm.frame['energyDataList'] = res['energyDataList']
+        // vm.frame['deviceDataList'] = res['deviceDataList']
+        // vm.frame['functionUnitDataList'] = res['functionUnitDataList']
+        // vm.frame['keyParameterDataList'] = res['keyParameterDataList']
+        // vm.frame['outputFrameDataList'] = res['outputFrameDataList']
+        console.log(vm.frame)
       })
     })
   },

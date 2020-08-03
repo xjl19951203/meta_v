@@ -118,6 +118,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
+      vm.postForm = {}
       let sceneDataId = to.params['sceneDataId']
       let args = {
         url: 'manage/sceneData/' + sceneDataId
@@ -129,6 +130,7 @@ export default {
           vm.sceneData['inputFrameDataList'][0]['materialDataList'].forEach((item) => {
             vm.postInputFrameData.materialDataList.push(item['materialId'])
           })
+          console.log(vm.postInputFrameData.materialDataList)
           vm.sceneData['inputFrameDataList'][0]['deviceDataList'].forEach((item) => {
             vm.postInputFrameData.deviceDataList.push(item['deviceId'])
           })
@@ -143,6 +145,7 @@ export default {
     handleDetail (row) {
       let params = {
         sceneDataId: row.sceneDataId,
+        sceneData: this.sceneData,
         inputFrameDataId: row.id
       }
       this.$router.push({name: 'SceneFrameData', params: params})
@@ -172,6 +175,7 @@ export default {
           if (res > 0) {
             let params = {
               sceneDataId: this.sceneData['id'],
+              sceneData: this.sceneData,
               inputFrameDataId: res
             }
             this.$router.push({name: 'SceneFrameData', params: params})
