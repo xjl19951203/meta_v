@@ -59,28 +59,28 @@
           </el-button>
           <el-divider></el-divider>
           <div>
-            <search-item v-if="searchList.material!==undefined" v-for="item in searchList.material" :key="item.index" :item="item"></search-item>
+            <search-item v-if="searchList.material!==undefined" v-for="item in searchList.material" :key="item.index" :item="item" :list="searchList.material"></search-item>
           </div>
           <el-button v-if="(searchList.device||'').length!==0" @click="deviceDeal" type="warning" plain>设备
             <!--            <router-link :to="{name: 'Manage', params: {tableName: 'device', tableList: this.searchList.device}}">设备</router-link>-->
           </el-button>
           <el-divider></el-divider>
           <div>
-            <search-item v-if="searchList.device!==undefined" v-for="item in searchList.device" :key="item.index" :item="item"></search-item>
+            <search-item v-if="searchList.device!==undefined" v-for="item in searchList.device" :key="item.index" :item="item"  :list="searchList.device"></search-item>
           </div>
           <el-button v-if="(searchList.energy||'').length!==0" @click="energyDeal" type="info" plain>能源
             <!--            <router-link :to="{name: 'Manage', params: {tableName: 'energy', tableList: this.searchList.energy}}">能源</router-link>-->
           </el-button>
           <el-divider></el-divider>
           <div>
-            <search-item v-if="searchList.energy!==undefined" v-for="item in searchList.energy" :key="item.index" :item="item"></search-item>
+            <search-item v-if="searchList.energy!==undefined" v-for="item in searchList.energy" :key="item.index" :item="item" :list="searchList.energy"></search-item>
           </div>
           <el-button v-if="(searchList.envLoad||'').length!==0" @click="envLoadDeal" type="danger" plain>环境负荷
             <!--            <router-link :to="{name: 'Manage', params: {tableName: 'envLoad', tableList: this.searchList.envLoad}}">环境负荷</router-link>-->
           </el-button>
           <el-divider></el-divider>
           <div>
-            <search-item v-if="searchList.envLoad!==undefined" v-for="item in searchList.envLoad" :key="item.index" :item="item"></search-item>
+            <search-item v-if="searchList.envLoad!==undefined" v-for="item in searchList.envLoad" :key="item.index" :item="item" :list="searchList.envLoad"></search-item>
           </div>
         </div>
         <!--        <div>-->

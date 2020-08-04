@@ -8,7 +8,7 @@
           </el-input>
         </el-col>
         <el-col :span="6" style="text-align:right">
-          <el-button type="primary" @click="handleSceneDrawer(null)">
+          <el-button type="primary" @click="handleSceneDrawer(null)" :disabled="postSceneVisible">
             <i class="el-icon-circle-plus-outline"></i>新增工艺场景
           </el-button>     <!--以弹窗（drawer抽屉）的形式新增工艺场景-->
         </el-col>
@@ -201,6 +201,7 @@ export default {
   },
   data () {
     return {
+      postSceneVisible: false,
       postCategoryList: [],
       selectScene: {
         category: {}
@@ -258,13 +259,16 @@ export default {
       }
       if (to.params['sceneDataList'] !== undefined) {
         vm.sceneDataList = to.params['sceneDataList']
+        vm.postSceneVisible = true
         localStorage.setItem('sceneDataList', vm.sceneDataList)
       } else if (localStorage.getItem('sceneDataList') !== undefined) {
         console.log(localStorage.getItem('sceneDataList'))
         if (localStorage.getItem('sceneDataList') !== null) {
+          vm.postSceneVisible = true
           vm.sceneDataList = JSON.parse(localStorage.getItem('sceneDataList'))
           localStorage.removeItem('sceneDataList')
         } else {
+          // vm.postSceneVisible = false
           let args = {
             url: 'category/',
             params: query
@@ -276,6 +280,7 @@ export default {
           // console.log(localStorage.getItem('sceneDataList'))
         }
       } else {
+        // vm.postSceneVisible = false
         let args = {
           url: 'category/',
           params: query
@@ -289,6 +294,7 @@ export default {
   },
   beforeRouteUpdate (to, from, next) {
     // let categoryId = to.query['category'] ? to.query['category'] : 1
+    this.postSceneVisible = false
     let query = {
       categoryId: to.query['categoryId'] ? to.query['categoryId'] : 1,
       currentPage: to.query['currentPage'] ? to.query['currentPage'] : 1,

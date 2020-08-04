@@ -35,7 +35,8 @@ export default {
   props: {
     item: {
       type: Object
-    }
+    },
+    list: {}
   },
   data () {
     return {
@@ -99,16 +100,26 @@ export default {
       let path
       if (this.item['modelType'] === 'scene') {
         path = 'sceneData/' + this.item.id
+        this.$router.push(path)
       } else if (this.item['modelType'] === 'material') {
-        path = 'manage/material'
+        this.$router.push({name: 'Manage', params: {tableName: 'material', tableList: this.list}})
       } else if (this.item['modelType'] === 'energy') {
-        path = 'manage/energy'
+        this.$router.push({name: 'Manage', params: {tableName: 'energy', tableList: this.list}})
       } else if (this.item['modelType'] === 'device') {
-        path = 'manage/device'
+        this.$router.push({name: 'Manage', params: {tableName: 'device', tableList: this.list}})
       } else if (this.item['modelType'] === 'env_load') {
-        path = 'manage/envLoad'
+        this.$router.push({name: 'Manage', params: {tableName: 'envLoad', tableList: this.list}})
       }
-      this.$router.push(path)
+      // } else if (this.item['modelType'] === 'material') {
+      //   path = 'manage/material'
+      // } else if (this.item['modelType'] === 'energy') {
+      //   path = 'manage/energy'
+      // } else if (this.item['modelType'] === 'device') {
+      //   path = 'manage/device'
+      // } else if (this.item['modelType'] === 'env_load') {
+      //   path = 'manage/envLoad'
+      // }
+      // this.$router.push(path)
     }
   }
 }
