@@ -57,14 +57,10 @@
         </el-table-column>
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
-            <el-button
-              size="mini"
-              @click="handleDetailDrawer(scope.$index, scope.row)">
+            <el-button size="mini" @click="handleDetailDrawer(scope.$index, scope.row)">
               详情
             </el-button>
-            <el-button
-              size="mini"
-              @click="handleSceneDrawer(scope.row)">
+            <el-button size="mini" @click="handleSceneDrawer(scope.row)" :disabled="postSceneVisible">
               编辑
             </el-button>
           </template>
