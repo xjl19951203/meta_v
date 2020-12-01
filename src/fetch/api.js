@@ -42,6 +42,7 @@ function get (args) {
 function post (args) {
   return new Promise((resolve, reject) => {
     let root = store.state.root
+    let url = args.url
     if (!args['config']) {
       args['config'] = {}
     }
@@ -53,7 +54,7 @@ function post (args) {
         args['progressCallback'](complete)
       }
     }
-    axios.post(root + args.url, args['params'], args['config'])
+    axios.post(root + url, args['params'], args['config'])
       .then(response => {
         store.commit('clear')
         resolve(response.data)

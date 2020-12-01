@@ -21,6 +21,7 @@
   </div>
 </template>
 <script>
+// import api from 'api'
 export default {
   name: 'Navigation',
   computed: {
@@ -29,6 +30,9 @@ export default {
     // },
     sceneTree () {
       let temp = this.$store.state.categories
+      console.log(temp)
+      console.log(1)
+      // let tmp = api.get()
       // 权限管理控制显示的库的个数
       // let baseList = temp[0]['children']
       // baseList.forEach(base => {
@@ -43,7 +47,8 @@ export default {
       //   children: baseList
       // }]
       return [{
-        title: '工艺场景',
+        // title: '工艺场景',
+        title: '资源环境负荷数据',
         id: null,
         name: 'SceneDataList',
         children: temp[0]['children']
@@ -142,7 +147,6 @@ export default {
       // }
     },
     handleBase (data) {
-      console.log(data['tableName'])
       if (data['tableName'] !== undefined) {
         this.$router.push({name: 'Manage', params: {tableName: data['tableName']}})
       } else {

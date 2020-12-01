@@ -19,43 +19,47 @@
       <el-table
         :data="sceneDataList.filter(data => !searchForm.content || data.title.toLowerCase().includes(searchForm.content.toLowerCase()))"
         style="width: 100%"
+        height="600px"
         >
         <el-table-column
-          label="工艺分类"
-          width="120">
-          <template slot-scope="scope">
-            {{scope.row['category']['title']}}
-          </template>
-        </el-table-column>
-        <el-table-column
           label="工艺名称"
-          width="170">
+          align="center"
+        >
           <template slot-scope="scope">
             {{scope.row['title']}}
           </template>
         </el-table-column>
         <el-table-column
+          label="工艺类型"
+          align="center"
+        >
+          <template slot-scope="scope">
+            {{scope.row['category']['title']}}
+          </template>
+        </el-table-column>
+        <el-table-column
           label="场景描述"
-          width="200">
+          align="center">
           <template slot-scope="scope">
             {{scope.row['description']}}
           </template>
         </el-table-column>
         <el-table-column
           label="创建时间"
-          width="100">
+          align="center">
           <template slot-scope="scope">
             {{ scope.row['createdAt'] }}
           </template>
         </el-table-column>
         <el-table-column
           label="更新时间"
-          width="100">
+          width="100"
+          align="center">
           <template slot-scope="scope">
             {{ scope.row['updatedAt'] }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="200">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleDetailDrawer(scope.$index, scope.row)">
               详情
@@ -253,14 +257,21 @@ export default {
         currentPage: to.query['currentPage'] ? to.query['currentPage'] : 1,
         pageSize: to.query['pageSize'] ? to.query['pageSize'] : 7
       }
+      // let arg = {
+      //   url: 'category/',
+      //   params: query
+      // }
+      // api.get(arg).then(res => {
+      //   vm.$store.state.categories = res
+      // })
       if (to.params['sceneDataList'] !== undefined) {
         vm.sceneDataList = to.params['sceneDataList']
-        vm.postSceneVisible = true
+        // vm.postSceneVisible = true
         localStorage.setItem('sceneDataList', vm.sceneDataList)
       } else if (localStorage.getItem('sceneDataList') !== undefined) {
         console.log(localStorage.getItem('sceneDataList'))
         if (localStorage.getItem('sceneDataList') !== null) {
-          vm.postSceneVisible = true
+          // vm.postSceneVisible = true
           vm.sceneDataList = JSON.parse(localStorage.getItem('sceneDataList'))
           localStorage.removeItem('sceneDataList')
         } else {
@@ -290,7 +301,7 @@ export default {
   },
   beforeRouteUpdate (to, from, next) {
     // let categoryId = to.query['category'] ? to.query['category'] : 1
-    this.postSceneVisible = false
+    // this.postSceneVisible = false
     let query = {
       categoryId: to.query['categoryId'] ? to.query['categoryId'] : 1,
       currentPage: to.query['currentPage'] ? to.query['currentPage'] : 1,
@@ -362,7 +373,7 @@ export default {
           if (result > 0) {
             this.$router.push({name: 'SceneData', params: {sceneDataId: result}})
           } else if (result === 0) {
-            alert('场景重复！请在已存在的场景下添加输入输出数据！')
+            this.$alert('场景重复！请在已存在的场景下添加输入输出数据！')
             // history.go(0)
             this.$router.push({name: 'SceneData', params: {sceneDataId: result}})
           } else {

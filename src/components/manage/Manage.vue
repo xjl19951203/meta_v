@@ -2,7 +2,7 @@
   <div class="Manage">
     <el-divider></el-divider>
     <div style="margin:0 6px;">
-      <el-row :gutter="12" class="hover">
+      <el-row :gutter="5" class="hover">
         <el-col :span="15">
           <el-input class="base-input" placeholder="检索数据" v-model="searchContent">
             <el-button slot="append" icon="el-icon-search"></el-button>
@@ -23,7 +23,8 @@
       <el-table-column
         v-for="column in tableColumns"
         :label="column['columnComment']"
-        :key="column.index">
+        :key="column.index"
+        align="center">
         <!--这段解释-->
         <!--        这里用slot-scope="scope"取到表格中的当前单元格-->
         <!--        scope.row 直接取到该单元格对象，就是数组里的元素对象-->
@@ -38,7 +39,8 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="操作">
+        label="操作"
+        align="center">
         <template slot-scope="scope">
           <el-button @click="handleEditDrawer(scope.row)" :disabled="searchVisible" type="text" size="small">编辑</el-button>
           <el-button @click="handleDeleteDialog(scope.row)" :disabled="searchVisible" type="text" size="small">删除</el-button>
@@ -114,7 +116,7 @@ export default {
       vm.tableName = to.params['tableName']
       if (to.params['tableList'] !== undefined) {
         vm.tableList = to.params['tableList']
-        vm.searchVisible = true
+        // vm.searchVisible = true
       } else {
         vm.tableList = vm.$store.state.baseTableMap[vm.tableName]
       }
@@ -126,7 +128,7 @@ export default {
   beforeRouteUpdate (to, from, next) {
     this.tableName = to.params['tableName']
     this.tableList = this.$store.state.baseTableMap[this.tableName]
-    this.searchVisible = false
+    // this.searchVisible = false
     this.handleColumns()
     this.initEditForm()
     next()
@@ -194,7 +196,7 @@ export default {
   }
   .Manage{
     .base-input{
-      width: 700px;
+      /*width: 700px;*/
       border-style: ridge;
       border-color: cornflowerblue;
       border-width: 5px

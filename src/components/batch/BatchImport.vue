@@ -112,11 +112,16 @@ export default {
   },
   methods: {
     myUrl () {
+      let root = store.state.root
       if (this.tableType === 'baseTable') {
-        return 'http://localhost:8000/api/batch/excel/baseTable'
+        return root + 'batch/excel/baseTable'
+        // return 'http://localhost:8000/api/batch/excel/baseTable'
+        // return 'http://47.92.117.58/api/batch/excel/baseTable'
         // return store.state.root + 'batch/excel/baseTable'
       } else if (this.tableType === 'sceneData') {
-        return 'http://localhost:8000/api/batch/excel/sceneData'
+        return root + 'batch/excel/sceneData'
+        // return 'http://localhost:8000/api/batch/excel/sceneData'
+        // return 'http://47.92.117.58/api/batch/excel/sceneData'
         // return store.state.root + 'batch/excel/sceneData'
       }
     },

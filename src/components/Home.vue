@@ -1,60 +1,60 @@
 <template>
   <div class="Home">
     <div class="Wrap">
-      <h3 v-if="title">
-        欢迎进入{{title}}工艺资源环境负荷数据库
-      </h3>
-      <h3 v-else>
+      <h3>
         欢迎进入基础制造工艺资源环境负荷数据库
       </h3>
       <div class="wrapper">
-        <p v-if="auth" style="text-align: center">
-          <router-link :to="{name: 'User'}">
-            <el-avatar :size="200">
-              <div class="font">{{auth['userName']}}</div>
-            </el-avatar>
-          </router-link>
-        </p>
-        <div v-if="auth">
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <router-link :to="{name: 'SceneDataList'}">
-                <el-card always="always">
-                  <i class="fa fa-fw fa-cubes"></i>工艺场景管理
-                </el-card>
-              </router-link>
-            </el-col>
-            <el-col :span="12">
-              <router-link :to="{name: 'ManageIndex'}">
-                <el-card always="always">
-                  <i class="fa fa-fw fa-table"></i>基础数据管理
-                </el-card>
-              </router-link>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="8">
-              <router-link :to="{name: 'BatchDoc'}">
-                <el-card always="always">
-                  <i class="fa fa-fw fa-download"></i>批量数据处理
-                </el-card>
-              </router-link>
-            </el-col>
-            <el-col :span="8">
-              <router-link :to="{name: 'Search'}">
-                <el-card always="always">
-                  <i class="fa fa-fw fa-search"></i> 数据查询
-                </el-card>
-              </router-link>
-            </el-col>
-            <el-col :span="8">
-              <router-link :to="{name: 'User'}">
-                <el-card always="always">
-                  <i class="fa fa-fw fa-users"></i> 用户管理
-                </el-card>
-              </router-link>
-            </el-col>
-          </el-row>
+<!--        <p v-if="auth" style="text-align: center">-->
+<!--          <router-link :to="{name: 'User'}">-->
+<!--            <el-avatar :size="200">-->
+<!--              <div class="font">{{auth['userName']}}</div>-->
+<!--            </el-avatar>-->
+<!--          </router-link>-->
+<!--        </p>-->
+<!--        <div v-if="auth">-->
+<!--          <el-row :gutter="20">-->
+<!--            <el-col :span="12">-->
+<!--              <router-link :to="{name: 'SceneDataList'}">-->
+<!--                <el-card always="always">-->
+<!--                  <i class="fa fa-fw fa-cubes"></i>工艺场景管理-->
+<!--                </el-card>-->
+<!--              </router-link>-->
+<!--            </el-col>-->
+<!--            <el-col :span="12">-->
+<!--              <router-link :to="{name: 'ManageIndex'}">-->
+<!--                <el-card always="always">-->
+<!--                  <i class="fa fa-fw fa-table"></i>基础数据管理-->
+<!--                </el-card>-->
+<!--              </router-link>-->
+<!--            </el-col>-->
+<!--          </el-row>-->
+<!--          <el-row :gutter="20">-->
+<!--            <el-col :span="8">-->
+<!--              <router-link :to="{name: 'BatchDoc'}">-->
+<!--                <el-card always="always">-->
+<!--                  <i class="fa fa-fw fa-download"></i>批量数据处理-->
+<!--                </el-card>-->
+<!--              </router-link>-->
+<!--            </el-col>-->
+<!--            <el-col :span="8">-->
+<!--              <router-link :to="{name: 'Search'}">-->
+<!--                <el-card always="always">-->
+<!--                  <i class="fa fa-fw fa-search"></i> 数据查询-->
+<!--                </el-card>-->
+<!--              </router-link>-->
+<!--            </el-col>-->
+<!--            <el-col :span="8">-->
+<!--              <router-link :to="{name: 'User'}">-->
+<!--                <el-card always="always">-->
+<!--                  <i class="fa fa-fw fa-users"></i> 用户管理-->
+<!--                </el-card>-->
+<!--              </router-link>-->
+<!--            </el-col>-->
+<!--          </el-row>-->
+<!--        </div>-->
+        <div v-if="type === 'auth'">
+
         </div>
         <Login v-else-if="type === 'login'" :categoryId="categoryId"></Login>
         <Register v-else-if="type === 'register'" :categoryId="categoryId"></Register>

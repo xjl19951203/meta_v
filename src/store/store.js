@@ -3,14 +3,16 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
-    // root: 'http://10.1.1.230:8000/api/manage/',
-    // root: 'http://localhost:8000/api/manage/',
     // root: 'http://39.106.151.147/api/',
     // rootApi: 'http://39.106.151.147/api/',
-    root: 'http://47.92.117.58/api/',
-    rootApi: 'http://47.92.117.58/api/',
-    // root: 'http://localhost:8000/api/',
-    // rootApi: 'http://localhost:8000/api/',
+    // root: 'http://47.92.117.58/api/',
+    // rootApi: 'http://47.92.117.58/api/',
+    // root: 'http://8.131.61.66:8000/api/',
+    // rootApi: 'http://8.131.61.66:8000/api/', // 没配置Nginx的时候要加:8000，配置Nginx之后不用加:8000
+    // root: 'http://8.131.61.66/api/',
+    // rootApi: 'http://8.131.61.66/api/',
+    root: 'http://localhost:8000/api/',
+    rootApi: 'http://localhost:8000/api/',
     posting: false,
     pageLoading: false,
     scrollLoading: false,

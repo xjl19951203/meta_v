@@ -20,12 +20,12 @@
             <el-col :span="5">
               <router-link :to="{name: 'Home', query:{type: 'register'}}" type="warning">注册账户</router-link>
             </el-col>
-            <el-col :span="9" style="text-align:right">
+            <el-col :span="18" style="text-align:right">
               <router-link :to="{name: 'Home', query:{type: 'forget'}}" type="warning">忘记密码</router-link>
             </el-col>
-            <el-col :span="9" style="text-align:right">
-              <router-link :to="{name: 'HomeIndex'}">系统首页</router-link>
-            </el-col>
+<!--            <el-col :span="9" style="text-align:right">-->
+<!--              <router-link :to="{name: 'HomeIndex'}">系统首页</router-link>-->
+<!--            </el-col>-->
           </el-row>
         </el-form>
       </el-card>
@@ -85,7 +85,8 @@ export default {
               this.$message.error('账户名或密码错误!')
             } else {
               this.$store.commit('login', res)
-              this.$router.push({name: 'Home', params: {categoryId: this.categoryId}})
+              // this.$router.push({name: 'Home', params: {categoryId: this.categoryId}})
+              this.$router.push({name: 'HomeIndex', params: {categoryId: this.categoryId}})
             }
           })
         } else {

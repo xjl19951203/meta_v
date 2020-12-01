@@ -3,21 +3,22 @@
     <el-header class="title">
       <Header></Header>
     </el-header>
-    <el-container>
+    <el-container style="min-height: 800px">
       <el-aside>
         <Navigation></Navigation>
       </el-aside>
       <el-container>
-        <el-main class="Wrapper">
+<!--        <el-main class="Wrapper">-->
+<!--        <el-main >-->
           <keep-alive>
             <router-view></router-view>
           </keep-alive>
-        </el-main>
-        <el-footer class="foot">
-          <Footer></Footer>
-        </el-footer>
+<!--        </el-main>-->
       </el-container>
     </el-container>
+    <el-footer class="foot">
+      <Footer></Footer>
+    </el-footer>
   </el-container>
 </template>
 <script>

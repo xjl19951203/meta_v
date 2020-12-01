@@ -35,19 +35,19 @@ export default {
       text-align: center!important;
       color: #fff;
     }
-    .title{
-      font-size: 18px;
-      padding: 20px;
-    }
-    .links{
-      a{
-        margin: 10px;
-        color: #fff;
-        font-size: 13px;
-      }
-    }
+    /*.title{*/
+    /*  font-size: 18px;*/
+    /*  padding: 20px;*/
+    /*}*/
+    /*.links{*/
+    /*  a{*/
+    /*    margin: 10px;*/
+    /*    color: #fff;*/
+    /*    font-size: 13px;*/
+    /*  }*/
+    /*}*/
     .copyright{
-      padding: 5px 0 0 0;
+      padding: 0 0 0 0;
       line-height: 25px;
       font-size: 12px;
     }
